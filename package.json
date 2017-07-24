@@ -3,6 +3,6 @@
     "version": "0.1.0",
     "private": true,
     "scripts": {
-        "build": "cd client && (echo Build starting >&2) && npm run build && cd .. && ls -R client/build"
+        "postinstall": "cd client && yarn install && yarn run build && cd .. && ls -R client/build"
     }
 }
