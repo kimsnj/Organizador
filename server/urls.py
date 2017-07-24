@@ -19,5 +19,8 @@ from . import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+
+    # Catch all query that returns the index page.
+    # To be left at the end to handle pushState history
     url(r'^', views.FrontendAppView.as_view()),
 ]
