@@ -22,6 +22,10 @@ class Header extends Component {
     document.body.classList.toggle('aside-menu-hidden');
   }
 
+  onResearchChanged(e) {
+    console.log('DO something');
+  }
+
   render() {
     return (
       <header className="app-header navbar">
@@ -31,7 +35,15 @@ class Header extends Component {
           <li className="nav-item">
             <button className="nav-link navbar-toggler sidebar-toggler" type="button" onClick={this.sidebarToggle}>&#9776;</button>
           </li>
+          <li> 
+            <div className="form-group row">
+              <div className="col-10">
+                <input className="form-control" type="search" value="Rechercher..." id="example-search-input" onChange={this.onResearchChanged}/>
+              </div>
+            </div>
+          </li>
         </ul>
+        
       </header>
     )
   }
