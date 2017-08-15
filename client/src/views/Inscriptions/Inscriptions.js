@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { Field, reduxForm } from 'redux-form'
+import React from 'react';
+import { reduxForm } from 'redux-form'
 
 import InfosPersonelles from './Formulaires/InfosPersonnelles';
 import InfosCapoeira from './Formulaires/InfosCapoeira';

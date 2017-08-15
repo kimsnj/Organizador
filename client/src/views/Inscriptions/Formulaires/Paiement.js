@@ -1,111 +1,139 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
+import { connect } from 'react-redux'
+import {Field, FieldArray, formValueSelector} from 'redux-form'
 
-class Paiement extends Component {
-    constructor(props) {
-        super(props);
-        this.onSommeChanged = this.onSommeChanged.bind(this);
-        this.onMoyenChanged = this.onMoyenChanged.bind(this);
-        this.state = {
-            cheque: [],
-        };
-    }
+var PRIX_COURS = [
+    { prix: 175, categorie: 'eveil', frequence: 1, formeLongue: '1 fois par semaine' },
+    { prix: 185, categorie: 'enfants', frequence: 1, formeLongue: '1 fois par semaine' },
+    { prix: 195, categorie: 'adolescents', frequence: 1, formeLongue: '1 fois par semaine' },
+    { prix: 220, categorie: 'adultes', frequence: 1, formeLongue: '1 fois par semaine' },
+    { prix: 308, categorie: 'enfants', frequence: 2, formeLongue: '2 fois par semaine' },
+    { prix: 175, categorie: 'adolescents', frequence: 2, formeLongue: '2 fois par semaine' },
+    { prix: 175, categorie: 'adultes', frequence: 2, formeLongue: '2 fois par semaine' }
+];
 
-    onMoyenChanged(e) {
-        console.log("onMoyenChanged");
-    }
-
-    onSommeChanged(e) {
-        console.log("onSommeChanged");
-    }
-
-    render() {
-            return (        
-            <div className="row">
-                <div className="col-md-12">
-                <div className="card">
-                    <div className="card-header">
-                    <h4><i className="fa fa-money"></i> Paiement</h4>
-                    </div>
-                    <div className="card-block">
-                    <form
-                        action=""
-                        method="post"
-                        encType="multipart/form-data"
-                        className="form-horizontal">
-                        <div className="form-group row">
-                            <label className="col-md-3 form-control-label" htmlFor="text-input">Somme</label>
-                            <div className="col-md-9">
-                            <select id="select" name="select" className="form-control">
-                                <option value="0">Dérouler... TODO préproposer valeur en fonction des choix antérieurs</option>
-                                <option value="175" onChange={this.onSommeChanged}>175€ (Eveil, 1 fois par semaine)</option>
-                                <option value="185" onChange={this.onSommeChanged}>185€ (Enfant, 1 fois par semaine)</option>
-                                <option value="195" onChange={this.onSommeChanged}>195€ (Adolescent, 1 fois par semaine)</option>
-                                <option value="220" onChange={this.onSommeChanged}>220€ (Adulte, 1 fois par semaine)</option>
-                                <option value="308" onChange={this.onSommeChanged}>308€ (Enfant, 2 fois par semaine)</option>
-                                <option value="325" onChange={this.onSommeChanged}>325€ (Adolescent, 2 fois par semaine)</option>
-                                <option value="395" onChange={this.onSommeChanged}>359€ (Adulte, 2 fois par semaine)</option>
-                            </select>
-                            <span className="help-block">IDEE : champ libre?</span>
-                        </div>
-                        </div>
-                        <div className="form-group row">
-                            <label className="col-md-3 form-control-label" htmlFor="text-input">Moyen de paiement</label>
-                            <div className="col-md-9">
-                            <select id="select" name="select" className="form-control">
-                                <option value="0" onChange={this.onMoyenChanged}>Dérouler...</option>
-                                <option value="cheque" onChange={this.onMoyenChanged}>Chèque</option>
-                                <option value="liquide" onChange={this.onMoyenChanged}>Liquide</option>
-                                <option value="virement" onChange={this.onMoyenChanged}>Virement</option>
-                                <option value="natureCoquinou" onChange={this.onMoyenChanged}>Nature (coquinou)</option>
-                            </select>
-                        </div>
-                        </div>
-                        <div className="form-group row">
-                            <label className="col-md-3 form-control-label" htmlFor="text-input">Chèque n°</label>
-                            <div className="col-md-9">
-                                <input
-                                    type="text"
-                                    id="text-input"
-                                    name="text-input"
-                                    className="form-control"
-                                    placeholder="Champ optionnel"/>
-                            </div>
-                            <label className="col-md-3 form-control-label" htmlFor="text-input">Somme</label>
-                            <div className="col-md-9">
-                                <input
-                                    type="text"
-                                    id="text-input"
-                                    name="text-input"
-                                    className="form-control"
-                                    placeholder="Champ optionnel"/>
-                            </div>
-                            <label className="col-md-3 form-control-label" htmlFor="text-input">Date d'encaissement</label>
-                            <div className="col-md-9">
-                                <input
-                                    type="text"
-                                    id="text-input"
-                                    name="text-input"
-                                    className="form-control"
-                                    placeholder="Champ optionnel"/>
-                            </div>
-                            <div className="form-group form-actions col-md-9">
-                            <button type="submit" className="btn btn-sm btn-info">Ajouter chèque</button>
-                            </div>
-                            <span className="help-block">N'apparaît que si chèque est sélectionné</span>
-                        </div>
-                        <div className="form-group row">
-                            <label className="col-md-3 form-control-label" htmlFor="text-input">Commentaire</label>
-                            <div className="col-md-9">
-                                <textarea id="textarea-input" name="textarea-input" rows="9" className="form-control" placeholder="Content.."></textarea>
-                            </div>
-                        </div>
-                    </form>
+let renderCheques = ({fields}) => (
+    <div>
+        <div className="form-group row">
+            <div className="form-group col-md-9">
+                <button type="button" className="btn btn-info" onClick={() => fields.push()}>Ajouter chèque</button>
+            </div>
+        </div>
+        {fields.map((field, index) => (
+            <div className="form-group row">
+                <div className="col-md-1">
+                    <i className="fa fa-remove" onClick={() => fields.remove(index)}></i>
                 </div>
+                <label className="col-md-1 form-control-label" htmlFor="text-input">Chèque n°</label>
+                <div className="col-md-10">
+                    <Field
+                        component="input"
+                        type="text"
+                        id="text-input"
+                        name="text-input"
+                        className="form-control"
+                        placeholder=""/>
+                </div>
+                <div className="col-md-1">
+                </div>
+                <label className="col-md-1 form-control-label" htmlFor="text-input">Somme</label>
+                <div className="col-md-10">
+                    <Field
+                        component="input"
+                        type="text"
+                        id="text-input"
+                        name="text-input"
+                        className="form-control"
+                        placeholder=""/>
+                </div>
+                <div className="col-md-1"/>
+                <label className="col-md-1 form-control-label" htmlFor="text-input">Date d'encaissement</label>
+                <div className="col-md-10">
+                    <Field
+                        component="input"
+                        type="text"
+                        id="text-input"
+                        name="text-input"
+                        className="form-control"
+                        placeholder=""/>
+                </div>
+            </div>
+        ))
+    } </div>
+)
+
+let filtered_with_type_paiement = (type_paiement) => (
+    type_paiement === "cheque" ? <FieldArray name="cheques" component={renderCheques}/> : null
+)
+
+let filter_with_category_and_nb_of_classes = (categorie, cours, liste) => {
+    console.log("I received category ", categorie, " cours ", cours, " liste ", liste)
+    return (
+    PRIX_COURS.filter((element) => 
+        !categorie || (element.categorie === categorie && cours && cours.length === element.frequence))
+) }
+
+
+let Paiement = ({typePaiement, categorie, cours}) => (
+    <div className="row">
+        <div className="col-md-12">
+            <div className="card">
+                <div className="card-header">
+                    <h4>
+                        <i className="fa fa-money"></i>
+                        Paiement</h4>
+                </div>
+                <div className="card-block">
+                    <div className="form-group row">
+                        <label className="col-md-3 form-control-label" htmlFor="text-input">Somme</label>
+                        <div className="col-md-9">
+                            <Field component="select" id="select" name="selectPrix" className="form-control">
+                                {filter_with_category_and_nb_of_classes(categorie, cours, PRIX_COURS).map((c, idx) => (
+                                    <option value={c.prix}>{c.prix} € : {c.categorie}, {c.formeLongue}</option>
+                                ))}
+                            </Field>
+                        </div>
+                    </div>
+                    <div className="form-group row">
+                        <label className="col-md-3 form-control-label" htmlFor="text-input">Moyen de paiement</label>
+                        <div className="col-md-9">
+                            <Field component="select" id="select" name="selectTypePaiement" className="form-control">
+                                <option name="typePaiement" value="">Dérouler...</option>
+                                <option name="typePaiement" value="cheque">Chèque</option>
+                                <option name="typePaiement" value="liquide">Liquide</option>
+                                <option name="typePaiement" value="virement">Virement</option>
+                            </Field>
+                        </div>
+                    </div>
+
+                    <div className="form-group row">
+                        <label className="col-md-3 form-control-label" htmlFor="text-input">Commentaire</label>
+                        <div className="col-md-9">
+                            <textarea
+                                id="textarea-input"
+                                name="textarea-input"
+                                rows="9"
+                                className="form-control"
+                                placeholder="Content.."></textarea>
+                        </div>
+                    </div>
+                    {filtered_with_type_paiement(typePaiement)}
                 </div>
             </div>
         </div>
-        )
+    </div>
+)
+
+const selector = formValueSelector('inscriptions')
+Paiement = connect(
+    state => {
+        const typePaiement = selector(state, 'selectTypePaiement') // a travers la fonctionnalite selector de reduxform, accède au champ dont name="categorie"
+        const categorie = selector(state, 'categorie')
+        const cours = selector(state, 'cours')
+        return {
+            typePaiement, categorie, cours
+        }
     }
-}
+)(Paiement)
 
 export default Paiement;

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux'
 import { Field, formValueSelector } from 'redux-form'
 
@@ -14,9 +14,31 @@ var COURS = [
     { id: 9, jour: 'Vendredi', horaire: '18h-19h', lieu: 'Pégomas', type: 'all' }
 ];
 
-let filtered_courses = (categorie) => (
-    COURS.filter((cours) => (
-        cours.type == categorie || cours.type == 'all'
+var CORDES = [
+    { couleur : 'sem corda', type: 'all'},
+    { couleur : '5 ans', type: 'enfants'},
+    { couleur : '6 ans', type: 'enfants'},
+    { couleur : '7 ans', type: 'enfants'},
+    { couleur : '8 ans', type: 'enfants'},
+    { couleur : '9 ans', type: 'enfants'},
+    { couleur : '10 ans', type: 'enfants'},
+    { couleur : '11 ans', type: 'adolescents'},
+    { couleur : '12 ans', type: 'adolescents'},
+    { couleur : '13 ans', type: 'adolescents'},
+    { couleur : '14 ans', type: 'adolescents'},
+    { couleur : '15 ans', type: 'adolescents'},
+    { couleur : '16 ans', type: 'adolescents'},
+    { couleur : 'Azul', type: 'adultes'},
+    { couleur : 'Laranja', type: 'adultes'},
+    { couleur : 'Laranja Marron', type: 'adultes'},
+    { couleur : 'Marron', type: 'adultes'},
+    { couleur : 'Marron Roxa', type: 'adultes'},
+];
+
+let filtered_with_all = (categorie, liste) => (
+    
+    liste.filter((element) => (
+        !categorie || element.type === categorie || element.type === 'all'
     ))
 )
 
@@ -51,7 +73,7 @@ let InfosCapoeira = ({ categorie }) => (
                                 id="text-input"
                                 name="apellido"
                                 className="form-control"
-                                placeholder="Champ optionnel" />
+                                placeholder="" />
                         </div>
                     </div>
                     <div className="form-group row">
@@ -59,7 +81,7 @@ let InfosCapoeira = ({ categorie }) => (
                         <div className="col-md-9">
                             <label className="radio-inline" htmlFor="inline-radio1">
                                 <Field component="input" type="radio" id="inline-radio1" name="categorie" value="eveil" /> Eveil
-                                </label>
+                            </label>
                             <label className="radio-inline" htmlFor="inline-radio2" style={{ marginLeft: 5 + 'px' }}>
                                 <Field component="input" type="radio" id="inline-radio2" name="categorie" value="enfants" /> Enfants
                                 </label>
@@ -76,7 +98,7 @@ let InfosCapoeira = ({ categorie }) => (
                         <div className="col-md-9">
                             <Field component="select" id="multiple-select" name="cours" className="form-control" size="5" multiple>
                                 {
-                                    filtered_courses(categorie)
+                                    filtered_with_all(categorie, COURS)
                                         .map((c, idx) => (
                                             <option value={c.id}>{c.jour} {c.horaire} à {c.lieu} </option>
                                         ))
@@ -88,15 +110,13 @@ let InfosCapoeira = ({ categorie }) => (
                         <label className="col-md-3 form-control-label" htmlFor="select">Corde</label>
                         <div className="col-md-9">
                             <Field component="select" id="select" name="corde" className="form-control">
-                                <option value="">Dérouler...</option>
-                                <option value="semCorda">Sem corda</option>
-                                <option value="azul">Azul</option>
-                                <option value="laranja">Laranja</option>
-                                <option value="laranjaMarron">Laranja Marron</option>
-                                <option value="marron">Marron</option>
-                                <option value="marronRoxa">Marron Roxa</option>
+                                {
+                                    filtered_with_all(categorie, CORDES)
+                                        .map((c, idx) => (
+                                            <option value={c.couleur}>{c.couleur}</option>
+                                        ))
+                                }
                             </Field>
-                            <span className="help-block">TODO : changer la liste en fonction du type de cours</span>
                         </div>
                     </div>
                     <div className="form-group row">
@@ -126,7 +146,7 @@ let InfosCapoeira = ({ categorie }) => (
 const selector = formValueSelector('inscriptions')
 InfosCapoeira = connect(
     state => {
-        const categorie = selector(state, 'categorie')
+        const categorie = selector(state, 'categorie') // a travers la fonctionnalite selector de reduxform, accède au champ dont name="categorie"
         return {
             categorie
         }
