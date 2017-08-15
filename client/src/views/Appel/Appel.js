@@ -1,16 +1,42 @@
-import React, { Component } from 'react';
+import React from 'react'
+import { Field, reduxForm } from 'redux-form'
 
-class Appel extends Component {
-  render() {
-    return (
-      <div className="animated fadeIn">
-        <p>Date : ../../.. Cours : Multichoice</p>
-        <p> Tableau </p>
-        <p> Rechercher autre élève </p>
-        <p> Commentaire </p>  
-      </div>
-    )
+
+let validate = values => {
+  let errors = {};
+  if (!values.lastName) {
+    errors.lastName = "Comment tu t'appelles?";
   }
+  return errors;
 }
 
-export default Appel;
+
+let AppelForm = props => {
+  const { handleSubmit } = props
+  return (
+
+    <form onSubmit={handleSubmit}>
+      <div>
+        <label htmlFor="firstName">First Name</label>
+        <Field name="firstName" component="input" type="text" />
+      </div>
+      <div>
+        <label htmlFor="lastName">Last Name</label>
+        <Field name="lastName" component="input" type="text" />
+      </div>
+      <div>
+        <label htmlFor="email">Email</label>
+        <Field name="email" component="input" type="text" />
+      </div>
+      <button type="submit">Submit</button>
+    </form>
+  )
+}
+
+AppelForm = reduxForm({
+  form: 'appel',
+  deleteOnComponentUnmont: false,
+  validate
+})(AppelForm)
+
+export default AppelForm;
