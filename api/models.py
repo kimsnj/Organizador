@@ -3,6 +3,7 @@
 """
 import calendar
 from datetime import date, timedelta
+import uuid
 from django.db import models
 
 TAILLES_ABADA_CHOIX = (
@@ -22,10 +23,12 @@ CATEGORIES_COURS_CHOIX = (
 
 class Personne(models.Model):
     """ Modèle représentant une personne: élève, contact ou parent."""
-
+    id = models.UUIDField(
+        primary_key=True, default=uuid.uuid4, editable=False)
     prenom = models.CharField(max_length=50, db_index=True)
     nom = models.CharField(max_length=50, db_index=True)
-    surnom = models.CharField(db_index=True, max_length=50)
+    surnom = models.CharField(
+        db_index=True, blank=True, null=True, max_length=50)
     date_naissance = models.DateField(auto_now=False, auto_now_add=False)
     telephone = models.CharField(max_length=50)
     adresse = models.TextField(blank=True, null=True)
@@ -187,8 +190,9 @@ class Paiement(models.Model):
     """Model definition for Paiement."""
 
     inscription = models.ForeignKey(Inscription)
+    somme = models.IntegerField()
     methode = models.CharField(max_length=10)
-    encaissement = models.DateField()
+    encaissement = models.DateField(null=True, blank=True)
     validite = models.DateField()
     encaisse = models.BooleanField(default=False)
 
