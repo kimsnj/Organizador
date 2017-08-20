@@ -21,6 +21,8 @@ from . import views
 
 router = routers.DefaultRouter()
 router.register(r'personnes', api_views.PersonneViewSet)
+router.register(r'cours', api_views.CoursViewSet)
+router.register(r'paiements', api_views.PaiementViewSet)
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),

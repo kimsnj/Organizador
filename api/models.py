@@ -20,39 +20,6 @@ CATEGORIES_COURS_CHOIX = (
     ('ADULTE', 'Adulte')
 )
 
-
-class Personne(models.Model):
-    """ Modèle représentant une personne: élève, contact ou parent."""
-    id = models.UUIDField(
-        primary_key=True, default=uuid.uuid4, editable=False)
-    prenom = models.CharField(max_length=50, db_index=True)
-    nom = models.CharField(max_length=50, db_index=True)
-    surnom = models.CharField(
-        db_index=True, blank=True, null=True, max_length=50)
-    date_naissance = models.DateField(auto_now=False, auto_now_add=False)
-    telephone = models.CharField(max_length=50)
-    adresse = models.TextField(blank=True, null=True)
-
-    categorie = models.CharField(
-        choices=CATEGORIES_COURS_CHOIX, blank=True, null=True, max_length=10)
-    corde = models.CharField(blank=True, null=True, max_length=20)
-    taille_abada = models.CharField(blank=True, null=True, max_length=2,
-                                    choices=TAILLES_ABADA_CHOIX)
-
-    droit_image = models.BooleanField(default=False)
-    contacts = models.ManyToManyField('self', blank=True)
-
-    class Meta:
-        """Meta definition for Personne."""
-
-        verbose_name = 'Personne'
-        verbose_name_plural = 'Personnes'
-
-    def __str__(self):
-        """Unicode representation of Personne."""
-        return "{} {}".format(self.prenom, self.nom)
-
-
 SEMAINE = (
     (calendar.MONDAY, 'Lundi'),
     (calendar.TUESDAY, 'Mardi'),
@@ -140,6 +107,44 @@ class DateCours(models.Model):
         return "[{}] {}".format(str(self.cours), self.date)
 
 
+class Personne(models.Model):
+    """ Modèle représentant une personne: élève, contact ou parent."""
+    id = models.UUIDField(
+        primary_key=True, default=uuid.uuid4, editable=False)
+    prenom = models.CharField(max_length=50, db_index=True)
+    nom = models.CharField(max_length=50, db_index=True)
+    surnom = models.CharField(
+        db_index=True, blank=True, null=True, max_length=50)
+    date_naissance = models.DateField(
+        auto_now=False, auto_now_add=False, null=True)
+    telephone = models.CharField(max_length=50)
+    adresse = models.TextField(blank=True, null=True)
+
+    categorie = models.CharField(
+        choices=CATEGORIES_COURS_CHOIX, blank=True, null=True, max_length=10)
+    corde = models.CharField(blank=True, null=True, max_length=20)
+    taille_abada = models.CharField(blank=True, null=True, max_length=2,
+                                    choices=TAILLES_ABADA_CHOIX)
+
+    droit_image = models.BooleanField(default=False)
+    photo = models.BooleanField(default=False)
+    fiche_adhesion = models.BooleanField(default=False)
+    certificat_medical = models.BooleanField(default=False)
+
+    contacts = models.ManyToManyField('self', blank=True)
+    cours = models.ManyToManyField(Cours, blank=True)
+
+    class Meta:
+        """Meta definition for Personne."""
+
+        verbose_name = 'Personne'
+        verbose_name_plural = 'Personnes'
+
+    def __str__(self):
+        """Unicode representation of Personne."""
+        return "{} {}".format(self.prenom, self.nom)
+
+
 class Presence(models.Model):
     """Model definition for Presence."""
 
@@ -160,41 +165,22 @@ class Presence(models.Model):
                                    str(self.cours))
 
 
-class Inscription(models.Model):
-    """Model definition for Inscription."""
-
-    eleve = models.ForeignKey(Personne, on_delete=models.CASCADE)
-    cours = models.ForeignKey(Cours, on_delete=models.CASCADE)
-    photo = models.BooleanField(default=False)
-    fiche_adhesion = models.BooleanField(default=False)
-    certificat_medical = models.BooleanField(default=False)
-
-    class Meta:
-        """Meta definition for Inscriptions."""
-
-        verbose_name = 'Inscription'
-        verbose_name_plural = 'Inscriptions'
-
-    def __str__(self):
-        """Unicode representation of I nscriptions."""
-        return "Inscription {} à {}".format(str(self.eleve), str(self.cours))
-
-
 METHODE_PAIEMENT_CHOIX = (
-    ('ESPECE', 'Éspèce'),
-    ('CHÈQUE', 'Chèque')
+    ('ESPECE', 'Espèce'),
+    ('CHEQUE', 'Chèque'),
+    ('VIREMENT', 'Virement')
 )
 
 
 class Paiement(models.Model):
     """Model definition for Paiement."""
 
-    inscription = models.ForeignKey(Inscription)
+    methode = models.CharField(max_length=10, choices=METHODE_PAIEMENT_CHOIX)
     somme = models.IntegerField()
-    methode = models.CharField(max_length=10)
     encaissement = models.DateField(null=True, blank=True)
     validite = models.DateField()
     encaisse = models.BooleanField(default=False)
+    payeur = models.ForeignKey(Personne, related_name='paiements')
 
     class Meta:
         """Meta definition for Paiement."""
