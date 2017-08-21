@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { HashRouter, Route, Switch } from 'react-router-dom'
+import { Router, Route, Switch } from 'react-router-dom'
 import { createBrowserHistory } from 'history';
 
 import { createStore, combineReducers } from 'redux'
@@ -23,10 +23,10 @@ const history = createBrowserHistory();
 
 ReactDOM.render((
   <Provider store={store}>
-    <HashRouter history={history}>
+    <Router history={history}>
       <Switch>
         <Route path="/" name="Home" component={Full} />
       </Switch>
-    </HashRouter>
+    </Router>
   </Provider>
 ), document.getElementById('root'))
