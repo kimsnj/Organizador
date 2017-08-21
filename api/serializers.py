@@ -1,4 +1,4 @@
-from rest_framework.serializers import ModelSerializer, UUIDField, IntegerField
+from rest_framework.serializers import ModelSerializer, UUIDField, IntegerField, ListField
 from .models import Paiement, Cours, Personne
 
 
@@ -14,14 +14,6 @@ class CoursSerializer(ModelSerializer):
         fields = '__all__'
 
 
-class CoursIdSerializer(ModelSerializer):
-    id = IntegerField(read_only=False, required=True)
-
-    class Meta:
-        model = Cours
-        fields = ('id',)
-
-
 class EmbeddedPaiementSerializer(ModelSerializer):
     class Meta:
         model = Paiement
@@ -29,22 +21,11 @@ class EmbeddedPaiementSerializer(ModelSerializer):
                   'encaissement', 'validite', 'encaisse')
 
 
-class PersonneIdSerializer(ModelSerializer):
-    id = UUIDField(read_only=False, required=True)
-
-    class Meta:
-        model = Personne
-        fields = ('id',)
-
-
 class PersonneSerializer(ModelSerializer):
     id = UUIDField(read_only=False, required=False)
-    contacts = PersonneIdSerializer(many=True, read_only=False, required=False)
-    cours = CoursIdSerializer(many=True, read_only=False, required=False)
-
+    cours = ListField(child=IntegerField(), required=False, read_only=False)
+    contacts = ListField(child=UUIDField(), read_only=False, required=False)
     paiements = EmbeddedPaiementSerializer(many=True)
-    # paiements = HyperlinkedRelatedField(
-    #     many=True, view_name='paiement-detail', queryset=Paiement.objects.all())
 
     class Meta:
         model = Personne
@@ -52,7 +33,6 @@ class PersonneSerializer(ModelSerializer):
         depth = 1
 
     def create(self, validated_data):
-        print(validated_data)
         donnees_paiements = validated_data.pop('paiements')
         donnees_cours = validated_data.pop('cours')
         donnees_contact = validated_data.pop('contacts')
@@ -60,12 +40,12 @@ class PersonneSerializer(ModelSerializer):
 
         # Related field: Cours
         for cours in donnees_cours:
-            c = Cours.objects.get(pk=cours["id"])
+            c = Cours.objects.get(pk=cours)
             personne.cours.add(c)
 
         # Related field: Contact
         for contact in donnees_contact:
-            c = Personne.objects.get(pk=contact["id"])
+            c = Personne.objects.get(pk=contact)
             personne.contacts.add(c)
 
         personne.save()
