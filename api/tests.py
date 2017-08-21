@@ -75,10 +75,10 @@ class PersonneSerializerTest(TestCase):
                 }
             ],
             "cours": [
-                {"id": 1}
+                1
             ],
             "contacts": [
-                {"id": p.id}
+                p.id
             ],
             "prenom": "K",
             "nom": "S",
@@ -95,7 +95,8 @@ class PersonneSerializerTest(TestCase):
         }
 
         serializer = PersonneSerializer(data=donnees)
-        self.assertTrue(serializer.is_valid())
+        if not serializer.is_valid():
+            self.assertTrue(False, "Invalid serializer: " + str(serializer.errors))
         serializer.save()
 
         new_p = Personne.objects.get(pk=donnees["id"])
