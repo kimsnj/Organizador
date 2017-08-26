@@ -20,9 +20,9 @@ let DossierInscription = (props) => {
                     </div>
                     <div className="card-block">
                         <fieldset className="form-group" style={{ marginLeft: 30 + 'px' }}>
-                            <Field name="certificat" label="Certificat Médical" component={CheckBoxField} />
+                            <Field name="certificat_medical" label="Certificat Médical" component={CheckBoxField} />
                             <Field name="photo" label="Photo d'identité" component={CheckBoxField} />
-                            <Field name="fiche" label="Fiche d'adhésion" component={CheckBoxField} />
+                            <Field name="fiche_adhesion" label="Fiche d'adhésion" component={CheckBoxField} />
                         </fieldset>
                     </div>
                 </div>
