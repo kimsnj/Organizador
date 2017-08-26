@@ -4,7 +4,7 @@ import uuidv4 from 'uuid/v4';
  * Action types
  */
 
-export const INSCRIRE_ELEVE = 'INSCRIRE_ELEVE';
+export const INSCRIRE_MEMBRE = 'INSCRIRE_MEMBRE';
 
 /*
  * Actions status for asynch calls
@@ -17,9 +17,9 @@ export const STATUS_ERROR = 'error';
  * Action creators
  */
 
-export const inscrireEleve = (data) => {
+export const inscrireMembre = (data) => {
     return {
-        type: INSCRIRE_ELEVE,
+        type: INSCRIRE_MEMBRE,
         status: STATUS_REQUESTED,
         data: {
             ...data,
@@ -28,14 +28,14 @@ export const inscrireEleve = (data) => {
     }
 };
 
-export const inscrireEleveSucces = data => ({
-    type: INSCRIRE_ELEVE,
+export const inscrireMembreSucces = data => ({
+    type: INSCRIRE_MEMBRE,
     status: STATUS_SUCCES,
     data
 });
 
-export const inscrireEleveErreur = (data, error) => ({
-    type: INSCRIRE_ELEVE,
+export const inscrireMembreErreur = (data, error) => ({
+    type: INSCRIRE_MEMBRE,
     status: STATUS_ERROR,
     data,
     error

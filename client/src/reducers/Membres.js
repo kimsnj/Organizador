@@ -1,8 +1,8 @@
-import { INSCRIRE_ELEVE } from '../actions/Eleves'
+import { INSCRIRE_MEMBRE } from '../actions/Membres'
 
-export const eleves = (state = {}, action) => {
+export const membres = (state = {}, action) => {
     switch (action.type) {
-        case INSCRIRE_ELEVE:
+        case INSCRIRE_MEMBRE:
             return {
                 ...state,
                 [action.data.id]: {
