@@ -6,13 +6,18 @@ import InfosCapoeira from './Formulaires/InfosCapoeira';
 import Paiement from './Formulaires/Paiement';
 import DossierInscription from './Formulaires/DossierInscription';
 
+
 let Inscriptions = props => {
   const { handleSubmit } = props
   return (
     <div className="container">
       <form onSubmit={handleSubmit}>
-        <InfosPersonelles />
+        <div style={{ marginBottom: 30 + 'px' }}>
+          <button type="submit" className="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="top" title="Bientôt!">Nouvelle inscription</button>&nbsp;
+          <button type="submit" className="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="top" title="Bientôt!">Modifier un profil déjà existant</button>
+        </div>
         <InfosCapoeira />
+        <InfosPersonelles />
         <DossierInscription />
         <Paiement />
         <div style={{ marginBottom: 30 + 'px' }}>
@@ -22,8 +27,6 @@ let Inscriptions = props => {
     </div>
   )
 }
-
-
 
 Inscriptions = reduxForm({
   form: 'inscriptions'
