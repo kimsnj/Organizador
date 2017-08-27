@@ -39,10 +39,10 @@ class Dashboard extends Component {
                 <p className="card-text">
                   <ul className="list-group">
                     <li className="list-group-item list-group-item-action">Paiement
-                      <span className="badge badge-danger badge-pill" style={{ marginLeft: 5 + 'px' }}>2</span>
+                      <span className="badge badge-warning badge-pill" style={{ marginLeft: 5 + 'px' }}>4</span>
                     </li>
                     <li className="list-group-item list-group-item-action">Dossiers incomplets
-                      <span className="badge badge-warning badge-pill" style={{ marginLeft: 5 + 'px' }}>5</span>
+                      <span className="badge badge-danger badge-pill" style={{ marginLeft: 5 + 'px' }}>5</span>
                     </li>
                   </ul>
                 </p>
