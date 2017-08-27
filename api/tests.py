@@ -96,7 +96,8 @@ class PersonneSerializerTest(TestCase):
 
         serializer = PersonneSerializer(data=donnees)
         if not serializer.is_valid():
-            self.assertTrue(False, "Invalid serializer: " + str(serializer.errors))
+            self.assertTrue(False, "Invalid serializer: " +
+                            str(serializer.errors))
         serializer.save()
 
         new_p = Personne.objects.get(pk=donnees["id"])

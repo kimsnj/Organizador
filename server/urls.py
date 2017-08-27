@@ -23,9 +23,11 @@ router = routers.DefaultRouter()
 router.register(r'personnes', api_views.PersonneViewSet)
 router.register(r'cours', api_views.CoursViewSet)
 router.register(r'paiements', api_views.PaiementViewSet)
+router.register(r'dates', api_views.DateCoursViewSet)
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'api/init/', api_views.InitView.as_view()),
     url(r'api/', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 
