@@ -1,4 +1,5 @@
-import { INSCRIRE_MEMBRE, STATUS_ERROR } from '../actions/Membres'
+import {INSCRIRE_MEMBRE, STATUS_ERROR, STATUS_SUCCES} from '../actions/Membres'
+import {INIT} from '../actions/common'
 
 const inscrireMembre = (membre = {}, action) => {
     switch (action.status) {
@@ -16,8 +17,20 @@ const inscrireMembre = (membre = {}, action) => {
     }
 }
 
+const enrichFromInit = (old_state, personnes = []) => {
+    let state = Object.assign({}, old_state);
+    for (var i = 0; i < personnes.length; i++) {
+        state[personnes[i].id] = {
+            ...personnes[i],
+            status: STATUS_SUCCES
+        }
+    }
+}
+
 export const membres = (state = {}, action) => {
     switch (action.type) {
+        case INIT:
+            return enrichFromInit(state, action.data.personnes);
         case INSCRIRE_MEMBRE:
             const id = action.data.id;
             return {
