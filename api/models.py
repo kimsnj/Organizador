@@ -93,7 +93,8 @@ class Cours(models.Model):
 class DateCours(models.Model):
     """Model definition for Cours."""
 
-    cours = models.ForeignKey(Cours, on_delete=models.CASCADE)
+    cours = models.ForeignKey(
+        Cours, on_delete=models.CASCADE, related_name='dates')
     date = models.DateField(db_index=True)
 
     class Meta:

@@ -20,7 +20,7 @@ let InfosPersonnelles = ({categorie}) => (
                                 type="text"
                                 name="nom"
                                 className="form-control"
-                                placeholder=""/>
+                                placeholder="" />
                         </div>
                     </div>
                     <div className="form-group row">
@@ -31,7 +31,7 @@ let InfosPersonnelles = ({categorie}) => (
                                 type="text"
                                 name="prenom"
                                 className="form-control"
-                                placeholder=""/>
+                                placeholder="" />
                         </div>
                     </div>
                     <div className="form-group row">
@@ -42,7 +42,7 @@ let InfosPersonnelles = ({categorie}) => (
                                 type="text"
                                 name="date_naissance"
                                 className="form-control"
-                                placeholder=""/>
+                                placeholder="" />
                         </div>
                     </div>
                     <div className="form-group row">
@@ -53,7 +53,7 @@ let InfosPersonnelles = ({categorie}) => (
                                 type="text"
                                 name="telephone"
                                 className="form-control"
-                                placeholder=""/>
+                                placeholder="" />
                         </div>
                     </div>
                     <div className="form-group row">

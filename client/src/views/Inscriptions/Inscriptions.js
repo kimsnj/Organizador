@@ -1,10 +1,12 @@
 import React from 'react';
 import { reduxForm } from 'redux-form'
+import uuidv4 from 'uuid/v4';
 
 import InfosPersonelles from './Formulaires/InfosPersonnelles';
 import InfosCapoeira from './Formulaires/InfosCapoeira';
 import Paiement from './Formulaires/Paiement';
 import DossierInscription from './Formulaires/DossierInscription';
+import { postInscription } from '../../actions/Membres'
 
 
 let Inscriptions = props => {
@@ -29,7 +31,9 @@ let Inscriptions = props => {
 }
 
 Inscriptions = reduxForm({
-  form: 'inscriptions'
+  form: 'inscriptions',
+  onSubmit: (values, dispatch) =>
+    dispatch(postInscription({ ...values, id: uuidv4() })),
 })(Inscriptions)
 
 export default Inscriptions;

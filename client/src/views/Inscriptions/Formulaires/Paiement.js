@@ -1,6 +1,6 @@
-import React, {Component} from 'react';
+import React from 'react';
 import { connect } from 'react-redux'
-import {Field, FieldArray, formValueSelector} from 'redux-form'
+import { Field, FieldArray, formValueSelector } from 'redux-form'
 
 var PRIX_COURS = [
     { prix: 175, categorie: 'eveil', frequence: 1, formeLongue: '1 fois par semaine' },
@@ -12,7 +12,7 @@ var PRIX_COURS = [
     { prix: 175, categorie: 'adultes', frequence: 2, formeLongue: '2 fois par semaine' }
 ];
 
-let renderCheques = ({fields}) => (
+let renderCheques = ({ fields }) => (
     <div>
         <div className="form-group row">
             <div className="form-group col-md-9">
@@ -20,6 +20,7 @@ let renderCheques = ({fields}) => (
             </div>
         </div>
         {fields.map((field, index) => (
+        <i className="fa fa-remove" onClick={() => fields.remove(index)}></i>
             <div className="form-group row">
                 <div className="col-md-2">
                     <button type="button" className="btn btn-danger" onClick={() => fields.remove(index)}>Supprimer</button>
@@ -32,7 +33,7 @@ let renderCheques = ({fields}) => (
                         id="text-input"
                         name="text-input"
                         className="form-control"
-                        placeholder=""/>
+                        placeholder="" />
                 </div>
                 <div className="col-md-2">
                 </div>
@@ -44,7 +45,7 @@ let renderCheques = ({fields}) => (
                         id="text-input"
                         name="text-input"
                         className="form-control"
-                        placeholder=""/>
+                        placeholder="" />
                 </div>
                 <div className="col-md-2"/>
                 <label className="col-md-2 form-control-label" htmlFor="text-input">Date d'encaissement</label>
@@ -55,26 +56,27 @@ let renderCheques = ({fields}) => (
                         id="text-input"
                         name="text-input"
                         className="form-control"
-                        placeholder=""/>
+                        placeholder="" />
                 </div>
             </div>
         ))
-    } </div>
+        } </div>
 )
 
 let filtered_with_type_paiement = (type_paiement) => (
-    type_paiement === "cheque" ? <FieldArray name="cheques" component={renderCheques}/> : null
+    type_paiement === "cheque" ? <FieldArray name="cheques" component={renderCheques} /> : null
 )
 
 let filter_with_category_and_nb_of_classes = (categorie, cours, liste) => {
     console.log("I received category ", categorie, " cours ", cours, " liste ", liste)
     return (
-    PRIX_COURS.filter((element) => 
-        !categorie || (element.categorie === categorie && cours && cours.length === element.frequence))
-) }
+        PRIX_COURS.filter((element) =>
+            !categorie || (element.categorie === categorie && cours && cours.length === element.frequence))
+    )
+}
 
 
-let Paiement = ({typePaiement, categorie, cours}) => (
+let Paiement = ({ typePaiement, categorie, cours }) => (
     <div className="row">
         <div className="col-md-12">
             <div className="card">
@@ -89,7 +91,7 @@ let Paiement = ({typePaiement, categorie, cours}) => (
                         <div className="col-md-9">
                             <Field component="select" id="select" name="selectPrix" className="form-control">
                                 {filter_with_category_and_nb_of_classes(categorie, cours, PRIX_COURS).map((c, idx) => (
-                                    <option value={c.prix}>{c.prix} € : {c.categorie}, {c.formeLongue}</option>
+                                    <option key={idx} value={c.prix}>{c.prix} € : {c.categorie}, {c.formeLongue}</option>
                                 ))}
                             </Field>
                         </div>

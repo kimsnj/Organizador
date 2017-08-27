@@ -1,23 +1,29 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import thunkMiddleware from 'redux-thunk'
 import { Router, Route, Switch } from 'react-router-dom'
 import { createBrowserHistory } from 'history';
 
-import { createStore, combineReducers } from 'redux'
+import { createStore, combineReducers, applyMiddleware, compose } from 'redux'
 import { Provider } from 'react-redux'
 import { reducer as formReducer } from 'redux-form'
+
+import { membres } from './reducers/Membres'
 
 // Containers
 import Full from './containers/Full/'
 
 const rootReducer = combineReducers({
-  // ...your other reducers here
-  // you have to pass formReducer under 'form' key,
-  // for custom keys look up the docs for 'getFormState'
-  form: formReducer
+  form: formReducer,
+  membres
 })
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-const store = createStore(rootReducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
+const store = createStore(rootReducer,
+  /* preloadedState, */
+  composeEnhancers(
+    applyMiddleware(thunkMiddleware)
+  ));
 
 const history = createBrowserHistory();
 
