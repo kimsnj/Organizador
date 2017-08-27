@@ -9,14 +9,17 @@ import { Provider } from 'react-redux'
 import { reducer as formReducer } from 'redux-form'
 
 import { membres } from './reducers/Membres'
+import { cours } from './reducers/Cours'
 
 // Containers
 import Full from './containers/Full/'
 
 const rootReducer = combineReducers({
   form: formReducer,
-  membres
+  membres,
+  cours
 })
+
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const store = createStore(rootReducer,

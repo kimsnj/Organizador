@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "chart.js": "2.5.0",
+    "deep-freeze": "^0.0.1",
     "history": "^4.6.1",
     "isomorphic-fetch": "^2.2.1",
     "react": "^15.5.4",

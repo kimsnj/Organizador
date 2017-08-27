@@ -133,7 +133,7 @@ class Personne(models.Model):
     certificat_medical = models.BooleanField(default=False)
 
     contacts = models.ManyToManyField('self', blank=True)
-    cours = models.ManyToManyField(Cours, blank=True)
+    cours = models.ManyToManyField(Cours, blank=True, related_name='inscrits')
 
     class Meta:
         """Meta definition for Personne."""

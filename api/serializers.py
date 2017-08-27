@@ -18,6 +18,8 @@ class DateCoursSerializer(ModelSerializer):
 
 
 class CoursSerializer(ModelSerializer):
+    inscrits = PrimaryKeyRelatedField(many=True, read_only=True)
+
     class Meta:
         model = Cours
         fields = '__all__'
