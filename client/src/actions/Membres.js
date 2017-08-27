@@ -1,4 +1,4 @@
-import uuidv4 from 'uuid/v4';
+import fetch from 'isomorphic-fetch';
 
 /*
  * Action types
@@ -17,14 +17,11 @@ export const STATUS_ERROR = 'error';
  * Action creators
  */
 
-export const inscrireMembre = (data) => {
+export const inscrireMembre = data => {
     return {
         type: INSCRIRE_MEMBRE,
         status: STATUS_REQUESTED,
-        data: {
-            ...data,
-            id: uuidv4()
-        }
+        data
     }
 };
 
@@ -40,3 +37,49 @@ export const inscrireMembreErreur = (data, error) => ({
     data,
     error
 })
+
+const handlePostResponse = (data, response) => {
+    console.log(response)
+    if (response.ok) {
+        return inscrireMembreSucces(JSON.parse(response.body))
+    }
+    else {
+        return inscrireMembreErreur(data, {
+            code: response.status,
+            text: response.statusText,
+            body: response.body
+        })
+    }
+}
+
+/*
+ * Async actions creators => Going to the server
+ */
+export const postInscription = data => {
+    console.log(data)
+    return dispatch => {
+        dispatch(inscrireMembre(data))
+        return fetch('/api/personnes/', {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method: 'POST',
+            body: JSON.stringify(data)
+        })
+            .then(response =>
+                response
+                    .text()
+                    .then(body => Promise.resolve({
+                        ok: response.ok,
+                        status: response.status,
+                        statusText: response.statusText,
+                        body
+                    }))
+            , error => console.log(error))
+            .then(response =>
+                dispatch(handlePostResponse(data, response)),
+
+        )
+    }
+}

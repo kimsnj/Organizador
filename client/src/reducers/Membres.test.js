@@ -5,7 +5,7 @@ test('Inscription eleve', () => {
     const init = membres(undefined, { type: 'INIT' })
     expect(init).toEqual({})
 
-    const data = { donnees: [1, 2] }
+    const data = { donnees: [1, 2], id: "some-uuid" }
     const action = inscrireMembre(data)
     const uuid = action.data.id
     const after = membres(init, action)

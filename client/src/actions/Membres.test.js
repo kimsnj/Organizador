@@ -9,9 +9,6 @@ test('Inscrire eleve', () => {
     expect(act1.type).toBe(INSCRIRE_MEMBRE);
     expect(act2.type).toBe(INSCRIRE_MEMBRE);
 
-    // IDs are different each time
-    expect(act1.data.id).not.toEqual(act2.data.id);
-
     // Data is kept
     expect(act1.data.test).toBe('data');
     expect(act2.data.other).toBe('info');

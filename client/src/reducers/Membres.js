@@ -1,16 +1,29 @@
-import { INSCRIRE_MEMBRE } from '../actions/Membres'
+import { INSCRIRE_MEMBRE, STATUS_ERROR } from '../actions/Membres'
+
+const inscrireMembre = (membre = {}, action) => {
+    switch (action.status) {
+        case STATUS_ERROR:
+            return {
+                ...membre,
+                status: STATUS_ERROR,
+                error: action.error
+            }
+        default:
+            return {
+                ...action.data,
+                status: action.status
+            };
+    }
+}
 
 export const membres = (state = {}, action) => {
     switch (action.type) {
         case INSCRIRE_MEMBRE:
+            const id = action.data.id;
             return {
                 ...state,
-                [action.data.id]: {
-                    ...action.data,
-                    status: action.status
-                }
+                [id]: inscrireMembre(state[id], action)
             };
-
         default:
             return state;
     }

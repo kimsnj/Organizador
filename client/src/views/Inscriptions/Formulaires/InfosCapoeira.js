@@ -15,28 +15,28 @@ var COURS = [
 ];
 
 var CORDES = [
-    { couleur : 'sem corda', type: 'all'},
-    { couleur : '5 ans', type: 'enfants'},
-    { couleur : '6 ans', type: 'enfants'},
-    { couleur : '7 ans', type: 'enfants'},
-    { couleur : '8 ans', type: 'enfants'},
-    { couleur : '9 ans', type: 'enfants'},
-    { couleur : '10 ans', type: 'enfants'},
-    { couleur : '11 ans', type: 'adolescents'},
-    { couleur : '12 ans', type: 'adolescents'},
-    { couleur : '13 ans', type: 'adolescents'},
-    { couleur : '14 ans', type: 'adolescents'},
-    { couleur : '15 ans', type: 'adolescents'},
-    { couleur : '16 ans', type: 'adolescents'},
-    { couleur : 'Azul', type: 'adultes'},
-    { couleur : 'Laranja', type: 'adultes'},
-    { couleur : 'Laranja Marron', type: 'adultes'},
-    { couleur : 'Marron', type: 'adultes'},
-    { couleur : 'Marron Roxa', type: 'adultes'},
+    { couleur: 'sem corda', type: 'all' },
+    { couleur: '5 ans', type: 'enfants' },
+    { couleur: '6 ans', type: 'enfants' },
+    { couleur: '7 ans', type: 'enfants' },
+    { couleur: '8 ans', type: 'enfants' },
+    { couleur: '9 ans', type: 'enfants' },
+    { couleur: '10 ans', type: 'enfants' },
+    { couleur: '11 ans', type: 'adolescents' },
+    { couleur: '12 ans', type: 'adolescents' },
+    { couleur: '13 ans', type: 'adolescents' },
+    { couleur: '14 ans', type: 'adolescents' },
+    { couleur: '15 ans', type: 'adolescents' },
+    { couleur: '16 ans', type: 'adolescents' },
+    { couleur: 'Azul', type: 'adultes' },
+    { couleur: 'Laranja', type: 'adultes' },
+    { couleur: 'Laranja Marron', type: 'adultes' },
+    { couleur: 'Marron', type: 'adultes' },
+    { couleur: 'Marron Roxa', type: 'adultes' },
 ];
 
 let filtered_with_all = (categorie, liste) => (
-    
+
     liste.filter((element) => (
         !categorie || element.type === categorie || element.type === 'all'
     ))
@@ -100,7 +100,7 @@ let InfosCapoeira = ({ categorie }) => (
                                 {
                                     filtered_with_all(categorie, COURS)
                                         .map((c, idx) => (
-                                            <option value={c.id}>{c.jour} {c.horaire} à {c.lieu} </option>
+                                            <option key={idx} value={c.id}>{c.jour} {c.horaire} à {c.lieu} </option>
                                         ))
                                 }
                             </Field>
@@ -113,7 +113,7 @@ let InfosCapoeira = ({ categorie }) => (
                                 {
                                     filtered_with_all(categorie, CORDES)
                                         .map((c, idx) => (
-                                            <option value={c.couleur}>{c.couleur}</option>
+                                            <option key={idx} value={c.couleur}>{c.couleur}</option>
                                         ))
                                 }
                             </Field>
