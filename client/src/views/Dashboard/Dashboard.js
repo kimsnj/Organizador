@@ -1,5 +1,6 @@
-import React, { Component } from 'react';
-import { NavLink } from 'react-router-dom'
+import React, {Component} from 'react';
+import {NavLink} from 'react-router-dom'
+import Statistiques from './Statistiques'
 
 class Dashboard extends Component {
 
@@ -8,19 +9,24 @@ class Dashboard extends Component {
       <div className="container">
         <div className="row">
           <div className="col">
-            <div className="card">
+            <div className="card bg-primary">
               <div className="card-block">
-                {/* <a href="#">
-                  <h3 className="card-title">Nouvelle inscription</h3>
-                </a> */}
-                <NavLink to={'/inscriptions'} className="nav-link" activeClassName="active"><h3>Nouvelle inscription</h3></NavLink>
+                <NavLink to={'/inscriptions'} className="nav-link text-white" activeClassName="active">
+                  <h3>
+                    <i className="fa fa-flag" style={{ marginRight: 10 + 'px' }} ></i>
+                    Inscriptions</h3>
+                </NavLink>
               </div>
             </div>
           </div>
           <div className="col">
-            <div className="card">
+            <div className="card bg-success">
               <div className="card-block">
-                <NavLink to={'/appel'} className="nav-link" activeClassName="active"><h3>Faire l'appel</h3></NavLink>
+                <NavLink to={'/appel'} className="nav-link text-white" activeClassName="active">
+                  <h3>
+                    <i className="fa fa-hand-paper-o" style={{ marginRight: 10 + 'px' }} ></i>
+                    Faire l'appel</h3>
+                </NavLink>
               </div>
             </div>
           </div>
@@ -28,13 +34,16 @@ class Dashboard extends Component {
         <div className="row">
           <div className="col">
             <div className="card">
-              <div className="card-block">
+              <div className="card-block social-box facebook">
                 <h3 className="card-title">Alertes</h3>
                 <p className="card-text">
                   <ul className="list-group">
-                    <li className="list-group-item list-group-item-action">Paiement <span className="badge badge-default badge-pill">2</span></li>
-                    <li className="list-group-item list-group-item-action">Retards</li>
-                    <li className="list-group-item list-group-item-action">Dossiers incomplets <span className="badge badge-default badge-pill">5</span></li>
+                    <li className="list-group-item list-group-item-action">Paiement
+                      <span className="badge badge-danger badge-pill" style={{ marginLeft: 5 + 'px' }}>2</span>
+                    </li>
+                    <li className="list-group-item list-group-item-action">Dossiers incomplets
+                      <span className="badge badge-warning badge-pill" style={{ marginLeft: 5 + 'px' }}>5</span>
+                    </li>
                   </ul>
                 </p>
               </div>
@@ -43,23 +52,10 @@ class Dashboard extends Component {
         </div>
         <div className="row">
           <div className="col">
-            <div className="card">
-              <div className="card-block">
-                <h3 className="card-title">Statistiques</h3>
-                <p>
-                  <div className="card">
-                    <div className="card-block">
-                      <p> 1er : Katia </p>
-                      <p> 2e : Violinha </p>
-                      <p> 3e : Troca troca </p>
-                    </div>
-                  </div>
-                  </p>
-                </div>
-              </div>
-            </div>
+            <Statistiques/>
           </div>
         </div>
+      </div>
     )
   }
 }

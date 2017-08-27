@@ -20,12 +20,13 @@ let renderCheques = ({ fields }) => (
             </div>
         </div>
         {fields.map((field, index) => (
-            <div className="form-group row" key={index}>
-                <div className="col-md-1">
-                    <i className="fa fa-remove" onClick={() => fields.remove(index)}></i>
+        <i className="fa fa-remove" onClick={() => fields.remove(index)}></i>
+            <div className="form-group row">
+                <div className="col-md-2">
+                    <button type="button" className="btn btn-danger" onClick={() => fields.remove(index)}>Supprimer</button>
                 </div>
-                <label className="col-md-1 form-control-label" htmlFor="text-input">Chèque n°</label>
-                <div className="col-md-10">
+                <label className="col-md-2 form-control-label" htmlFor="text-input">Chèque n°</label>
+                <div className="col-md-8">
                     <Field
                         component="input"
                         type="text"
@@ -34,10 +35,10 @@ let renderCheques = ({ fields }) => (
                         className="form-control"
                         placeholder="" />
                 </div>
-                <div className="col-md-1">
+                <div className="col-md-2">
                 </div>
-                <label className="col-md-1 form-control-label" htmlFor="text-input">Somme</label>
-                <div className="col-md-10">
+                <label className="col-md-2 form-control-label" htmlFor="text-input">Somme</label>
+                <div className="col-md-8">
                     <Field
                         component="input"
                         type="text"
@@ -46,9 +47,9 @@ let renderCheques = ({ fields }) => (
                         className="form-control"
                         placeholder="" />
                 </div>
-                <div className="col-md-1" />
-                <label className="col-md-1 form-control-label" htmlFor="text-input">Date d'encaissement</label>
-                <div className="col-md-10">
+                <div className="col-md-2"/>
+                <label className="col-md-2 form-control-label" htmlFor="text-input">Date d'encaissement</label>
+                <div className="col-md-8">
                     <Field
                         component="input"
                         type="text"
@@ -98,24 +99,12 @@ let Paiement = ({ typePaiement, categorie, cours }) => (
                     <div className="form-group row">
                         <label className="col-md-3 form-control-label" htmlFor="text-input">Moyen de paiement</label>
                         <div className="col-md-9">
-                            <Field component="select" id="select" name="selectTypePaiement" className="form-control">
+                            <Field component="select" id="multiple-select" name="selectTypePaiement" className="form-control">
                                 <option name="typePaiement" value="">Dérouler...</option>
                                 <option name="typePaiement" value="cheque">Chèque</option>
                                 <option name="typePaiement" value="liquide">Liquide</option>
                                 <option name="typePaiement" value="virement">Virement</option>
                             </Field>
-                        </div>
-                    </div>
-
-                    <div className="form-group row">
-                        <label className="col-md-3 form-control-label" htmlFor="text-input">Commentaire</label>
-                        <div className="col-md-9">
-                            <textarea
-                                id="textarea-input"
-                                name="textarea-input"
-                                rows="9"
-                                className="form-control"
-                                placeholder="Content.."></textarea>
                         </div>
                     </div>
                     {filtered_with_type_paiement(typePaiement)}

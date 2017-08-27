@@ -42,21 +42,6 @@ let filtered_with_all = (categorie, liste) => (
     ))
 )
 
-/*
-FONCTION ANONYME
-
-(c) => (
-        c.type == categorie || c.type == 'all'
-    )
-
-EQUIVALENT TO
-
-function (c) {
-    return c.type == categorie || c.type == 'all';
-}
-
-*/
-
 let InfosCapoeira = ({ categorie }) => (
     <div className="row">
         <div className="col-md-12">
@@ -71,7 +56,7 @@ let InfosCapoeira = ({ categorie }) => (
                             <Field component="input"
                                 type="text"
                                 id="text-input"
-                                name="apellido"
+                                name="surnom"
                                 className="form-control"
                                 placeholder="" />
                         </div>
@@ -123,16 +108,16 @@ let InfosCapoeira = ({ categorie }) => (
                         <label className="col-md-3 form-control-label">Taille d'abada</label>
                         <div className="col-md-9">
                             <label className="radio-inline" htmlFor="inline-radio1">
-                                <Field component="input" type="radio" id="inline-radio1" name="taille" value="P" /> P
+                                <Field component="input" type="radio" id="inline-radio1" name="taille_abada" value="P" /> P
                                 </label>
                             <label className="radio-inline" htmlFor="inline-radio2" style={{ marginLeft: 5 + 'px' }}>
-                                <Field component="input" type="radio" id="inline-radio2" name="taille" value="M" /> M
+                                <Field component="input" type="radio" id="inline-radio2" name="taille_abada" value="M" /> M
                                 </label>
                             <label className="radio-inline" htmlFor="inline-radio3" style={{ marginLeft: 5 + 'px' }}>
-                                <Field component="input" type="radio" id="inline-radio3" name="taille" value="G" /> G
+                                <Field component="input" type="radio" id="inline-radio3" name="taille_abada" value="G" /> G
                                 </label>
                             <label className="radio-inline" htmlFor="inline-radio3" style={{ marginLeft: 5 + 'px' }}>
-                                <Field component="input" type="radio" id="inline-radio3" name="taille" value="GG" /> GG
+                                <Field component="input" type="radio" id="inline-radio3" name="taille_abada" value="GG" /> GG
                                 </label>
                         </div>
                     </div>
