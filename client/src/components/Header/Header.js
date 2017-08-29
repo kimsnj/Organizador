@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import { Dropdown, DropdownMenu, DropdownItem } from 'reactstrap';
 
 class Header extends Component {
@@ -62,7 +62,7 @@ class Header extends Component {
           className="navbar-toggler mobile-sidebar-toggler d-lg-none"
           onClick={this.mobileSidebarToggle}
           type="button">&#9776;</button>
-        <a className="navbar-brand" href="/"></a>
+        <a className="navbar-brand" href="/"> </a>
         <ul className="nav navbar-nav d-md-down-none mr-auto">
           <li className="nav-item">
             <button
@@ -78,7 +78,7 @@ class Header extends Component {
                   type="search"
                   value="Rechercher..."
                   id="example-search-input"
-                  onChange={this.onResearchChanged}/>
+                  onChange={this.onResearchChanged} />
               </div>
             </div>
           </li>
@@ -101,7 +101,7 @@ class Header extends Component {
                 aria-expanded={this.state.dropdownOpen}>
                 <img
                   src={'img/avatars/governador.jpg'}
-                  className="img-avatar"/>
+                  className="img-avatar" />
                 <span className="d-md-down-none">Karim</span>
               </button>
 

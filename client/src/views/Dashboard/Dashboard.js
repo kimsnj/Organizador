@@ -1,6 +1,7 @@
-import React, {Component} from 'react';
-import {NavLink} from 'react-router-dom'
-import Statistiques from './Statistiques'
+import React, { Component } from 'react';
+import { NavLink } from 'react-router-dom'
+import Statistiques from './Statistiques';
+import moment from 'moment'
 
 class Dashboard extends Component {
 
@@ -22,7 +23,7 @@ class Dashboard extends Component {
           <div className="col">
             <div className="card bg-success">
               <div className="card-block">
-                <NavLink to={'/appel'} className="nav-link text-white" activeClassName="active">
+                <NavLink to={'/appel/' + moment().format('YYYY-MM-DD')} className="nav-link text-white" activeClassName="active">
                   <h3>
                     <i className="fa fa-hand-paper-o" style={{ marginRight: 10 + 'px' }} ></i>
                     Faire l'appel</h3>
@@ -52,7 +53,7 @@ class Dashboard extends Component {
         </div>
         <div className="row">
           <div className="col">
-            <Statistiques/>
+            <Statistiques />
           </div>
         </div>
       </div>

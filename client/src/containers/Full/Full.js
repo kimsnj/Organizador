@@ -15,15 +15,15 @@ class Full extends Component {
       <div className="app">
         <Header />
         <div className="app-body">
-          <Sidebar {...this.props}/>
+          <Sidebar {...this.props} />
           <main className="main">
             <Breadcrumb />
             <div className="container-fluid">
               <Switch>
-                <Route path="/dashboard" name="Dashboard" component={Dashboard}/>
-                <Route path="/inscriptions" name="Inscriptions" component={Inscriptions}/>
-                <Route path="/appel" name="Appel" component={Appel}/>
-                <Redirect from="/" to="/dashboard"/>
+                <Route path="/dashboard" name="Dashboard" component={Dashboard} />
+                <Route path="/inscriptions" name="Inscriptions" component={Inscriptions} />
+                <Route path="/appel/:date/:cours_id?" name="Appel" component={Appel} />
+                <Redirect from="/" to="/dashboard" />
               </Switch>
             </div>
           </main>
