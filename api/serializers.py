@@ -50,14 +50,13 @@ class CoursSerializer(ModelSerializer):
 class EmbeddedPaiementSerializer(ModelSerializer):
     class Meta:
         model = Paiement
-        fields = ('methode', 'somme',
-                  'encaissement', 'validite', 'encaisse')
+        fields = ('methode', 'somme', 'encaissement', 'encaisse')
 
 
 class PersonneSerializer(ModelSerializer):
     id = UUIDField(read_only=False, required=False)
     cours = PrimaryKeyRelatedField(
-        many=True, read_only=False, queryset=Cours.objects.all())
+        many=True, read_only=False, queryset=Cours.objects.all(), required=False)
     contacts = PrimaryKeyRelatedField(
         many=True, read_only=False, queryset=Personne.objects.all(), required=False)
     paiements = EmbeddedPaiementSerializer(many=True, required=False)
