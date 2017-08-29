@@ -20,6 +20,7 @@ let renderCheques = ({ fields }) => (
             </div>
         </div>
         {fields.map((field, index) => (
+            <div>
         <i className="fa fa-remove" onClick={() => fields.remove(index)}></i>
             <div className="form-group row">
                 <div className="col-md-2">
@@ -58,6 +59,7 @@ let renderCheques = ({ fields }) => (
                         className="form-control"
                         placeholder="" />
                 </div>
+            </div>
             </div>
         ))
         } </div>
