@@ -133,7 +133,7 @@ class Personne(models.Model):
     fiche_adhesion = models.BooleanField(default=False)
     certificat_medical = models.BooleanField(default=False)
 
-    contacts = models.ManyToManyField('self', blank=True)
+    contacts = models.ManyToManyField('self', symmetrical=False, blank=True)
     cours = models.ManyToManyField(Cours, blank=True, related_name='inscrits')
 
     class Meta:

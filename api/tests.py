@@ -170,3 +170,6 @@ class DateCorusSerializerTest(TestCase):
         new_contacts = new_p.contacts.all()
         self.assertEqual(len(new_contacts), 1)
         self.assertEqual(new_contacts[0].id, p.id)
+
+        p = Personne.objects.get(pk=p.id)
+        self.assertEqual(len(p.contacts.all()), 0)
