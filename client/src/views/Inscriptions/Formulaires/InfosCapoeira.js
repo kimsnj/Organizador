@@ -8,7 +8,7 @@ var key_ado = "ADO"
 var key_adulte = "ADULTE"
 
 var CORDES = [
-    { couleur: 'sem corda', categorie: 'all' },
+    { couleur: 'Sem corda', categorie: 'all' },
     { couleur: '5 ans', categorie: key_enfants },
     { couleur: '6 ans', categorie: key_enfants },
     { couleur: '7 ans', categorie: key_enfants },
@@ -30,7 +30,7 @@ var CORDES = [
 
 let filtered_with_all = (categorie, liste) => ( 
     liste.filter((element) => (
-        !categorie || element.categorie === categorie
+        !categorie || element.categorie === categorie || element.categorie === 'all'
     )
 )
 )

@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux'
 import {Field, formValueSelector} from 'redux-form'
-import STATUS_SUCCES from '../../../actions/Membres'
 
 let filter_all_valid_members = (members) => {
     var people = [];
@@ -98,7 +97,7 @@ let InfosPersonnelles = ({categorie, members}) => (
                         <div className="col-md-9">
                             <Field component="select" id="multiple-select-emergency" name="emergency" className="form-control" size="5" multiple>
                                 {filter_all_valid_members(members).map((c, idx) => (
-                                            <option value={c.id}>{c.prenom} {c.nom} </option>
+                                            <option value={c.id} key={c.id}>{c.prenom} {c.nom} </option>
                                         ))}
                             </Field>
                         </div>
