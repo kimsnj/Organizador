@@ -27,7 +27,8 @@ let Inscriptions = props => {
           <button
             type="submit"
             className="btn btn-sm btn-primary"
-            disabled={pristine || submitting}>Enregistrer</button>
+            disabled={pristine || submitting}
+            onClick={handleClick}>Enregistrer</button>
           <button
             type="button"
             className="btn btn-sm"
@@ -39,6 +40,10 @@ let Inscriptions = props => {
       </form>
     </div>
   )
+}
+
+let handleClick = () => {
+   window.scrollTo(0, 0)
 }
 
 Inscriptions = reduxForm({

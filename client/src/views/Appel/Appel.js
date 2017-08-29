@@ -36,7 +36,6 @@ const renderEleve = (eleve, idx) =>
 let AppelForm = ({ handleSubmit, courses, classes, index, inscrits, presents, props }) => {
   return (
   <div className="row">
-    <form onSubmit={handleSubmit}>
       <div className="col-md-12">
         <div className="card">
           <div className="card-header">
@@ -82,7 +81,6 @@ let AppelForm = ({ handleSubmit, courses, classes, index, inscrits, presents, pr
           </div>
         </div>
       </div>
-    </form>
 </div>)
 }
 
