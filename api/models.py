@@ -118,8 +118,8 @@ class Personne(models.Model):
     surnom = models.CharField(
         db_index=True, blank=True, null=True, max_length=50)
     date_naissance = models.DateField(
-        auto_now=False, auto_now_add=False, null=True)
-    telephone = models.CharField(max_length=50)
+        auto_now=False, auto_now_add=False, blank=True, null=True)
+    telephone = models.CharField(max_length=50, blank=True, null=True)
     adresse = models.TextField(blank=True, null=True)
 
     categorie = models.CharField(
@@ -181,7 +181,6 @@ class Paiement(models.Model):
     methode = models.CharField(max_length=10, choices=METHODE_PAIEMENT_CHOIX)
     somme = models.IntegerField()
     encaissement = models.DateField(null=True, blank=True)
-    validite = models.DateField()
     encaisse = models.BooleanField(default=False)
     payeur = models.ForeignKey(Personne, related_name='paiements')
 

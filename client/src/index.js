@@ -10,6 +10,8 @@ import { reducer as formReducer } from 'redux-form'
 
 import { membres } from './reducers/Membres'
 import { cours } from './reducers/Cours'
+import { dates } from './reducers/Dates'
+import initialize from './initialize'
 
 // Containers
 import Full from './containers/Full/'
@@ -17,7 +19,8 @@ import Full from './containers/Full/'
 const rootReducer = combineReducers({
   form: formReducer,
   membres,
-  cours
+  cours,
+  dates
 })
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
@@ -28,6 +31,7 @@ const store = createStore(rootReducer,
     applyMiddleware(thunkMiddleware)
   ));
 
+initialize(store.dispatch)
 const history = createBrowserHistory();
 
 ReactDOM.render((

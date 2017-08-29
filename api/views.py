@@ -32,6 +32,7 @@ def two_month_range():
 
 
 class InitView(MultipleModelAPIView):
+    objectify = True
     queryList = [
         (Personne.objects.all(), PersonneSerializer, 'personnes'),
         (Cours.objects.all(), CoursSerializer, 'cours'),

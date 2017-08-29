@@ -1,5 +1,5 @@
-import {INSCRIRE_MEMBRE, STATUS_ERROR, STATUS_SUCCES} from '../actions/Membres'
-import {INIT} from '../actions/common'
+import { INSCRIRE_MEMBRE, STATUS_ERROR, STATUS_SUCCES } from '../actions/Membres'
+import { INIT } from '../actions/common'
 
 const inscrireMembre = (membre = {}, action) => {
     switch (action.status) {
@@ -25,6 +25,7 @@ const enrichFromInit = (old_state, personnes = []) => {
             status: STATUS_SUCCES
         }
     }
+    return state;
 }
 
 export const membres = (state = {}, action) => {

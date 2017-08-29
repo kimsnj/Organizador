@@ -1,4 +1,4 @@
-import {INIT} from '../actions/common'
+import { INIT } from '../actions/common'
 
 /**
  * {"id":1,"date":"2017-09-04","cours":1,"presences":[{"personne":"b7a132d2-e7b1-4e0b-aad5-b78491e98d73","present":false},{"personne":"3cfbe933-9c11-458a-9f51-5a1644684c4c","present":true}]}
