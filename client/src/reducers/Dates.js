@@ -12,6 +12,7 @@ const enrichFromInit = (old_state, dates = []) => {
         let datesInfoMap = {
             id: dates[i].id,
             cours: dates[i].cours,
+            date: dates[i].date,
             presents: new Set()
         }
         for (let j = 0; j < dates[i].presences.length; j++) {
