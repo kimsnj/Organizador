@@ -2,47 +2,40 @@ import React from 'react';
 import { connect } from 'react-redux'
 import { Field, formValueSelector } from 'redux-form'
 
-var COURS = [
-    { id: 1, jour: 'Lundi', horaire: '17h-18h30', lieu: 'Ranguin', type: 'adolescents' },
-    { id: 2, jour: 'Lundi', horaire: '20h-21h30', lieu: 'Ranguin', type: 'adultes' },
-    { id: 3, jour: 'Mercredi', horaire: '18h30-19h30', lieu: 'Pégomas', type: 'adolescents' },
-    { id: 4, jour: 'Mercredi', horaire: '17h-18h15', lieu: 'Auribeau', type: 'enfants' },
-    { id: 5, jour: 'Jeudi', horaire: '17h-18h', lieu: 'Pégomas', type: 'eveil' },
-    { id: 6, jour: 'Jeudi', horaire: '18h-19h30', lieu: 'Pégomas', type: 'enfants' },
-    { id: 7, jour: 'Jeudi', horaire: '20h-21h30', lieu: 'Auribeau', type: 'adultes' },
-    { id: 8, jour: 'Vendredi', horaire: '17h-18h', lieu: 'Pégomas', type: 'eveil' },
-    { id: 9, jour: 'Vendredi', horaire: '18h-19h', lieu: 'Pégomas', type: 'all' }
-];
+var key_eveil = "EVEIL"
+var key_enfants = "ENFANT"
+var key_ado = "ADO"
+var key_adulte = "ADULTE"
 
 var CORDES = [
-    { couleur: 'sem corda', type: 'all' },
-    { couleur: '5 ans', type: 'enfants' },
-    { couleur: '6 ans', type: 'enfants' },
-    { couleur: '7 ans', type: 'enfants' },
-    { couleur: '8 ans', type: 'enfants' },
-    { couleur: '9 ans', type: 'enfants' },
-    { couleur: '10 ans', type: 'enfants' },
-    { couleur: '11 ans', type: 'adolescents' },
-    { couleur: '12 ans', type: 'adolescents' },
-    { couleur: '13 ans', type: 'adolescents' },
-    { couleur: '14 ans', type: 'adolescents' },
-    { couleur: '15 ans', type: 'adolescents' },
-    { couleur: '16 ans', type: 'adolescents' },
-    { couleur: 'Azul', type: 'adultes' },
-    { couleur: 'Laranja', type: 'adultes' },
-    { couleur: 'Laranja Marron', type: 'adultes' },
-    { couleur: 'Marron', type: 'adultes' },
-    { couleur: 'Marron Roxa', type: 'adultes' },
+    { couleur: 'sem corda', categorie: 'all' },
+    { couleur: '5 ans', categorie: key_enfants },
+    { couleur: '6 ans', categorie: key_enfants },
+    { couleur: '7 ans', categorie: key_enfants },
+    { couleur: '8 ans', categorie: key_enfants },
+    { couleur: '9 ans', categorie: key_enfants },
+    { couleur: '10 ans', categorie: key_enfants },
+    { couleur: '11 ans', categorie: key_ado },
+    { couleur: '12 ans', categorie: key_ado },
+    { couleur: '13 ans', categorie: key_ado },
+    { couleur: '14 ans', categorie: key_ado },
+    { couleur: '15 ans', categorie: key_ado },
+    { couleur: '16 ans', categorie: key_ado },
+    { couleur: 'Azul', categorie: key_adulte },
+    { couleur: 'Laranja', categorie: key_adulte },
+    { couleur: 'Laranja Marron', categorie: key_adulte },
+    { couleur: 'Marron', categorie: key_adulte },
+    { couleur: 'Marron Roxa', categorie: key_adulte },
 ];
 
-let filtered_with_all = (categorie, liste) => (
-
+let filtered_with_all = (categorie, liste) => ( 
     liste.filter((element) => (
-        !categorie || element.type === categorie || element.type === 'all'
-    ))
+        !categorie || element.categorie === categorie
+    )
+)
 )
 
-let InfosCapoeira = ({ categorie }) => (
+let InfosCapoeira = ({categorie, cours}) => (
     <div className="row">
         <div className="col-md-12">
             <div className="card">
@@ -65,27 +58,28 @@ let InfosCapoeira = ({ categorie }) => (
                         <label className="col-md-3 form-control-label">Type de cours</label>
                         <div className="col-md-9">
                             <label className="radio-inline" htmlFor="inline-radio1">
-                                <Field component="input" type="radio" id="inline-radio1" name="categorie" value="eveil" /> Eveil
+                                <Field component="input" type="radio" id="inline-radio1" name="categorie" value={key_eveil}/> Eveil
                             </label>
                             <label className="radio-inline" htmlFor="inline-radio2" style={{ marginLeft: 5 + 'px' }}>
-                                <Field component="input" type="radio" id="inline-radio2" name="categorie" value="enfants" /> Enfants
+                                <Field component="input" type="radio" id="inline-radio2" name="categorie" value={key_enfants}/> Enfants
                                 </label>
                             <label className="radio-inline" htmlFor="inline-radio3" style={{ marginLeft: 5 + 'px' }}>
-                                <Field component="input" type="radio" id="inline-radio3" name="categorie" value="adolescents" /> Adolescents
+                                <Field component="input" type="radio" id="inline-radio3" name="categorie" value={key_ado}/> Adolescents
                                 </label>
                             <label className="radio-inline" htmlFor="inline-radio3" style={{ marginLeft: 5 + 'px' }}>
-                                <Field component="input" type="radio" id="inline-radio3" name="categorie" value="adultes" /> Adultes
+                                <Field component="input" type="radio" id="inline-radio3" name="categorie" value={key_adulte}/> Adultes
                                 </label>
                         </div>
                     </div>
                     <div className="form-group row">
                         <label className="col-md-3 form-control-label" htmlFor="multiple-select">Cours</label>
                         <div className="col-md-9">
-                            <Field component="select" id="multiple-select" name="cours" className="form-control" size="5" multiple>
+                            {/* Filtered from database values */}
+                            <Field component="select" id="multiple-select-classes" name="cours" className="form-control" size="5" multiple>
                                 {
-                                    filtered_with_all(categorie, COURS)
+                                    filtered_with_all(categorie, Object.values(cours))
                                         .map((c, idx) => (
-                                            <option key={idx} value={c.id}>{c.jour} {c.horaire} à {c.lieu} </option>
+                                            <option key={idx} value={c.id}>{c.categorie}, {c.horaire} à {c.salle} </option>
                                         ))
                                 }
                             </Field>
@@ -94,6 +88,7 @@ let InfosCapoeira = ({ categorie }) => (
                     <div className="form-group row">
                         <label className="col-md-3 form-control-label" htmlFor="select">Corde</label>
                         <div className="col-md-9">
+                            {/* Filtered from static application values */}
                             <Field component="select" id="select" name="corde" className="form-control">
                                 {
                                     filtered_with_all(categorie, CORDES)
@@ -118,7 +113,7 @@ let InfosCapoeira = ({ categorie }) => (
                                 </label>
                             <label className="radio-inline" htmlFor="inline-radio3" style={{ marginLeft: 5 + 'px' }}>
                                 <Field component="input" type="radio" id="inline-radio3" name="taille_abada" value="GG" /> GG
-                                </label>
+                            </label>
                         </div>
                     </div>
                 </div>
@@ -133,7 +128,8 @@ InfosCapoeira = connect(
     state => {
         const categorie = selector(state, 'categorie') // a travers la fonctionnalite selector de reduxform, accède au champ dont name="categorie"
         return {
-            categorie
+            categorie,
+            cours: state.cours
         }
     }
 )(InfosCapoeira)

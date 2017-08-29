@@ -1,8 +1,19 @@
 import React from 'react';
 import { connect } from 'react-redux'
 import {Field, formValueSelector} from 'redux-form'
+import STATUS_SUCCES from '../../../actions/Membres'
 
-let InfosPersonnelles = ({categorie}) => (
+let filter_all_valid_members = (members) => {
+    var people = [];
+    for (const key of Object.keys(members)) {
+        if (members[key].status === 'success') {
+            people.push(members[key]);
+        }       
+    }
+    return people;
+}
+
+let InfosPersonnelles = ({categorie, members}) => (
     <div className="row">
         <div className="col-md-12">
             <div className="card">
@@ -39,7 +50,7 @@ let InfosPersonnelles = ({categorie}) => (
                         <div className="col-md-9">
                             <Field
                                 component="input"
-                                type="text"
+                                type="date"
                                 name="date_naissance"
                                 className="form-control"
                                 placeholder="" />
@@ -85,11 +96,10 @@ let InfosPersonnelles = ({categorie}) => (
                     <div className="form-group row">
                         <label className="col-md-3 form-control-label">Contact d'urgence</label>
                         <div className="col-md-9">
-                            <Field component="select" id="multiple-select" name="cours" className="form-control" size="5" multiple>
-                                <option value="personne 1">Personne 1</option>
-                                <option value="personne 2">Personne 2</option>
-                                <option value="personne 3">Personne 3</option>
-                                <option value="personne 4">Personne 4</option>
+                            <Field component="select" id="multiple-select-emergency" name="emergency" className="form-control" size="5" multiple>
+                                {filter_all_valid_members(members).map((c, idx) => (
+                                            <option value={c.id}>{c.prenom} {c.nom} </option>
+                                        ))}
                             </Field>
                         </div>
                     </div>
@@ -104,7 +114,8 @@ InfosPersonnelles = connect(
     state => {
         const categorie = selector(state, 'categorie')
         return {
-            categorie
+            categorie,
+            members: state.membres
         }
     }
 )(InfosPersonnelles)
