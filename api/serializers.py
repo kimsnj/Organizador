@@ -1,5 +1,6 @@
-from rest_framework.serializers import ModelSerializer, UUIDField, IntegerField, ListField, PrimaryKeyRelatedField
-from .models import Paiement, Cours, Personne, DateCours
+from rest_framework.serializers import ModelSerializer, UUIDField, IntegerField, ListField, PrimaryKeyRelatedField, DateField
+from rest_framework.exceptions import MethodNotAllowed
+from .models import Paiement, Cours, Personne, DateCours, Presence
 from datetime import date, timedelta
 
 
@@ -9,12 +10,33 @@ class PaiementSerializer(ModelSerializer):
         fields = '__all__'
 
 
+class EmbeddedPresenceSerializer(ModelSerializer):
+    class Meta:
+        model = Presence
+        fields = ('personne', 'present')
+
+
 class DateCoursSerializer(ModelSerializer):
+    date = DateField(read_only=True)
     cours = PrimaryKeyRelatedField(read_only=True)
+    presences = EmbeddedPresenceSerializer(many=True, read_only=False)
 
     class Meta:
         model = DateCours
         fields = '__all__'
+
+    def update(self, instance, validated_data):
+        print("About to update: ", validated_data)
+        # Full replace of presences
+        Presence.objects.filter(cours=instance).delete()
+        for donnees_presence in validated_data.get('presences', []):
+            Presence.objects.create(cours=instance, **donnees_presence)
+        return instance
+
+    def create(self, validated_data):
+        print('Automatically create at Courses save, it\'s not allowed to POST them')
+        raise MethodNotAllowed(
+            'POST', detail='Dates are automatically created with Courses.')
 
 
 class CoursSerializer(ModelSerializer):

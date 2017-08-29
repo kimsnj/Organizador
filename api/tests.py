@@ -5,8 +5,10 @@ from uuid import uuid4
 from hypothesis import given, settings
 from hypothesis.strategies import dates, integers, composite
 
-from .models import Cours, Personne
-from .serializers import PersonneSerializer
+from .serializers import PersonneSerializer, DateCoursSerializer
+from .models import Cours, Personne, DateCours, Presence
+
+from rest_framework.renderers import JSONRenderer
 
 
 @composite
@@ -55,6 +57,66 @@ class CoursTestCase(TestCase):
 
 
 class PersonneSerializerTest(TestCase):
+    def test_create(self):
+        c = Cours(jour=0,
+                  salle='Auribeau',
+                  categorie='ADULTE',
+                  horaire=time(hour=17),
+                  dernier=date.today() + timedelta(days=14))
+        c.save()
+        d = list(DateCours.objects.filter(cours=c))[0]
+        p1 = Personne(nom="M", prenom="H", telephone="06")
+        p1.save()
+
+        donnees = {
+            "id": d.id,
+            "presences": [{
+                "personne": p1.id,
+                "present": True
+            }]
+        }
+
+        serializer = DateCoursSerializer(d, data=donnees)
+        if not serializer.is_valid():
+            self.assertTrue(False, "Invalid serializer: " +
+                            str(serializer.errors))
+        serializer.save()
+
+        presence = Presence.objects.filter(cours=d, personne=p1)
+        self.assertEqual(len(presence), 1)
+        self.assertTrue(presence[0].present)
+
+        p2 = Personne(nom="K", prenom="S", telephone="06")
+        p2.save()
+
+        donnees = {
+            "id": d.id,
+            "presences": [{
+                "personne": p1.id,
+                "present": False
+            }, {
+                "personne": p2.id,
+                "present": True
+            }]
+        }
+
+        serializer = DateCoursSerializer(d, data=donnees)
+        if not serializer.is_valid():
+            self.assertTrue(False, "Invalid serializer: " +
+                            str(serializer.errors))
+        serializer.save()
+        print('JSON rendering: ', JSONRenderer().render(serializer.data))
+
+        presence = Presence.objects.filter(cours=d, personne=p1)
+        self.assertEqual(len(presence), 1)
+        self.assertFalse(presence[0].present)
+
+        presence = Presence.objects.filter(cours=d, personne=p2)
+        self.assertEqual(len(presence), 1)
+        self.assertTrue(presence[0].present)
+
+
+class DateCorusSerializerTest(TestCase):
     def test_create(self):
         c = Cours(jour=0,
                   salle='Ranguin',

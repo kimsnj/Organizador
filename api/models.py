@@ -75,7 +75,8 @@ class Cours(models.Model):
     def are_dates_to_be_updated(self):
         return self.pk is None \
             or self.__original_jour != self.jour \
-            or self.__original_dernier != self.dernier
+            or self.__original_dernier != self.dernier \
+            or len(DateCours.objects.filter(cours=self)) == 0
 
     def save(self, *args, **kwargs):
         """ Enregistre le cours actuelles et créent tout les dates liées """
@@ -149,7 +150,8 @@ class Personne(models.Model):
 class Presence(models.Model):
     """Model definition for Presence."""
 
-    cours = models.ForeignKey(DateCours, on_delete=models.CASCADE)
+    cours = models.ForeignKey(
+        DateCours, on_delete=models.CASCADE, related_name='presences')
     personne = models.ForeignKey(Personne, on_delete=models.CASCADE)
     present = models.BooleanField()
 
