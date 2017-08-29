@@ -2,14 +2,19 @@ import React from 'react';
 import { connect } from 'react-redux'
 import { Field, FieldArray, formValueSelector } from 'redux-form'
 
+var key_eveil = "EVEIL"
+var key_enfants = "ENFANT"
+var key_ado = "ADO"
+var key_adulte = "ADULTE"
+
 var PRIX_COURS = [
-    { prix: 175, categorie: 'eveil', frequence: 1, formeLongue: '1 fois par semaine' },
-    { prix: 185, categorie: 'enfants', frequence: 1, formeLongue: '1 fois par semaine' },
-    { prix: 195, categorie: 'adolescents', frequence: 1, formeLongue: '1 fois par semaine' },
-    { prix: 220, categorie: 'adultes', frequence: 1, formeLongue: '1 fois par semaine' },
-    { prix: 308, categorie: 'enfants', frequence: 2, formeLongue: '2 fois par semaine' },
-    { prix: 175, categorie: 'adolescents', frequence: 2, formeLongue: '2 fois par semaine' },
-    { prix: 175, categorie: 'adultes', frequence: 2, formeLongue: '2 fois par semaine' }
+    { prix: 175, categorie: key_eveil, frequence: 1, formeLongue: '1 fois par semaine' },
+    { prix: 185, categorie: key_enfants, frequence: 1, formeLongue: '1 fois par semaine' },
+    { prix: 195, categorie: key_ado, frequence: 1, formeLongue: '1 fois par semaine' },
+    { prix: 220, categorie: key_adulte, frequence: 1, formeLongue: '1 fois par semaine' },
+    { prix: 308, categorie: key_enfants, frequence: 2, formeLongue: '2 fois par semaine' },
+    { prix: 175, categorie: key_ado, frequence: 2, formeLongue: '2 fois par semaine' },
+    { prix: 175, categorie: key_adulte, frequence: 2, formeLongue: '2 fois par semaine' }
 ];
 
 let renderCheques = ({ fields }) => (
@@ -70,7 +75,7 @@ let filtered_with_type_paiement = (type_paiement) => (
 )
 
 let filter_with_category_and_nb_of_classes = (categorie, cours, liste) => {
-    console.log("I received category ", categorie, " cours ", cours, " liste ", liste)
+    console.log("filter_with_category_and_nb_of_classes : categorie ", categorie, " cours ", cours)
     return (
         PRIX_COURS.filter((element) =>
             !categorie || (element.categorie === categorie && cours && cours.length === element.frequence))

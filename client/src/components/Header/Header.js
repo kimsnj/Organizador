@@ -52,7 +52,6 @@ class Header extends Component {
   }
 
   onResearchChanged(e) {
-    console.log('DO something');
   }
 
   render() {
