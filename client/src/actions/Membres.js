@@ -5,6 +5,7 @@ import fetch from 'isomorphic-fetch';
  */
 
 export const INSCRIRE_MEMBRE = 'INSCRIRE_MEMBRE';
+export const ENREGISTRER_APPEL = 'ENREGISTRER_APPEL';
 
 /*
  * Actions status for asynch calls
@@ -38,6 +39,27 @@ export const inscrireMembreErreur = (data, error) => ({
     error
 })
 
+export const enregistrerAppel = data => {
+    return {
+        type: ENREGISTRER_APPEL,
+        status: STATUS_REQUESTED,
+        data
+    }
+};
+
+export const enregistrerAppelSucces = data => ({
+    type: ENREGISTRER_APPEL,
+    status: STATUS_SUCCES,
+    data
+});
+
+export const enregistrerAppelErreur = (data, error) => ({
+    type: ENREGISTRER_APPEL,
+    status: STATUS_ERROR,
+    data,
+    error
+})
+
 const handlePostResponse = (data, response) => {
     console.log(response)
     if (response.ok) {
@@ -51,6 +73,20 @@ const handlePostResponse = (data, response) => {
         })
     }
 }
+
+const handlePutResponse = (data, response) => {
+    console.log(response) 
+    if (response.ok) {
+        return enregistrerAppelSucces(JSON.parse(response.body))
+    } else {
+        return inscrireMembreErreur(data, {
+            code: response.status,
+            text: response.statusText,
+            body: response.body
+        })
+    }
+}
+
 
 /*
  * Async actions creators => Going to the server
@@ -81,5 +117,36 @@ export const postInscription = data => {
                 dispatch(handlePostResponse(data, response)),
 
         )
+    }
+}
+
+export const putAppel = data => {
+    console.log(data)
+    return dispatch => {
+        dispatch(enregistrerAppel(data))
+
+        console.log("JON SNOW ", JSON.stringify(data))
+
+
+
+        return fetch('/api/cours/', {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method: 'PUT',
+            body: JSON.stringify(data)  // you gotta chaaaaaaaaaaaaaaaaaaange meeeeeeeeeeeeeeeeeeee
+        })
+            .then(response =>
+            response.text().then(body => Promise.resolve({
+                ok: response.ok,
+                status: response.status,
+                statusText: response.statusText,
+                body
+            }))
+            , error => console.log(error))
+            .then(response =>
+                dispatch(handlePutResponse(data, response))
+            )
     }
 }
