@@ -22,7 +22,7 @@ class Full extends Component {
               <Switch>
                 <Route path="/dashboard" name="Dashboard" component={Dashboard} />
                 <Route path="/inscriptions" name="Inscriptions" component={Inscriptions} />
-                <Route path="/appel/:date/:cours_id?" name="Appel" component={Appel} />
+                <Route path="/appel/:date/:index?" name="Appel" component={Appel} />
                 <Redirect from="/" to="/dashboard" />
               </Switch>
             </div>
