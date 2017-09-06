@@ -10,7 +10,7 @@ class Statistiques extends Component {
                 <div className="col-md-12">
                     <div className="card">
                         <div className="card-header">
-                            Statistiques
+                            <h4><i className="fa fa-area-chart" style={{ marginRight: 10 + 'px' }} ></i>Statistiques</h4>
                         </div>
                         <div className="card-block">
                             <div className="row">

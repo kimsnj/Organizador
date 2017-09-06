@@ -192,4 +192,4 @@ class Paiement(models.Model):
 
     def __str__(self):
         """Unicode representation of Paiement."""
-        return "Paiement par {} pour {}".format(self.get_methode_display(), self.inscription)
+        return "Paiement par {} pour {}".format(self.get_methode_display(), self.payeur)

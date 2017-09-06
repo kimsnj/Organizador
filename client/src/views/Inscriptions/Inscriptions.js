@@ -17,6 +17,7 @@ let Inscriptions = props => {
           <button type="submit" className="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="top" title="Bientôt!">Nouvelle inscription</button>&nbsp;
           <button type="submit" className="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="top" title="Bientôt!">Modifier un profil déjà existant</button>
         </div> */}
+        <ChargerPersonne/>
         <InfosCapoeira/>
         <InfosPersonelles/>
         <DossierInscription/>
