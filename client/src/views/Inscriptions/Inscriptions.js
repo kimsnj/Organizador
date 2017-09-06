@@ -6,6 +6,7 @@ import InfosPersonelles from './Formulaires/InfosPersonnelles';
 import InfosCapoeira from './Formulaires/InfosCapoeira';
 import Paiement from './Formulaires/Paiement';
 import DossierInscription from './Formulaires/DossierInscription';
+import ChargerPersonne from './Formulaires/ChargerPersonne'
 import {postInscription} from '../../actions/Membres'
 
 let Inscriptions = props => {
