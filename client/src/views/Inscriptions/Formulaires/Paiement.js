@@ -17,65 +17,55 @@ var PRIX_COURS = [
     { prix: 175, categorie: key_adulte, frequence: 2, formeLongue: '2 fois par semaine' }
 ];
 
-let renderCheques = ({ fields }) => (
+let renderPaiement = ({ fields }) => (
     <div>
         <div className="form-group row">
             <div className="form-group col-md-9">
-                <button type="button" className="btn btn-info" onClick={() => fields.push()}>Ajouter chèque</button>
+                <button type="button" className="btn btn-info" onClick={() => fields.push({methode: 'CHEQUE'})}>Ajouter paiement</button>
             </div>
         </div>
         {fields.map((field, index) => (
             <div>
-        <i className="fa fa-remove" onClick={() => fields.remove(index)}></i>
-            <div className="form-group row">
-                <div className="col-md-2">
-                    <button type="button" className="btn btn-danger" onClick={() => fields.remove(index)}>Supprimer</button>
+                <i className="fa fa-remove" onClick={() => fields.remove(index)}></i>
+                <div className="form-group row">
+                    <div className="col-md-2">
+                        <button type="button" className="btn btn-danger" onClick={() => fields.remove(index)}>Supprimer</button>
+                    </div>
+                    <div className="col-md-9">
+                        {/* Please leave me here, I am necessary and empty in the same time */}
+                    </div>
+                    <label className="col-md-2 form-control-label" htmlFor="text-input">Type</label>
+                    <div className="col-md-9">
+                        <Field component="select" id="multiple-select-classes" type="text" name={`${field}.methode`} className="form-control">
+                            <option key="cheque" value="CHEQUE">Chèque</option>
+                            <option key="liquide" value="ESPECE">Liquide</option>
+                            <option key="virement" value="VIREMENT">Virement</option>
+                        </Field>
+                    </div>
+                    <label className="col-md-2 form-control-label" htmlFor="text-input">Somme</label>
+                    <div className="col-md-9">
+                        <Field component="input" type="text" name={`${field}.somme`} className="form-control"/>
+                    </div>
+                    <label className="col-md-2 form-control-label" htmlFor="text-input">Date d'encaissement</label>
+                    <div className="col-md-9">
+                        <Field component="input" type="date" name={`${field}.encaissement`} className="form-control"/>
+                    </div>
+                    <label className="col-md-2 form-control-label" htmlFor="text-input">Encaissé</label>
+                    <div className="col-md-9">
+                        <Field component="input" type="checkbox" name={`${field}.encaisse`} className="form-control"/>
+                    </div>
                 </div>
-                <label className="col-md-2 form-control-label" htmlFor="text-input">Chèque n°</label>
-                <div className="col-md-8">
-                    <Field
-                        component="input"
-                        type="text"
-                        id="text-input"
-                        name="text-input"
-                        className="form-control"
-                        placeholder="" />
-                </div>
-                <div className="col-md-2">
-                </div>
-                <label className="col-md-2 form-control-label" htmlFor="text-input">Somme</label>
-                <div className="col-md-8">
-                    <Field
-                        component="input"
-                        type="text"
-                        id="text-input"
-                        name="text-input"
-                        className="form-control"
-                        placeholder="" />
-                </div>
-                <div className="col-md-2"/>
-                <label className="col-md-2 form-control-label" htmlFor="text-input">Date d'encaissement</label>
-                <div className="col-md-8">
-                    <Field
-                        component="input"
-                        type="text"
-                        id="text-input"
-                        name="text-input"
-                        className="form-control"
-                        placeholder="" />
-                </div>
-            </div>
             </div>
         ))
-        } </div>
+        }
+        </div>
 )
 
 let filtered_with_type_paiement = (type_paiement) => (
-    type_paiement === "cheque" ? <FieldArray name="cheques" component={renderCheques} /> : null
+    <FieldArray name="paiements" component={renderPaiement}/>
 )
 
 let filter_with_category_and_nb_of_classes = (categorie, cours, liste) => {
-    console.log("filter_with_category_and_nb_of_classes : categorie ", categorie, " cours ", cours)
     return (
         PRIX_COURS.filter((element) =>
             !categorie || (element.categorie === categorie && cours && cours.length === element.frequence))
@@ -104,17 +94,9 @@ let Paiement = ({ typePaiement, categorie, cours }) => (
                         </div>
                     </div>
                     <div className="form-group row">
-                        <label className="col-md-3 form-control-label" htmlFor="text-input">Moyen de paiement</label>
-                        <div className="col-md-9">
-                            <Field component="select" id="multiple-select" name="selectTypePaiement" className="form-control">
-                                <option name="typePaiement" value="">Dérouler...</option>
-                                <option name="typePaiement" value="cheque">Chèque</option>
-                                <option name="typePaiement" value="liquide">Liquide</option>
-                                <option name="typePaiement" value="virement">Virement</option>
-                            </Field>
-                        </div>
+                        <label className="col-md-3 form-control-label" htmlFor="text-input">Paiements</label>
+                        {filtered_with_type_paiement(typePaiement)}
                     </div>
-                    {filtered_with_type_paiement(typePaiement)}
                 </div>
             </div>
         </div>

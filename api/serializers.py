@@ -7,8 +7,7 @@ from datetime import date, timedelta
 class PaiementSerializer(ModelSerializer):
     class Meta:
         model = Paiement
-        fields = '__all__'
-
+        fields = ('methode', 'somme', 'encaissement', 'encaisse', 'payeur')
 
 class EmbeddedPresenceSerializer(ModelSerializer):
     class Meta:

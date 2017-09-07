@@ -6,6 +6,7 @@ import InfosPersonelles from './Formulaires/InfosPersonnelles';
 import InfosCapoeira from './Formulaires/InfosCapoeira';
 import Paiement from './Formulaires/Paiement';
 import DossierInscription from './Formulaires/DossierInscription';
+import ChargerPersonne from './Formulaires/ChargerPersonne'
 import {postInscription} from '../../actions/Membres'
 
 let Inscriptions = props => {
@@ -17,6 +18,7 @@ let Inscriptions = props => {
           <button type="submit" className="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="top" title="Bientôt!">Nouvelle inscription</button>&nbsp;
           <button type="submit" className="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="top" title="Bientôt!">Modifier un profil déjà existant</button>
         </div> */}
+        <ChargerPersonne/>
         <InfosCapoeira/>
         <InfosPersonelles/>
         <DossierInscription/>

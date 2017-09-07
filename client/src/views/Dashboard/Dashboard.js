@@ -32,7 +32,7 @@ class Dashboard extends Component {
             </div>
           </div>
         </div>
-        <div className="row">
+        {/* <div className="row">
           <div className="col">
             <div className="card">
               <div className="card-block social-box facebook">
@@ -50,7 +50,7 @@ class Dashboard extends Component {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
         <div className="row">
           <div className="col">
             <Statistiques />

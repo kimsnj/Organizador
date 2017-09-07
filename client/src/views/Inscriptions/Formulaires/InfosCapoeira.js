@@ -6,6 +6,7 @@ var key_eveil = "EVEIL"
 var key_enfants = "ENFANT"
 var key_ado = "ADO"
 var key_adulte = "ADULTE"
+var all_keys_with_order = [key_eveil, key_enfants, key_ado, key_adulte]
 
 var CORDES = [
     { couleur: 'Sem corda', categorie: 'all' },
@@ -28,12 +29,16 @@ var CORDES = [
     { couleur: 'Marron Roxa', categorie: key_adulte },
 ];
 
-let filtered_with_all = (categorie, liste) => ( 
+let filtered_with_all = (categorie, liste, adjacent) => {
+    if (adjacent) {
+        var next_cat = all_keys_with_order[all_keys_with_order.indexOf(categorie) + 1]
+    }
+    console.log("categorie ", categorie, " liste ", liste)
+    return ( 
     liste.filter((element) => (
-        !categorie || element.categorie === categorie || element.categorie === 'all'
-    )
-)
-)
+        !categorie || element.categorie === categorie || element.categorie === 'all' || (adjacent && element.categorie === next_cat)
+    )))
+}
 
 let InfosCapoeira = ({categorie, cours}) => (
     <div className="row">
@@ -55,7 +60,7 @@ let InfosCapoeira = ({categorie, cours}) => (
                         </div>
                     </div>
                     <div className="form-group row">
-                        <label className="col-md-3 form-control-label">Type de cours</label>
+                        <label className="col-md-3 form-control-label">Catégorie de l'élève</label>
                         <div className="col-md-9">
                             <label className="radio-inline" htmlFor="inline-radio1">
                                 <Field component="input" type="radio" id="inline-radio1" name="categorie" value={key_eveil}/> Eveil
@@ -77,7 +82,7 @@ let InfosCapoeira = ({categorie, cours}) => (
                             {/* Filtered from database values */}
                             <Field component="select" id="multiple-select-classes" name="cours" className="form-control" size="5" multiple>
                                 {
-                                    filtered_with_all(categorie, Object.values(cours))
+                                    filtered_with_all(categorie, Object.values(cours), true)
                                         .map((c, idx) => (
                                             <option key={idx} value={c.id}>{c.categorie}, {c.horaire} à {c.salle} </option>
                                         ))
@@ -91,7 +96,7 @@ let InfosCapoeira = ({categorie, cours}) => (
                             {/* Filtered from static application values */}
                             <Field component="select" id="select" name="corde" className="form-control">
                                 {
-                                    filtered_with_all(categorie, CORDES)
+                                    filtered_with_all(categorie, CORDES, false)
                                         .map((c, idx) => (
                                             <option key={idx} value={c.couleur}>{c.couleur}</option>
                                         ))

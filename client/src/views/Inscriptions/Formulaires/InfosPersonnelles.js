@@ -4,6 +4,7 @@ import {Field, formValueSelector} from 'redux-form'
 
 let filter_all_valid_members = (members) => {
     var people = [];
+    console.log(members)
     for (const key of Object.keys(members)) {
         if (members[key].status === 'success') {
             people.push(members[key]);
@@ -97,8 +98,8 @@ let InfosPersonnelles = ({categorie, members}) => (
                         <div className="col-md-9">
                             <Field component="select" id="multiple-select-emergency" name="emergency" className="form-control" size="5" multiple>
                                 {filter_all_valid_members(members).map((c, idx) => (
-                                            <option value={c.id} key={c.id}>{c.prenom} {c.nom} </option>
-                                        ))}
+                                    <option value={c.id} key={c.id}>{c.prenom} {c.nom} </option>
+                                ))}
                             </Field>
                         </div>
                     </div>
