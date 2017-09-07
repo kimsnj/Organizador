@@ -6,7 +6,7 @@ from hypothesis import given, settings
 from hypothesis.strategies import dates, integers, composite
 
 from .serializers import PersonneSerializer, DateCoursSerializer
-from .models import Cours, Personne, DateCours, Presence
+from .models import Cours, Personne, DateCours, Presence, Paiement
 
 from rest_framework.renderers import JSONRenderer
 
@@ -56,7 +56,7 @@ class CoursTestCase(TestCase):
         self.assertFalse(c2.are_dates_to_be_updated, 'Cours fraichement lu')
 
 
-class PersonneSerializerTest(TestCase):
+class DateCoursSerializerTest(TestCase):
     def test_create(self):
         c = Cours(jour=0,
                   salle='Auribeau',
@@ -116,16 +116,18 @@ class PersonneSerializerTest(TestCase):
         self.assertTrue(presence[0].present)
 
 
-class DateCorusSerializerTest(TestCase):
-    def test_create(self):
+class PersonneSerializerTest(TestCase):
+
+    @staticmethod
+    def donnees_personnes():
         c = Cours(jour=0,
                   salle='Ranguin',
                   categorie='ADO',
                   horaire=time(hour=17),
                   dernier=date(2020, 12, 31))
         c.save()
-        p = Personne(nom="M", prenom="H", telephone="06")
-        p.save()
+        contact = Personne(nom="M", prenom="H", telephone="06")
+        contact.save()
 
         donnees = {
             "id": uuid4(),
@@ -140,22 +142,23 @@ class DateCorusSerializerTest(TestCase):
                 1
             ],
             "contacts": [
-                p.id
+                contact.id
             ],
             "prenom": "K",
             "nom": "S",
             "surnom": "I",
             "date_naissance": "1988-12-01",
             "telephone": "06",
-            "adresse": "",
-            "corde": "",
             "taille_abada": "G",
             "droit_image": True,
             "photo": True,
             "fiche_adhesion": False,
             "certificat_medical": False
         }
+        return donnees, contact
 
+    def test_create(self):
+        donnees, contact = self.donnees_personnes()
         serializer = PersonneSerializer(data=donnees)
         if not serializer.is_valid():
             self.assertTrue(False, "Invalid serializer: " +
@@ -169,7 +172,37 @@ class DateCorusSerializerTest(TestCase):
         self.assertEqual(new_cours[0].id, 1)
         new_contacts = new_p.contacts.all()
         self.assertEqual(len(new_contacts), 1)
-        self.assertEqual(new_contacts[0].id, p.id)
+        self.assertEqual(new_contacts[0].id, contact.id)
 
-        p = Personne.objects.get(pk=p.id)
+        p = Personne.objects.get(pk=contact.id)
         self.assertEqual(len(p.contacts.all()), 0)
+
+    def test_update(self):
+        donnees, _ = self.donnees_personnes()
+        serializer = PersonneSerializer(data=donnees)
+        if not serializer.is_valid():
+            self.assertTrue(False, "Invalid serializer: " +
+                            str(serializer.errors))
+        p = serializer.save()
+
+        donnees.update({
+            "paiements": [
+                {
+                    "methode": "CHEQUE",
+                    "somme": 200,
+                    "validite": "2019-10-11",
+                    "encaisse": True
+                }
+            ],
+            "prenom": "Karim"
+        })
+        upd_serializer = PersonneSerializer(instance=p, data=donnees)
+        if not upd_serializer.is_valid():
+            self.assertTrue(False, "Invalid serializer: " +
+                            str(upd_serializer.errors))
+        print('Update with: ', upd_serializer.validated_data)
+        upd_p = upd_serializer.save()
+        self.assertEqual(upd_p.prenom, "Karim")
+        paiements = Paiement.objects.filter(payeur=upd_p)
+        self.assertEqual(len(paiements), 1)
+        self.assertTrue(paiements[0].encaisse)
