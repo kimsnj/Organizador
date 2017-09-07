@@ -138,9 +138,9 @@ class Personne(models.Model):
 
     class Meta:
         """Meta definition for Personne."""
-
         verbose_name = 'Personne'
         verbose_name_plural = 'Personnes'
+        unique_together = ('prenom', 'nom')
 
     def __str__(self):
         """Unicode representation of Personne."""
