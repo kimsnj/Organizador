@@ -21,7 +21,7 @@ class Full extends Component {
             <div className="container-fluid">
               <Switch>
                 <Route path="/dashboard" name="Dashboard" component={Dashboard} />
-                <Route path="/inscriptions" name="Inscriptions" component={Inscriptions} />
+                <Route path="/inscriptions/:id?" name="Inscriptions" component={Inscriptions} />
                 <Route path="/appel/:date/:index?" name="Appel" component={Appel} />
                 <Redirect from="/" to="/dashboard" />
               </Switch>

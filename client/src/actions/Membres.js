@@ -6,6 +6,7 @@ import fetch from 'isomorphic-fetch';
 
 export const INSCRIRE_MEMBRE = 'INSCRIRE_MEMBRE';
 export const ENREGISTRER_APPEL = 'ENREGISTRER_APPEL';
+export const LOAD = 'LOAD';
 
 /*
  * Actions status for asynch calls
@@ -17,6 +18,8 @@ export const STATUS_ERROR = 'error';
 /*
  * Action creators
  */
+
+export const load = data => ({ type: LOAD, data })
 
 export const inscrireMembre = data => {
     return {
@@ -124,10 +127,6 @@ export const putAppel = data => {
     console.log(data)
     return dispatch => {
         dispatch(enregistrerAppel(data))
-
-        console.log("JON SNOW ", JSON.stringify(data))
-
-
 
         return fetch('/api/cours/', {
             headers: {
