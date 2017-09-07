@@ -1,5 +1,5 @@
 import fetch from 'isomorphic-fetch';
-
+import { getAuthorizationHeader } from '../authentication'
 /*
  * Action types
  */
@@ -75,7 +75,7 @@ const handlePostResponse = (data, response) => {
 }
 
 const handlePutResponse = (data, response) => {
-    console.log(response) 
+    console.log(response)
     if (response.ok) {
         return enregistrerAppelSucces(JSON.parse(response.body))
     } else {
@@ -98,7 +98,8 @@ export const postInscription = data => {
         return fetch('/api/personnes/', {
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': getAuthorizationHeader()
             },
             method: 'POST',
             body: JSON.stringify(data)
@@ -138,12 +139,12 @@ export const putAppel = data => {
             body: JSON.stringify(data)  // you gotta chaaaaaaaaaaaaaaaaaaange meeeeeeeeeeeeeeeeeeee
         })
             .then(response =>
-            response.text().then(body => Promise.resolve({
-                ok: response.ok,
-                status: response.status,
-                statusText: response.statusText,
-                body
-            }))
+                response.text().then(body => Promise.resolve({
+                    ok: response.ok,
+                    status: response.status,
+                    statusText: response.statusText,
+                    body
+                }))
             , error => console.log(error))
             .then(response =>
                 dispatch(handlePutResponse(data, response))
