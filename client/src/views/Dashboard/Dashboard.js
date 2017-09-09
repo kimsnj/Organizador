@@ -7,7 +7,7 @@ import {formValueSelector} from 'redux-form'
 
 let id = 'toto'
 
-let filter_all_valid_members = (members) => {
+let filter_members = (members) => {
     var people = [];
     for (const key of Object.keys(members)) {
         if (members[key].status === 'success') {
@@ -17,10 +17,12 @@ let filter_all_valid_members = (members) => {
     return people;
 }
 
+const dossierComplet = (eleve) => eleve.fiche_adhesion && eleve.certificat_medical && eleve.photo;
+
 const renderEleve = (eleve, idx) =>
   <NavLink to={'/inscriptions/'+ eleve.id} className="nav-link" activeClassName="active">
     <li key={idx}>
-      <i className={"bg-warning"}></i>
+      <i className={dossierComplet(eleve) ? "icon-check bg-success" : "icon-bell bg-warning"}></i>
       <div className="desc">
         <div className="title">{eleve.prenom} {eleve.nom}</div>
         <small>{eleve.surnom}</small>
@@ -74,16 +76,17 @@ class Dashboard extends Component {
                     Modifier inscription pré-existante</h3>
                 {/* </NavLink> */}
               </div>
-              <div className="card-block">
-                <div className="row">
-                  <div className="col-md-9">
-                    <div className="col-sm-6 col-lg-4" style={{ marginTop: '20px' }}>
+              <div className="card-block" style={{marginTop: 0+'px'}}>
+                  <div className="col-md-12" id="InscriptionsPreExistantes">
                       <ul className="icons-list">
-                        {filter_all_valid_members(members).map(renderEleve)}
+                        <input
+                        className="form-control"
+                        type="search"
+                        placeholder="Chercher nom"
+                        id="example-search-input"/>
+                        {filter_members(members).map(renderEleve)}
                       </ul>
-                    </div>
                   </div>
-                </div>
               </div>
             </div>
           </div>
