@@ -9,6 +9,7 @@ class PaiementSerializer(ModelSerializer):
         model = Paiement
         fields = ('methode', 'somme', 'encaissement', 'encaisse', 'payeur')
 
+
 class EmbeddedPresenceSerializer(ModelSerializer):
     class Meta:
         model = Presence
@@ -87,3 +88,29 @@ class PersonneSerializer(ModelSerializer):
             Paiement.objects.create(payeur=personne, **paiement)
 
         return personne
+
+    def update(self, instance, validated_data):
+        # Overwrite all fields
+        instance.prenom = validated_data.get('prenom')
+        instance.nom = validated_data.get('nom')
+        instance.surnom = validated_data.get('surnom')
+        instance.date_naissance = validated_data.get('date_naissance')
+        instance.telephone = validated_data.get('telephone')
+        instance.adresse = validated_data.get('adresse')
+        instance.categorie = validated_data.get('categorie')
+        instance.corde = validated_data.get('corde')
+        instance.taille_abada = validated_data.get('taille_abada')
+        instance.droit_image = validated_data.get('droit_image')
+        instance.photo = validated_data.get('photo')
+        instance.fiche_adhesion = validated_data.get('fiche_adhesion')
+        instance.certificat_medical = validated_data.get('certificat_medical')
+        instance.contacts = validated_data.get('contacts')
+        instance.cours = validated_data.get('cours')
+        instance.save()
+
+        # Recreate all paiements from scratch
+        Paiement.objects.filter(payeur=instance).delete()
+        for paiement in validated_data.get('paiements', []):
+            Paiement.objects.create(payeur=instance, **paiement)
+
+        return instance
