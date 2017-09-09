@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Dropdown, DropdownMenu, DropdownItem } from 'reactstrap';
+import { logOut } from '../../authentication'
 
 class Header extends Component {
 
@@ -84,10 +85,10 @@ class Header extends Component {
         </ul>
         <ul className="nav navbar-nav ml-auto">
           <li className="nav-item d-md-down-none">
-            <a className="nav-link" href="#">
+            <button className="nav-link">
               <i className="icon-bell"></i>
               <span className="badge badge-pill badge-danger">9</span>
-            </a>
+            </button>
           </li>
           <li className="nav-item">
             <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
@@ -100,7 +101,8 @@ class Header extends Component {
                 aria-expanded={this.state.dropdownOpen}>
                 <img
                   src={'img/avatars/governador.jpg'}
-                  className="img-avatar" />
+                  className="img-avatar"
+                  alt="Governador" />
                 <span className="d-md-down-none">Karim</span>
               </button>
 
@@ -112,6 +114,10 @@ class Header extends Component {
                 <DropdownItem>
                   <i className="fa fa-envelope-o"></i>
                   Paiements<span className="badge badge-warning">5</span>
+                </DropdownItem>
+                <DropdownItem onClick={() => logOut(this.props.history)}>
+                  <i className="fa fa-sign-out"></i>
+                  Se déconnecter
                 </DropdownItem>
               </DropdownMenu>
             </Dropdown>
