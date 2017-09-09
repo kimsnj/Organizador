@@ -2,10 +2,8 @@ import React, { Component } from 'react';
 import { Progress } from 'reactstrap';
 
 class Statistiques extends Component {
-
     render() {
         return (
-
             <div className="row">
                 <div className="col-md-12">
                     <div className="card">

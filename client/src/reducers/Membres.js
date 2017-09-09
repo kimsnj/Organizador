@@ -1,4 +1,4 @@
-import { INSCRIRE_MEMBRE, STATUS_ERROR, STATUS_SUCCES } from '../actions/Membres'
+import { INSCRIRE_MEMBRE, STATUS_ERROR, STATUS_SUCCES, LOAD } from '../actions/Membres'
 import { INIT } from '../actions/common'
 
 const inscrireMembre = (membre = {}, action) => {
@@ -38,6 +38,10 @@ export const membres = (state = {}, action) => {
                 ...state,
                 [id]: inscrireMembre(state[id], action)
             };
+        case LOAD:
+            return {
+                data: action.data
+            }
         default:
             return state;
     }

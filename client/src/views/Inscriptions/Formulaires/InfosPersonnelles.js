@@ -1,19 +1,24 @@
 import React from 'react';
 import { connect } from 'react-redux'
 import {Field, formValueSelector} from 'redux-form'
+import { load as loadMember } from '../../../actions/Membres'
+const { DOM: { input } } = React
 
 let filter_all_valid_members = (members) => {
     var people = [];
-    console.log(members)
     for (const key of Object.keys(members)) {
-        if (members[key].status === 'success') {
+        if (members[key].status === 'success') {
             people.push(members[key]);
         }       
     }
     return people;
 }
 
-let InfosPersonnelles = ({categorie, members}) => (
+const data = {
+    nom: 'test'
+}
+
+let InfosPersonnelles = ({categorie, members, load}) => (
     <div className="row">
         <div className="col-md-12">
             <div className="card">
@@ -111,8 +116,9 @@ let InfosPersonnelles = ({categorie, members}) => (
 
 const selector = formValueSelector('inscriptions')
 InfosPersonnelles = connect(
-    state => {
+    (state, ownProps) => {
         const categorie = selector(state, 'categorie')
+        
         return {
             categorie,
             members: state.membres

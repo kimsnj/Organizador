@@ -1,12 +1,12 @@
 import React from 'react';
 import {reduxForm, reset} from 'redux-form'
 import uuidv4 from 'uuid/v4';
+import { connect } from 'react-redux'
 
 import InfosPersonelles from './Formulaires/InfosPersonnelles';
 import InfosCapoeira from './Formulaires/InfosCapoeira';
 import Paiement from './Formulaires/Paiement';
 import DossierInscription from './Formulaires/DossierInscription';
-import ChargerPersonne from './Formulaires/ChargerPersonne'
 import {postInscription} from '../../actions/Membres'
 
 let Inscriptions = props => {
@@ -14,11 +14,6 @@ let Inscriptions = props => {
   return (
     <div className="container">
       <form onSubmit={handleSubmit}>
-        {/* <div style={{ marginBottom: 30 + 'px' }}>
-          <button type="submit" className="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="top" title="Bientôt!">Nouvelle inscription</button>&nbsp;
-          <button type="submit" className="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="top" title="Bientôt!">Modifier un profil déjà existant</button>
-        </div> */}
-        <ChargerPersonne/>
         <InfosCapoeira/>
         <InfosPersonelles/>
         <DossierInscription/>
@@ -58,5 +53,15 @@ Inscriptions = reduxForm({
     dispatch(reset("inscriptions"));
   }
 })(Inscriptions)
+
+Inscriptions = connect(
+    (state, ownProps) => {
+        const id = ownProps.match.params.id;
+
+        return {
+          initialValues: state.membres[id]
+        }
+    }
+)(Inscriptions)
 
 export default Inscriptions;
