@@ -3,8 +3,7 @@ import {reduxForm, reset} from 'redux-form'
 import uuidv4 from 'uuid/v4';
 import {connect} from 'react-redux'
 
-import InfosPersonelles from './Formulaires/InfosPersonnelles';
-import InfosCapoeira from './Formulaires/InfosCapoeira';
+import Infos from './Formulaires/Infos';
 import Paiement from './Formulaires/Paiement';
 import DossierInscription from './Formulaires/DossierInscription';
 import {postInscription, putInscription} from '../../actions/Membres'
@@ -15,8 +14,7 @@ let Inscriptions = props => {
   return (
     <div className="container">
       <form onSubmit={handleSubmit}>
-        <InfosCapoeira/>
-        <InfosPersonelles/>
+        <Infos/>
         <DossierInscription/>
         <Paiement/>
         <div style={{
