@@ -1,5 +1,5 @@
 import fetch from 'isomorphic-fetch';
-import { getAuthorizationHeader } from '../authentication'
+import { getAuthorizationHeader, getCsrfToken } from '../authentication'
 /*
  * Action types
  */
@@ -102,9 +102,41 @@ export const postInscription = data => {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                'Authorization': getAuthorizationHeader()
+                'Authorization': getAuthorizationHeader(),
+                'X-CSRFToken':  getCsrfToken()
             },
             method: 'POST',
+            body: JSON.stringify(data)
+        })
+            .then(response =>
+                response
+                    .text()
+                    .then(body => Promise.resolve({
+                        ok: response.ok,
+                        status: response.status,
+                        statusText: response.statusText,
+                        body
+                    }))
+            , error => console.log(error))
+            .then(response =>
+                dispatch(handlePostResponse(data, response)),
+
+        )
+    }
+}
+
+export const putInscription = data => {
+    console.log('put inscription :  ', data)
+    return dispatch => {
+        dispatch(inscrireMembre(data))
+        return fetch('/api/personnes/' + data.id + '/', {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': getAuthorizationHeader(),
+                'X-CSRFToken':  getCsrfToken()
+            },
+            method: 'PUT',
             body: JSON.stringify(data)
         })
             .then(response =>

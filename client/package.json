@@ -16,6 +16,7 @@
     "enzyme": "^2.9.1",
     "history": "^4.6.1",
     "isomorphic-fetch": "^2.2.1",
+    "js-cookie": "^2.1.4",
     "moment": "^2.18.1",
     "react": "^15.5.4",
     "react-addons-css-transition-group": "15.5.2",

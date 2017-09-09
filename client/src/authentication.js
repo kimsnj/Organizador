@@ -1,3 +1,5 @@
+import cookie from 'js-cookie'
+
 const JWT = 'JWT';
 
 export const login = (data, history) => {
@@ -34,6 +36,7 @@ export const login = (data, history) => {
 
 export const isLoggedIn = () => !!window.sessionStorage.getItem(JWT);
 export const getAuthorizationHeader = () => 'JWT ' + window.sessionStorage.getItem(JWT);
+export const getCsrfToken = () => cookie.get('csrftoken');
 export const logOut = (history) => {
     window.sessionStorage.removeItem(JWT);
     history.push('/login');
