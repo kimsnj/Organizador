@@ -98,8 +98,12 @@ class PersonneSerializer(ModelSerializer):
         instance.photo = validated_data.get('photo')
         instance.fiche_adhesion = validated_data.get('fiche_adhesion')
         instance.certificat_medical = validated_data.get('certificat_medical')
-        instance.contacts = validated_data.get('contacts')
         instance.cours = validated_data.get('cours')
+        instance.contact_nom = validated_data.get('contact_nom')
+        instance.contact_principal_tel = validated_data.get(
+            'contact_principal_tel')
+        instance.contact_secondaire_tel = validated_data.get(
+            'contact_secondaire_tel')
         instance.save()
 
         # Recreate all paiements from scratch

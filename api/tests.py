@@ -178,6 +178,7 @@ class PersonneSerializerTest(TestCase):
         p = serializer.save()
 
         donnees.update({
+            "contact_nom": "MGH",
             "paiements": [
                 {
                     "methode": "CHEQUE",
@@ -195,6 +196,7 @@ class PersonneSerializerTest(TestCase):
         print('Update with: ', upd_serializer.validated_data)
         upd_p = upd_serializer.save()
         self.assertEqual(upd_p.prenom, "Karim")
+        self.assertEqual(upd_p.contact_nom, "MGH")
         paiements = Paiement.objects.filter(payeur=upd_p)
         self.assertEqual(len(paiements), 1)
         self.assertTrue(paiements[0].encaisse)
