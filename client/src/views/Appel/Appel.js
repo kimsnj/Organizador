@@ -11,6 +11,7 @@ const validate = values => {
   return errors;
 }
 
+
 const dossierComplet = (eleve) => eleve.fiche_adhesion && eleve.certificat_medical && eleve.photo;
 
 const renderEleve = (eleve, idx) => <li key={idx}>
@@ -43,7 +44,7 @@ let AppelForm = ({
   classes,
   index,
   inscrits,
-  presents,
+  nbOfPresents,
   pristine,
   submitting,
   props
@@ -91,12 +92,12 @@ let AppelForm = ({
                       <li>
                         <i className="icon-user"></i>
                         <span className="title">Présents</span>
-                        <span className="value">{presents}/{inscrits.length}</span>
+                        <span className="value">{nbOfPresents}/{inscrits.length}</span>
                         <div className="bars">
                           <Progress
                             className="progress-xs"
                             color="success"
-                            value={100 * presents / inscrits.length}/>
+                            value={100 * nbOfPresents / inscrits.length}/>
                         </div>
                       </li>
                       <li className="divider"></li>
@@ -129,7 +130,7 @@ AppelForm = reduxForm({
 
 AppelForm = connect((state, ownProps) => {
   const values = (state.form.appel && state.form.appel.values) || {}
-  const presents = Object
+  const nbOfPresents = Object
     .values(values)
     .filter(val => (val === true))
     .length
@@ -144,18 +145,28 @@ AppelForm = connect((state, ownProps) => {
   const inscrits = inscrits_id
     .map(id => state.membres[id])
     .filter(membre => membre && !membre.error);
-
-  const initialValues = {
-    id: classe.id
+  const presents = classe.presents;
+  let initialValues = {}
+  
+    console.log('presents: ', presents)
+  if (presents) {
+    for (let key of presents.values()) {
+      console.log('k', key)
+      initialValues[key] = true;
+    }
   }
+  initialValues.id = classe.id;
+
+  console.log('initialValues ', initialValues)
 
   return {
     ...ownProps,
     courses: state.cours,
     classes: classes,
+    presents,
     index,
     inscrits,
-    presents,
+    nbOfPresents,
     initialValues
   };
 })(AppelForm)
