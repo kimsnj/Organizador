@@ -132,9 +132,13 @@ class Personne(models.Model):
     photo = models.BooleanField(default=False)
     fiche_adhesion = models.BooleanField(default=False)
     certificat_medical = models.BooleanField(default=False)
-
-    contacts = models.ManyToManyField('self', symmetrical=False, blank=True)
     cours = models.ManyToManyField(Cours, blank=True, related_name='inscrits')
+
+    contact_nom = models.CharField(max_length=100, blank=True, null=True)
+    contact_principal_tel = models.CharField(
+        max_length=50, blank=True, null=True)
+    contact_secondaire_tel = models.CharField(
+        max_length=50, blank=True, null=True)
 
     class Meta:
         """Meta definition for Personne."""

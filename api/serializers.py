@@ -57,8 +57,6 @@ class PersonneSerializer(ModelSerializer):
     id = UUIDField(read_only=False, required=False)
     cours = PrimaryKeyRelatedField(
         many=True, read_only=False, queryset=Cours.objects.all(), required=False)
-    contacts = PrimaryKeyRelatedField(
-        many=True, read_only=False, queryset=Personne.objects.all(), required=False)
     paiements = EmbeddedPaiementSerializer(many=True, required=False)
 
     class Meta:
@@ -76,10 +74,6 @@ class PersonneSerializer(ModelSerializer):
         # Related field: Cours
         for cours in donnees_cours:
             personne.cours.add(cours)
-
-        # Related field: Contact
-        for contact in donnees_contact:
-            personne.contacts.add(contact)
 
         personne.save()
 
@@ -104,8 +98,12 @@ class PersonneSerializer(ModelSerializer):
         instance.photo = validated_data.get('photo')
         instance.fiche_adhesion = validated_data.get('fiche_adhesion')
         instance.certificat_medical = validated_data.get('certificat_medical')
-        instance.contacts = validated_data.get('contacts')
         instance.cours = validated_data.get('cours')
+        instance.contact_nom = validated_data.get('contact_nom')
+        instance.contact_principal_tel = validated_data.get(
+            'contact_principal_tel')
+        instance.contact_secondaire_tel = validated_data.get(
+            'contact_secondaire_tel')
         instance.save()
 
         # Recreate all paiements from scratch
