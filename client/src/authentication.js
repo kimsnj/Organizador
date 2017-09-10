@@ -3,7 +3,7 @@ import cookie from 'js-cookie'
 const JWT = 'JWT';
 
 export const login = (data, history) => {
-    console.log(data)
+    console.log("login ", data)
     fetch('/api-token-auth/', {
         headers: {
             'Accept': 'application/json',

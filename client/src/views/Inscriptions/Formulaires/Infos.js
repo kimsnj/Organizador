@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux'
 import { Field, formValueSelector } from 'redux-form'
 import { load as loadMember } from '../../../actions/Membres'
-const { DOM: { input } } = React
 
 var key_eveil = "EVEIL"
 var key_enfants = "ENFANT"
@@ -37,11 +36,10 @@ let filtered_with_all = (categorie, liste, adjacent) => {
     if (adjacent) {
         var next_cat = all_keys_with_order[all_keys_with_order.indexOf(categorie) + 1]
     }
-    console.log("categorie ", categorie, " liste ", liste)
-    return (
-        liste.filter((element) => (
-            !categorie || element.categorie === categorie || element.categorie === 'all' || (adjacent && element.categorie === next_cat)
-        )))
+    return ( 
+    liste.filter((element) => (
+        !categorie || element.categorie === categorie || element.categorie === 'all' || (adjacent && element.categorie === next_cat)
+    )))
 }
 
 let filter_all_valid_members = (members) => {

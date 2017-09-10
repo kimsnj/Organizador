@@ -3,9 +3,6 @@ import { NavLink } from 'react-router-dom'
 import Statistiques from './Statistiques';
 import moment from 'moment'
 import { connect } from 'react-redux'
-import {formValueSelector} from 'redux-form'
-
-let id = 'toto'
 
 let filter_members = (members) => {
     var people = [];
@@ -101,7 +98,6 @@ class Dashboard extends Component {
   }
 }
 
-const selector = formValueSelector('inscriptions')
 Dashboard = connect(
     state => {
         return {
