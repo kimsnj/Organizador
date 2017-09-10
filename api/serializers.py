@@ -57,8 +57,6 @@ class PersonneSerializer(ModelSerializer):
     id = UUIDField(read_only=False, required=False)
     cours = PrimaryKeyRelatedField(
         many=True, read_only=False, queryset=Cours.objects.all(), required=False)
-    contacts = PrimaryKeyRelatedField(
-        many=True, read_only=False, queryset=Personne.objects.all(), required=False)
     paiements = EmbeddedPaiementSerializer(many=True, required=False)
 
     class Meta:
@@ -76,10 +74,6 @@ class PersonneSerializer(ModelSerializer):
         # Related field: Cours
         for cours in donnees_cours:
             personne.cours.add(cours)
-
-        # Related field: Contact
-        for contact in donnees_contact:
-            personne.contacts.add(contact)
 
         personne.save()
 
