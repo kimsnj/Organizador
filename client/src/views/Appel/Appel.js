@@ -11,7 +11,6 @@ const validate = values => {
   return errors;
 }
 
-
 const dossierComplet = (eleve) => eleve.fiche_adhesion && eleve.certificat_medical && eleve.photo;
 
 const renderEleve = (eleve, idx) => <li key={idx}>
@@ -68,7 +67,7 @@ let AppelForm = ({
                       return <a
                         key={idx}
                         role="button"
-                        className={idx === index
+                        className={idx == index
                         ? "btn btn-primary btn-block"
                         : "btn btn-outline-secondary btn-block"}
                         href={"/appel/" + classe.date + "/" + idx}>

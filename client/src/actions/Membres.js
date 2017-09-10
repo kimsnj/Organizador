@@ -125,7 +125,21 @@ export const postInscription = data => {
     }
 }
 
+let dataSpecialTreatment = (data) => {
+    if (data.certificat_medical === "") {
+        data.certificat_medical = false;
+    }
+    if (data.photo === "") {
+        data.photo = false;
+    }
+    if (data.fiche_adhesion === "") {
+        data.fiche_adhesion = false;
+    }
+    return data;
+}
+
 export const putInscription = data => {
+    data = dataSpecialTreatment(data);
     console.log('putInscription :  ', data)
     return dispatch => {
         dispatch(inscrireMembre(data))
