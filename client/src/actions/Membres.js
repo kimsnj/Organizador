@@ -64,7 +64,7 @@ export const enregistrerAppelErreur = (data, error) => ({
 })
 
 const handlePostResponse = (data, response) => {
-    console.log(response)
+    console.log("handlePostResponse ", response)
     if (response.ok) {
         return inscrireMembreSucces(JSON.parse(response.body))
     }
@@ -78,7 +78,7 @@ const handlePostResponse = (data, response) => {
 }
 
 const handlePutResponse = (data, response) => {
-    console.log(response)
+    console.log("handlePutResponse ", response)
     if (response.ok) {
         return enregistrerAppelSucces(JSON.parse(response.body))
     } else {
@@ -95,7 +95,7 @@ const handlePutResponse = (data, response) => {
  * Async actions creators => Going to the server
  */
 export const postInscription = data => {
-    console.log(data)
+    console.log("postInscription ", data)
     return dispatch => {
         dispatch(inscrireMembre(data))
         return fetch('/api/personnes/', {
@@ -126,7 +126,7 @@ export const postInscription = data => {
 }
 
 export const putInscription = data => {
-    console.log('put inscription :  ', data)
+    console.log('putInscription :  ', data)
     return dispatch => {
         dispatch(inscrireMembre(data))
         return fetch('/api/personnes/' + data.id + '/', {
@@ -156,18 +156,33 @@ export const putInscription = data => {
     }
 }
 
-export const putAppel = data => {
-    console.log(data)
-    return dispatch => {
-        dispatch(enregistrerAppel(data))
+let keepOnlyPresences = (data) => {
+    var presences = [];
+    for (var key in data) {
+        if (data[key] === true) {
+            presences.push({personne: key, present:true});
+        }
+    }
+    console.log("returning ", presences)
+    return presences;
+}
 
-        return fetch('/api/cours/', {
+export const putAppel = data => {
+    var dataToSend = {
+        id: data.id,
+        presences: keepOnlyPresences(data)}
+    
+    return dispatch => {
+        dispatch(enregistrerAppel(dataToSend))
+
+        return fetch('/api/dates/' + data.id + '/', {
             headers: {
                 'Accept': 'application/json',
+                'Authorization': getAuthorizationHeader(),
                 'Content-Type': 'application/json'
             },
             method: 'PUT',
-            body: JSON.stringify(data)  // you gotta chaaaaaaaaaaaaaaaaaaange meeeeeeeeeeeeeeeeeeee
+            body: JSON.stringify(dataToSend)
         })
             .then(response =>
                 response.text().then(body => Promise.resolve({
@@ -178,7 +193,7 @@ export const putAppel = data => {
                 }))
             , error => console.log(error))
             .then(response =>
-                dispatch(handlePutResponse(data, response))
+                dispatch(handlePutResponse(dataToSend, response))
             )
     }
 }

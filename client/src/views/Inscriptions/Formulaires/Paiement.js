@@ -2,11 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux'
 import { Field, FieldArray, formValueSelector } from 'redux-form'
 
-var key_eveil = "EVEIL"
-var key_enfants = "ENFANT"
-var key_ado = "ADO"
-var key_adulte = "ADULTE"
-
 let renderPaiement = ({ fields }) => (
     <div>
         <div className="form-group row">
