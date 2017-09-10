@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux'
-import {Field, formValueSelector} from 'redux-form'
+import { Field, formValueSelector } from 'redux-form'
 import { load as loadMember } from '../../../actions/Membres'
 
 var key_eveil = "EVEIL"
@@ -45,73 +45,87 @@ let filtered_with_all = (categorie, liste, adjacent) => {
 let filter_all_valid_members = (members) => {
     var people = [];
     for (const key of Object.keys(members)) {
-        if (members[key].status === 'success') {
+        if (members[key].status === 'success') {
             people.push(members[key]);
-        }       
+        }
     }
     return people;
 }
 
-let BasicLabel = ({labelText}) => (
-    <label className="col-md-3 form-control-label" htmlFor="text-input">{labelText}</label>
+const BasicLabel = ({ labelText, fieldName }) => (
+    <label className="col-md-3 form-control-label" htmlFor={fieldName}>{labelText}</label>
 )
 
-let BasicInputField = ({fieldName, fieldType="input", fieldPlaceHolder=""}) => (
+const BasicInputField = ({ fieldName, fieldType = "input", fieldPlaceHolder = "" }) => (
     <div className="col-md-9">
         <Field
             component="input"
+            id={fieldName}
             type={fieldType}
             name={fieldName}
             className="form-control"
-            placeholder={fieldPlaceHolder}/>
+            placeholder={fieldPlaceHolder} />
     </div>
 )
 
-let Infos = ({categorie, members, load, cours}) => (
+const BasicLabelAndInput = (props) =>
+    <div className="form-group row">
+        <BasicLabel {...props} />
+        <BasicInputField {...props} />
+    </div>
+
+const renderContactAdule = () =>
+    <div>
+        <BasicLabelAndInput labelText="Téléphone" fieldName="telephone" />
+
+        <BasicLabelAndInput labelText="Nom contact urgence" fieldName="contact_nom" />
+        <BasicLabelAndInput labelText="Téléphone urgence" fieldName="contact_principal_tel" />
+    </div>
+
+const renderContactMineur = () =>
+    <div>
+
+        <BasicLabelAndInput labelText="Nom du tuteur" fieldName="contact_nom" />
+        <BasicLabelAndInput labelText="Téléphone principal" fieldName="contact_principal_tel" />
+        <BasicLabelAndInput labelText="Téléphone secondaire" fieldName="contact_secondaire_tel" />
+
+        <BasicLabelAndInput labelText="Téléphone de l'élève" fieldName="telephone" />
+    </div>
+
+
+let Infos = ({ categorie, droit_image, members, load, cours }) => (
     <div className="row">
         <div className="col-md-12">
             <div className="card">
                 <div className="card-header">
                     <h4>
-                        <i className="fa fa-user" style={{marginRight: 5+'px'}}></i>
-                         Informations élève</h4>
+                        <i className="fa fa-user" style={{ marginRight: 5 + 'px' }}></i>
+                        Informations élève</h4>
                 </div>
                 <div className="card-block">
                     <div className="form-group row">
-                        <BasicLabel labelText="Catégorie de l'élève"/>
-                         <div className="col-md-9">
-                            <label className="radio-inline" htmlFor="inline-radio1">
-                                <Field component="input" type="radio" id="inline-radio1" name="categorie" value={key_eveil}/> Eveil
+                        <BasicLabel labelText="Catégorie de l'élève" />
+                        <div className="col-md-9">
+                            <label className="radio-inline" htmlFor={key_eveil}>
+                                <Field component="input" type="radio" id={key_eveil} name="categorie" value={key_eveil} /> Eveil
                             </label>
-                            <label className="radio-inline" htmlFor="inline-radio2" style={{ marginLeft: 5 + 'px' }}>
-                                <Field component="input" type="radio" id="inline-radio2" name="categorie" value={key_enfants}/> Enfant
+                            <label className="radio-inline" htmlFor={key_enfants} style={{ marginLeft: 5 + 'px' }}>
+                                <Field component="input" type="radio" id={key_enfants} name="categorie" value={key_enfants} /> Enfant
                                 </label>
-                            <label className="radio-inline" htmlFor="inline-radio3" style={{ marginLeft: 5 + 'px' }}>
-                                <Field component="input" type="radio" id="inline-radio3" name="categorie" value={key_ado}/> Adolescent
+                            <label className="radio-inline" htmlFor={key_ado} style={{ marginLeft: 5 + 'px' }}>
+                                <Field component="input" type="radio" id={key_ado} name="categorie" value={key_ado} /> Adolescent
                                 </label>
-                            <label className="radio-inline" htmlFor="inline-radio3" style={{ marginLeft: 5 + 'px' }}>
-                                <Field component="input" type="radio" id="inline-radio3" name="categorie" value={key_adulte}/> Adulte
+                            <label className="radio-inline" htmlFor={key_adulte} style={{ marginLeft: 5 + 'px' }}>
+                                <Field component="input" type="radio" id={key_adulte} name="categorie" value={key_adulte} /> Adulte
                                 </label>
-                        </div> 
+                        </div>
                     </div>
+                    <BasicLabelAndInput labelText="Nom" fieldName="nom" />
+                    <BasicLabelAndInput labelText="Prénom" fieldName="prenom" />
+                    <BasicLabelAndInput labelText="Date de naissance" fieldName="date_naissance" fieldType="date" />
+                    <BasicLabelAndInput labelText="Apellido" fieldName="surnom" fieldPlaceHolder="Optionnel" />
                     <div className="form-group row">
-                        <BasicLabel labelText="Nom"/>
-                        <BasicInputField fieldName="nom"/>
-                    </div>
-                    <div className="form-group row">
-                        <BasicLabel labelText="Prénom"/>
-                        <BasicInputField fieldName="prenom"/>
-                    </div>
-                    <div className="form-group row">     
-                        <BasicLabel labelText="Date de naissance"/>   
-                        <BasicInputField fieldName="date_naissance" fieldType="date"/>
-                    </div>
-                    <div className="form-group row">
-                        <BasicLabel labelText="Apellido"/>
-                        <BasicInputField fieldName="surnom" fieldPlaceHolder="Optionnel"/>
-                    </div>
-                    <div className="form-group row">
-                        <BasicLabel labelText="Corde"/>
+                        <BasicLabel labelText="Corde" />
                         <div className="col-md-9">
                             <Field component="select" id="select" name="corde" className="form-control">
                                 {
@@ -124,58 +138,49 @@ let Infos = ({categorie, members, load, cours}) => (
                         </div>
                     </div>
                     <div className="form-group row">
-                        <BasicLabel labelText="Taille d'abada"/>
+                        <BasicLabel labelText="Taille d'abada" />
                         <div className="col-md-9">
-                            <label className="radio-inline" htmlFor="inline-radio1">
-                                <Field component="input" type="radio" id="inline-radio1" name="taille_abada" value="P" /> P
+                            <label className="radio-inline" htmlFor="taille_abada_P">
+                                <Field component="input" type="radio" id="taille_abada_P" name="taille_abada" value="P" /> P
                             </label>
-                            <label className="radio-inline" htmlFor="inline-radio2" style={{ marginLeft: 5 + 'px' }}>
-                                <Field component="input" type="radio" id="inline-radio2" name="taille_abada" value="M" /> M
+                            <label className="radio-inline" htmlFor="taille_abada_M" style={{ marginLeft: 5 + 'px' }}>
+                                <Field component="input" type="radio" id="taille_abada_M" name="taille_abada" value="M" /> M
                             </label>
-                            <label className="radio-inline" htmlFor="inline-radio3" style={{ marginLeft: 5 + 'px' }}>
-                                <Field component="input" type="radio" id="inline-radio3" name="taille_abada" value="G" /> G
+                            <label className="radio-inline" htmlFor="taille_abada_G" style={{ marginLeft: 5 + 'px' }}>
+                                <Field component="input" type="radio" id="taille_abada_G" name="taille_abada" value="G" /> G
                             </label>
-                            <label className="radio-inline" htmlFor="inline-radio3" style={{ marginLeft: 5 + 'px' }}>
-                                <Field component="input" type="radio" id="inline-radio3" name="taille_abada" value="GG" /> GG
+                            <label className="radio-inline" htmlFor="taille_abada_GG" style={{ marginLeft: 5 + 'px' }}>
+                                <Field component="input" type="radio" id="taille_abada_GG" name="taille_abada" value="GG" /> GG
                             </label>
                         </div>
                     </div>
                     <div className="form-group row">
-                        <BasicLabel labelText="Adresse"/>
+                        <BasicLabel labelText="Adresse" />
                         <div className="col-md-9">
                             <Field
                                 component="textarea"
                                 name="adresse"
                                 rows="4"
-                                className="form-control"/>
+                                className="form-control" />
                         </div>
                     </div>
+                    <hr />
+                    {(categorie == key_adulte) ? renderContactAdule() : renderContactMineur()}
+                    <hr />
+
                     <div className="form-group row">
-                        <BasicLabel labelText="Contact"/>
-                        <div className="col-md-9">
-                            <Field component="select" id="multiple-select-emergency" name="emergency" className="form-control" size="5" multiple>
-                                {filter_all_valid_members(members).map((c, idx) => (
-                                    <option value={c.id} key={c.id}>{c.prenom} {c.nom} </option>
-                                ))}
-                            </Field>
-                        </div>
-                    </div>
-                    <div className="form-group row">
-                        <BasicLabel labelText="Numéro de téléphone de l'élève"/>
-                        <BasicInputField fieldName="telephone"/>
-                    </div>
-                    <div className="form-group row">
-                        <BasicLabel labelText="Droit à l'image"/>
+                        <BasicLabel labelText="Droit à l'image" fieldName="droit_image" />
                         <div className="col-md-9">
                             <label className="form-check-label">
                                 <Field
                                     component="input"
                                     name="droit_image"
+                                    id="droit_image"
                                     className="form-check-input"
                                     style={{
-                                    marginRight: 5 + 'px'
-                                }}
-                                    type="checkbox"/>
+                                        marginRight: 5 + 'px'
+                                    }}
+                                    type="checkbox" />
                             </label>
                         </div>
                     </div>
@@ -203,7 +208,8 @@ const selector = formValueSelector('inscriptions')
 Infos = connect(
     (state, ownProps) => {
         const categorie = selector(state, 'categorie')
-        
+        const droit_image = selector(state, 'droit_image')
+
         return {
             categorie,
             members: state.membres,
