@@ -4,6 +4,15 @@ import Statistiques from './Statistiques';
 import moment from 'moment'
 import { connect } from 'react-redux'
 
+let PAIEMENT = new Object();
+PAIEMENT["EVEIL_1"] = 175;
+PAIEMENT["ENFANT_1"] = 185;
+PAIEMENT["ENFANT_2"] = 308;
+PAIEMENT["ADO_1"] = 195;
+PAIEMENT["ADO_2"] = 325;
+PAIEMENT["ADULTE_1"] = 220;
+PAIEMENT["ADULTE_2"] = 359;
+
 let filter_members = (members) => {
     var people = [];
     for (const key of Object.keys(members)) {
@@ -14,12 +23,77 @@ let filter_members = (members) => {
     return people;
 }
 
+const calculeCombienManque = (eleve) => {
+  if (eleve.paiements.length == 0) {
+    return "la totalité"
+  } else {
+    let total = 0;
+    for (var i = 0; i < eleve.paiements.length; i++) {
+      total += eleve.paiements[i].somme;
+    }
+    if (total < PAIEMENT[eleve.categorie + "_" + eleve.cours.length]) {
+      return (PAIEMENT[eleve.categorie + "_" + eleve.cours.length] - total) + "€";
+    }
+  }
+}
+
+const renderToolTipEleve = (eleve) => {
+  let missingItems = ""
+  if (!eleve.fiche_adhesion)
+    missingItems += "- Fiche adhésion\n"
+  if (!eleve.certificat_medical)
+    missingItems += "- Certificat médical\n"
+  if (!eleve.photo)
+    missingItems += "- Photo\n"
+  if (!paiementFait(eleve))
+    missingItems += "- Paiement : manque " + calculeCombienManque(eleve)
+  return (missingItems)
+}
+
 const dossierComplet = (eleve) => eleve.fiche_adhesion && eleve.certificat_medical && eleve.photo;
+
+const paiementFait = (eleve) => { 
+  if (eleve.paiements.length == 0) {
+    return false
+  } else {
+    let total = 0;
+    for (var i = 0; i < eleve.paiements.length; i++) {
+      total += eleve.paiements[i].somme;
+    }
+    if (total < PAIEMENT[eleve.categorie + "_" + eleve.cours.length]) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+}
+
+let determinerIconeStatutInscription = (eleve) => {
+  let iconDescription = "";
+  console.log("eleve : ", eleve)
+  console.log("paiementFait(eleve) : ", paiementFait(eleve))
+  console.log("dossierComplet(eleve) : ", dossierComplet(eleve))
+  if (paiementFait(eleve)) {
+    if (dossierComplet(eleve)) {
+      iconDescription= "icon-check bg-success"
+    } else {
+      iconDescription = "icon-bell bg-warning"
+    }
+  } else {
+    iconDescription = "icon-bell bg-danger"
+  }
+  console.log("iconDescription : ", iconDescription)
+  console.log("\n")
+  return iconDescription
+}
 
 const renderEleve = (eleve, idx) =>
   <NavLink to={'/inscriptions/'+ eleve.id} className="nav-link" activeClassName="active">
     <li key={idx}>
-      <i className={dossierComplet(eleve) ? "icon-check bg-success" : "icon-bell bg-warning"}></i>
+      <i className={determinerIconeStatutInscription(eleve)}
+      data-toggle="tooltip" 
+       data-placement="top"
+       title={renderToolTipEleve(eleve)}/>
       <div className="desc">
         <div className="title">{eleve.prenom} {eleve.nom}</div>
         <small>{eleve.surnom}</small>

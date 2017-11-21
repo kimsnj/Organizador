@@ -13,11 +13,27 @@ const validate = values => {
 
 const dossierComplet = (eleve) => eleve.fiche_adhesion && eleve.certificat_medical && eleve.photo;
 
+const renderToolTipEleve = (eleve) => {
+  let missingItems = ""
+  if (!eleve.fiche_adhesion)
+    missingItems += "- Fiche adhésion\n"
+  if (!eleve.certificat_medical)
+    missingItems += "- Certificat médical\n"
+  if (!eleve.photo)
+    missingItems += "- Photo"
+  return (missingItems)
+}
+
 const renderEleve = (eleve, idx) => <li key={idx}>
   <i
     className={dossierComplet(eleve)
     ? "icon-check bg-success"
-    : "icon-bell bg-warning"}></i>
+    : "icon-bell bg-warning" } 
+    data-toggle="tooltip" 
+    data-placement="top" 
+    title={renderToolTipEleve(eleve)}
+
+    ></i>
   <div className="desc">
     <div className="title">{eleve.prenom} {eleve.nom}</div>
     <small>{eleve.surnom}</small>
@@ -30,7 +46,8 @@ const renderEleve = (eleve, idx) => <li key={idx}>
         component="input"
         type="checkbox"
         className="switch-input"
-        name={eleve.id}/>
+        name={eleve.id}
+        data-toggle="tooltip"/>
       <span className="switch-label" data-on="On" data-off="Off"></span>
       <span className="switch-handle"></span>
     </label>
