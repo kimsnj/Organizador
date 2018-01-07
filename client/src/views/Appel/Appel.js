@@ -1,10 +1,9 @@
 import React from 'react'
-import {Field, reduxForm} from 'redux-form'
-import {connect} from 'react-redux'
-import {Progress} from 'reactstrap'
-import uuidv4 from 'uuid/v4';
+import { Field, reduxForm } from 'redux-form'
+import { connect } from 'react-redux'
+import { Progress } from 'reactstrap'
 
-import {putAppel} from '../../actions/Membres'
+import { putAppel } from '../../actions/Membres'
 
 const validate = values => {
   let errors = {};
@@ -27,13 +26,13 @@ const renderToolTipEleve = (eleve) => {
 const renderEleve = (eleve, idx) => <li key={idx}>
   <i
     className={dossierComplet(eleve)
-    ? "icon-check bg-success"
-    : "icon-bell bg-warning" } 
-    data-toggle="tooltip" 
-    data-placement="top" 
+      ? "icon-check bg-success"
+      : "icon-bell bg-warning"}
+    data-toggle="tooltip"
+    data-placement="top"
     title={renderToolTipEleve(eleve)}
 
-    ></i>
+  ></i>
   <div className="desc">
     <div className="title">{eleve.prenom} {eleve.nom}</div>
     <small>{eleve.surnom}</small>
@@ -47,7 +46,7 @@ const renderEleve = (eleve, idx) => <li key={idx}>
         type="checkbox"
         className="switch-input"
         name={eleve.id}
-        data-toggle="tooltip"/>
+        data-toggle="tooltip" />
       <span className="switch-label" data-on="On" data-off="Off"></span>
       <span className="switch-handle"></span>
     </label>
@@ -84,9 +83,9 @@ let AppelForm = ({
                       return <a
                         key={idx}
                         role="button"
-                        className={idx == index
-                        ? "btn btn-primary btn-block"
-                        : "btn btn-outline-secondary btn-block"}
+                        className={idx === index
+                          ? "btn btn-primary btn-block"
+                          : "btn btn-outline-secondary btn-block"}
                         href={"/appel/" + classe.date + "/" + idx}>
                         Cours {cours.categorie} de {cours.horaire} à {cours.salle}
                       </a>
@@ -96,8 +95,8 @@ let AppelForm = ({
                   <div
                     className="col-sm-6 col-lg-4"
                     style={{
-                    marginTop: '20px'
-                  }}>
+                      marginTop: '20px'
+                    }}>
                     <ul className="icons-list">
                       {inscrits.map(renderEleve)}
                     </ul>
@@ -113,7 +112,7 @@ let AppelForm = ({
                           <Progress
                             className="progress-xs"
                             color="success"
-                            value={100 * nbOfPresents / inscrits.length}/>
+                            value={100 * nbOfPresents / inscrits.length} />
                         </div>
                       </li>
                       <li className="divider"></li>
@@ -122,9 +121,9 @@ let AppelForm = ({
                         className="btn btn-sm btn-primary col-md-9"
                         disabled={pristine || submitting}
                         style={{
-                        display: 'block',
-                        margin: 'auto'
-                      }}>Enregistrer</button>
+                          display: 'block',
+                          margin: 'auto'
+                        }}>Enregistrer</button>
                     </ul>
                   </div>
                 </div>
@@ -163,8 +162,8 @@ AppelForm = connect((state, ownProps) => {
     .filter(membre => membre && !membre.error);
   const presents = classe.presents;
   let initialValues = {}
-  
-    console.log('presents: ', presents)
+
+  console.log('presents: ', presents)
   if (presents) {
     for (let key of presents.values()) {
       console.log('k', key)

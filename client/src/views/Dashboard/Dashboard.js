@@ -4,27 +4,28 @@ import Statistiques from './Statistiques';
 import moment from 'moment'
 import { connect } from 'react-redux'
 
-let PAIEMENT = new Object();
-PAIEMENT["EVEIL_1"] = 175;
-PAIEMENT["ENFANT_1"] = 185;
-PAIEMENT["ENFANT_2"] = 308;
-PAIEMENT["ADO_1"] = 195;
-PAIEMENT["ADO_2"] = 325;
-PAIEMENT["ADULTE_1"] = 220;
-PAIEMENT["ADULTE_2"] = 359;
+const PAIEMENT = {
+  "EVEIL_1": 175,
+  "ENFANT_1": 185,
+  "ENFANT_2": 308,
+  "ADO_1": 195,
+  "ADO_2": 325,
+  "ADULTE_1": 220,
+  "ADULTE_2": 359
+}
 
-let filter_members = (members) => {
-    var people = [];
-    for (const key of Object.keys(members)) {
-        if (members[key].status === 'success') {
-            people.push(members[key]);
-        }       
+const filter_members = (members) => {
+  var people = [];
+  for (const key of Object.keys(members)) {
+    if (members[key].status === 'success') {
+      people.push(members[key]);
     }
-    return people;
+  }
+  return people;
 }
 
 const calculeCombienManque = (eleve) => {
-  if (eleve.paiements.length == 0) {
+  if (eleve.paiements.length === 0) {
     return "la totalité"
   } else {
     let total = 0;
@@ -52,8 +53,8 @@ const renderToolTipEleve = (eleve) => {
 
 const dossierComplet = (eleve) => eleve.fiche_adhesion && eleve.certificat_medical && eleve.photo;
 
-const paiementFait = (eleve) => { 
-  if (eleve.paiements.length == 0) {
+const paiementFait = (eleve) => {
+  if (eleve.paiements.length === 0) {
     return false
   } else {
     let total = 0;
@@ -75,7 +76,7 @@ let determinerIconeStatutInscription = (eleve) => {
   console.log("dossierComplet(eleve) : ", dossierComplet(eleve))
   if (paiementFait(eleve)) {
     if (dossierComplet(eleve)) {
-      iconDescription= "icon-check bg-success"
+      iconDescription = "icon-check bg-success"
     } else {
       iconDescription = "icon-bell bg-warning"
     }
@@ -88,12 +89,12 @@ let determinerIconeStatutInscription = (eleve) => {
 }
 
 const renderEleve = (eleve, idx) =>
-  <NavLink to={'/inscriptions/'+ eleve.id} className="nav-link" activeClassName="active">
+  <NavLink to={'/inscriptions/' + eleve.id} className="nav-link" activeClassName="active">
     <li key={idx}>
       <i className={determinerIconeStatutInscription(eleve)}
-      data-toggle="tooltip" 
-       data-placement="top"
-       title={renderToolTipEleve(eleve)}/>
+        data-toggle="tooltip"
+        data-placement="top"
+        title={renderToolTipEleve(eleve)} />
       <div className="desc">
         <div className="title">{eleve.prenom} {eleve.nom}</div>
         <small>{eleve.surnom}</small>
@@ -142,22 +143,22 @@ class Dashboard extends Component {
             <div className="card">
               <div className="card-block">
                 {/* <NavLink to={'/inscriptions/'+id} className="nav-link text-white" activeClassName="active"> */}
-                  <h3>
-                    <i className="fa fa-edit" style={{ marginRight: 10 + 'px' }} ></i>
-                    Modifier inscription pré-existante</h3>
+                <h3>
+                  <i className="fa fa-edit" style={{ marginRight: 10 + 'px' }} ></i>
+                  Modifier inscription pré-existante</h3>
                 {/* </NavLink> */}
               </div>
-              <div className="card-block" style={{marginTop: 0+'px'}}>
-                  <div className="col-md-12" id="InscriptionsPreExistantes">
-                      <ul className="icons-list">
-                        <input
-                        className="form-control"
-                        type="search"
-                        placeholder="Chercher nom"
-                        id="example-search-input"/>
-                        {filter_members(members).map(renderEleve)}
-                      </ul>
-                  </div>
+              <div className="card-block" style={{ marginTop: 0 + 'px' }}>
+                <div className="col-md-12" id="InscriptionsPreExistantes">
+                  <ul className="icons-list">
+                    <input
+                      className="form-control"
+                      type="search"
+                      placeholder="Chercher nom"
+                      id="example-search-input" />
+                    {filter_members(members).map(renderEleve)}
+                  </ul>
+                </div>
               </div>
             </div>
           </div>
@@ -173,11 +174,11 @@ class Dashboard extends Component {
 }
 
 Dashboard = connect(
-    state => {
-        return {
-            members: state.membres
-        }
+  state => {
+    return {
+      members: state.membres
     }
+  }
 )(Dashboard)
 
 export default Dashboard;

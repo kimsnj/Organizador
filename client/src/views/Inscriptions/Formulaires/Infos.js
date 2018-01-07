@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux'
 import { Field, formValueSelector } from 'redux-form'
-import { load as loadMember } from '../../../actions/Membres'
 
 var key_eveil = "EVEIL"
 var key_enfants = "ENFANT"
@@ -36,12 +35,13 @@ let filtered_with_all = (categorie, liste, adjacent) => {
     if (adjacent) {
         var next_cat = all_keys_with_order[all_keys_with_order.indexOf(categorie) + 1]
     }
-    return ( 
-    liste.filter((element) => (
-        !categorie || element.categorie === categorie || element.categorie === 'all' || (adjacent && element.categorie === next_cat)
-    )))
+    return (
+        liste.filter((element) => (
+            !categorie || element.categorie === categorie || element.categorie === 'all' || (adjacent && element.categorie === next_cat)
+        )))
 }
 
+// eslint-disable-next-line
 let filter_all_valid_members = (members) => {
     var people = [];
     for (const key of Object.keys(members)) {
@@ -165,7 +165,7 @@ let Infos = ({ categorie, droit_image, members, load, cours }) => (
                         </div>
                     </div>
                     <hr />
-                    {(categorie == key_adulte) ? renderContactAdule() : renderContactMineur()}
+                    {(categorie === key_adulte) ? renderContactAdule() : renderContactMineur()}
                     <hr />
 
                     <div className="form-group row">
@@ -212,6 +212,7 @@ Infos = connect(
 
         return {
             categorie,
+            droit_image,
             members: state.membres,
             cours: state.cours
         }
