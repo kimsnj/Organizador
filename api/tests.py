@@ -1,14 +1,13 @@
 from datetime import timedelta, date, time
 from django.test import TestCase
 
-from uuid import uuid4
-from hypothesis import given, settings
+from hypothesis import given
 from hypothesis.strategies import dates, integers, composite
+
+from rest_framework.renderers import JSONRenderer
 
 from .serializers import PersonneSerializer, DateCoursSerializer
 from .models import Cours, Personne, DateCours, Presence, Paiement
-
-from rest_framework.renderers import JSONRenderer
 
 
 @composite

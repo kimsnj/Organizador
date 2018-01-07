@@ -71,9 +71,6 @@ const paiementFait = (eleve) => {
 
 let determinerIconeStatutInscription = (eleve) => {
   let iconDescription = "";
-  console.log("eleve : ", eleve)
-  console.log("paiementFait(eleve) : ", paiementFait(eleve))
-  console.log("dossierComplet(eleve) : ", dossierComplet(eleve))
   if (paiementFait(eleve)) {
     if (dossierComplet(eleve)) {
       iconDescription = "icon-check bg-success"
@@ -83,14 +80,12 @@ let determinerIconeStatutInscription = (eleve) => {
   } else {
     iconDescription = "icon-bell bg-danger"
   }
-  console.log("iconDescription : ", iconDescription)
-  console.log("\n")
   return iconDescription
 }
 
 const renderEleve = (eleve, idx) =>
-  <NavLink to={'/inscriptions/' + eleve.id} className="nav-link" activeClassName="active">
-    <li key={idx}>
+  <NavLink to={'/inscriptions/' + eleve.id} className="nav-link" activeClassName="active" key={idx}>
+    <li>
       <i className={determinerIconeStatutInscription(eleve)}
         data-toggle="tooltip"
         data-placement="top"

@@ -1,7 +1,6 @@
-from rest_framework.serializers import ModelSerializer, UUIDField, IntegerField, ListField, PrimaryKeyRelatedField, DateField
+from rest_framework.serializers import ModelSerializer, UUIDField, PrimaryKeyRelatedField, DateField
 from rest_framework.exceptions import MethodNotAllowed
 from .models import Paiement, Cours, Personne, DateCours, Presence
-from datetime import date, timedelta
 
 
 class PaiementSerializer(ModelSerializer):
@@ -68,7 +67,6 @@ class PersonneSerializer(ModelSerializer):
         print("About to save: ", validated_data)
         donnees_paiements = validated_data.pop('paiements', [])
         donnees_cours = validated_data.pop('cours', [])
-        donnees_contact = validated_data.pop('contacts', [])
         personne = Personne.objects.create(**validated_data)
 
         # Related field: Cours

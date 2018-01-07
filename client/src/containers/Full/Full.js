@@ -32,7 +32,6 @@ class Full extends Component {
           json
         })))
       .then(response => {
-        console.log(response)
         if (response.ok) {
           dispatch(init(response.json))
         }

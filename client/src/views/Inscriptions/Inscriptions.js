@@ -1,22 +1,22 @@
 import React from 'react';
-import {reduxForm, reset} from 'redux-form'
+import { reduxForm, reset } from 'redux-form'
 import uuidv4 from 'uuid/v4';
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 
 import Infos from './Formulaires/Infos';
 import Paiement from './Formulaires/Paiement';
 import DossierInscription from './Formulaires/DossierInscription';
-import {postInscription, putInscription} from '../../actions/Membres'
+import { postInscription, putInscription } from '../../actions/Membres'
 
 let Inscriptions = props => {
-  const {handleSubmit, pristine, reset, submitting} = props
+  const { handleSubmit, pristine, reset, submitting } = props
 
   return (
     <div className="container">
       <form onSubmit={handleSubmit}>
-        <Infos/>
-        <DossierInscription/>
-        <Paiement/>
+        <Infos />
+        <DossierInscription />
+        <Paiement />
         <div style={{
           marginBottom: 30 + 'px'
         }}>
@@ -44,20 +44,23 @@ let handleClick = () => {
 
 Inscriptions = reduxForm({
   form: 'inscriptions',
-  onSubmit: (values, dispatch) => {
-    dispatch(values.id
-      ? putInscription(values)
-      : postInscription({
+  onSubmit: (values, dispatch, props) => {
+    if (values.id) {
+      dispatch(putInscription(values));
+      props.history.push(props.url);
+    } else {
+      dispatch(postInscription({
         ...values,
         id: uuidv4()
-      }))
-    dispatch(reset("inscriptions"));
+      }));
+      dispatch(reset("inscriptions"));
+    }
   }
 })(Inscriptions)
 
 Inscriptions = connect((state, ownProps) => {
   let id = ownProps.match.params.id;
-  return {initialValues: state.membres[id]}
+  return { initialValues: state.membres[id] }
 })(Inscriptions)
 
 export default Inscriptions;
