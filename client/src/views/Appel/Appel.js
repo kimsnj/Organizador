@@ -140,7 +140,7 @@ AppelForm = reduxForm({
   form: 'appel',
   enableReinitialize: true,
   validate,
-  onSubmit: (values, dispatch) => dispatch(putAppel(values))
+  onSubmit: (values, dispatch, props) => dispatch(putAppel({ ...values, date: props.match.params.date }))
 })(AppelForm)
 
 AppelForm = connect((state, ownProps) => {

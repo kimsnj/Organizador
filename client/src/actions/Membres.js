@@ -104,7 +104,7 @@ export const postInscription = data => {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
                 'Authorization': getAuthorizationHeader(),
-                'X-CSRFToken':  getCsrfToken()
+                'X-CSRFToken': getCsrfToken()
             },
             method: 'POST',
             body: JSON.stringify(data)
@@ -129,7 +129,7 @@ export const postInscription = data => {
 let dataSpecialTreatment = (data) => {
     data.certificat_medical = data.certificat_medical || false
     data.photo = data.photo || false
-    data.fiche_adhesion = data.fiche_adhesion || false
+    data.fiche_adhesion = data.fiche_adhesion ||  false
     data.droit_image = data.droit_image || false
     return data;
 }
@@ -143,7 +143,7 @@ export const putInscription = data => {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
                 'Authorization': getAuthorizationHeader(),
-                'X-CSRFToken':  getCsrfToken()
+                'X-CSRFToken': getCsrfToken()
             },
             method: 'PUT',
             body: JSON.stringify(data)
@@ -169,7 +169,7 @@ let keepOnlyPresences = (data) => {
     var presences = [];
     for (var key in data) {
         if (data[key] === true) {
-            presences.push({personne: key, present:true});
+            presences.push({ personne: key, present: true });
         }
     }
     console.log("returning ", presences)
@@ -178,9 +178,10 @@ let keepOnlyPresences = (data) => {
 
 export const putAppel = data => {
     var dataToSend = {
-        id: data.id,
-        presences: keepOnlyPresences(data)}
-    
+        ...data,
+        presences: keepOnlyPresences(data)
+    }
+
     return dispatch => {
         dispatch(enregistrerAppel(dataToSend))
 

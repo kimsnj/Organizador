@@ -1,5 +1,7 @@
-import {dates} from './Dates'
-import {init} from '../actions/common'
+import { dates } from './Dates'
+import { init } from '../actions/common'
+import { enregistrerAppel } from '../actions/Membres'
+import deepFreeze from 'deep-freeze'
 
 test('Init from server dates', () => {
 
@@ -68,4 +70,49 @@ test('Init from server dates', () => {
     expect(state["2016-08-12"][0].presents).toEqual(new Set(["idpersonne1", "idpersonne3"]));
     expect(state["2016-08-12"][1].cours).toEqual(6);
     expect(state["2016-08-12"][1].presents).toEqual(new Set());
+})
+
+test('Update dates after submitting', () => {
+    const initialState = {
+        '2018-01-01': [
+            {
+                id: 5,
+                presents: new Set('toto', 'tutu'),
+                extra: 'stuff'
+            },
+            {
+                id: 7,
+                presents: new Set('titi')
+            }
+        ],
+        '2018-01-08': [
+            {
+                id: 5,
+                presents: new Set('toto')
+            }
+        ]
+    };
+
+    const action = {
+        id: 5,
+        date: '2018-01-01',
+        presences: [
+            { personne: 'toto', present: false },
+            { personne: 'tata', present: true },
+            { personne: 'tutu', present: true }
+        ]
+    }
+
+    deepFreeze(initialState);
+    deepFreeze(action);
+
+    const state = dates(initialState, enregistrerAppel(action));
+    expect(state['2018-01-01'][0].id).toEqual(5);
+    expect(state['2018-01-01'][0].presents).toEqual(new Set(['tata', 'tutu']));
+    expect(state['2018-01-01'][0].extra).toBe('stuff'); // only presents should be updated
+
+    // other courses of the same date should not be touched
+    expect(state['2018-01-01'][1]).toBe(initialState['2018-01-01'][1]);
+    // other dates should not be touched
+    expect(state['2018-01-08']).toBe(initialState['2018-01-08']);
 })
