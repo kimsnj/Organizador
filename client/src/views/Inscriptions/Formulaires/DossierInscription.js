@@ -1,21 +1,6 @@
 import React from 'react';
 import { Field } from 'redux-form'
 
-// eslint-disable-next-line
-let CheckBoxField = field => (
-    <div className="form-check">
-        <label className="form-check-label">
-            <input
-                name={field.name}
-                className="form-check-input"
-                style={{
-                    marginRight: 5 + 'px'
-                }}
-                {...field.input} /> {field.label}
-        </label>
-    </div>
-);
-
 let BasicLabel = ({ labelText }) => (
     <label className="col-md-3 form-control-label" htmlFor="text-input">{labelText}</label>
 )

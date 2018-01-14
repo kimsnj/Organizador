@@ -1,8 +1,58 @@
 import React, { Component } from 'react';
 import { Progress } from 'reactstrap';
+import { reduxForm } from 'redux-form'
+import { connect } from 'react-redux'
+
+var key_eveil = "EVEIL"
+var key_enfants = "ENFANT"
+var key_ado = "ADO"
+var key_adulte = "ADULTE"
+
+const countMembers = (membres, categorie) => {
+    var counter = 0;
+    for (var id in membres) {
+        if (membres.hasOwnProperty(id)) {
+            if (membres[id].categorie === categorie) {
+                counter++;
+            }
+        }
+    }
+    return counter;
+}
+
+const countPercentageMembers = (membres, categorie) => {
+    var nb_categorie = countMembers(membres, categorie);
+    var nb_total = Object.keys(membres).length;
+    return nb_categorie * 100 / nb_total;
+}
+
+const count_surnoms = (membres, withSurnom) => {
+    var counter = 0;
+    var nb_total = Object.keys(membres).length;
+    var answer = 0;
+    
+    if (nb_total !== 0) {
+        for (var id in membres) {
+            if (membres.hasOwnProperty(id)) {
+                if (membres[id].surnom) {
+                    counter++;
+                }
+            }
+        }
+
+        if (withSurnom) {
+            answer = counter * 100 / nb_total;
+        } else {
+            answer = 100 - (counter * 100 / nb_total);
+        }
+    } 
+    return answer;
+}
 
 class Statistiques extends Component {
     render() {
+        const { membres = [] } = this.props;
+        const { cours = [] } = this.props;
         return (
             <div className="row">
                 <div className="col-md-12">
@@ -14,30 +64,59 @@ class Statistiques extends Component {
                             <div className="row">
                                 <div className="col-sm-12 col-lg-8">
                                     <div className="row">
-                                        <div className="col-sm-6">
+                                        <div className="col-sm-12">
                                             <div className="callout callout-info">
-                                                <small className="text-muted">Total des élèves élèves</small><br />
-                                                <strong className="h4">163</strong>
+                                                <small className="text-muted">Nombre total d'élèves</small><br />
+                                                <strong className="h4">{Object.keys(membres).length}</strong>
                                                 <div className="chart-wrapper">
                                                     <canvas id="sparkline-chart-1" width="100" height="30"></canvas>
                                                 </div>
                                             </div>
                                         </div>
+                                    </div>
+                                    {/* <div className="row">
                                         <div className="col-sm-6">
                                             <div className="callout callout-danger">
-                                                <small className="text-muted">Elèves adultes</small><br />
-                                                <strong className="h4">25</strong>
+                                                <small className="text-muted">Nombre d'adultes</small><br />
+                                                <strong className="h4">{countMembers(membres, key_adulte)}</strong>
                                                 <div className="chart-wrapper">
                                                     <canvas id="sparkline-chart-2" width="100" height="30"></canvas>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                        <div className="col-sm-6">
+                                            <div className="callout callout-danger">
+                                                <small className="text-muted">Nombre d'ados</small><br />
+                                                <strong className="h4">{countMembers(membres, key_ado)}</strong>
+                                                <div className="chart-wrapper">
+                                                    <canvas id="sparkline-chart-2" width="100" height="30"></canvas>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="col-sm-6">
+                                            <div className="callout callout-danger">
+                                                <small className="text-muted">Nombre d'enfants</small><br />
+                                                <strong className="h4">{countMembers(membres, key_enfants)}</strong>
+                                                <div className="chart-wrapper">
+                                                    <canvas id="sparkline-chart-2" width="100" height="30"></canvas>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="col-sm-6">
+                                            <div className="callout callout-danger">
+                                                <small className="text-muted">Nombre d'éveil</small><br />
+                                                <strong className="h4">{countMembers(membres, key_eveil)}</strong>
+                                                <div className="chart-wrapper">
+                                                    <canvas id="sparkline-chart-2" width="100" height="30"></canvas>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div> */}
                                     <hr className="mt-0" />
                                     <ul className="horizontal-bars">
                                         <li>
                                             <div className="title">
-                                                Lundi
+                                                Lundi ados
                                             </div>
                                             <div className="bars">
                                                 <Progress className="progress-xs" color="info" value="34" />
@@ -97,7 +176,7 @@ class Statistiques extends Component {
                                                 <Progress className="progress-xs" color="info" value="9" />
                                                 <Progress className="progress-xs" color="danger" value="69" />
                                             </div>
-                                        </li>
+                                        </li> */}
                                         <li className="legend">
                                             <span className="badge badge-pill badge-info"></span>
                                             <small>New clients</small>
@@ -111,8 +190,8 @@ class Statistiques extends Component {
                                     <div className="row">
                                         <div className="col-sm-6">
                                             <div className="callout callout-warning">
-                                                <small className="text-muted">Présences</small><br />
-                                                <strong className="h4">78,623</strong>
+                                                <small className="text-muted">Présences sur l'année</small><br />
+                                                <strong className="h4">A faire</strong>
                                                 <div className="chart-wrapper">
                                                     <canvas id="sparkline-chart-3" width="100" height="30"></canvas>
                                                 </div>
@@ -120,8 +199,8 @@ class Statistiques extends Component {
                                         </div>
                                         <div className="col-sm-6">
                                             <div className="callout callout-success">
-                                                <small className="text-muted">Absences</small><br />
-                                                <strong className="h4">49,123</strong>
+                                                <small className="text-muted">Absences sur l'année</small><br />
+                                                <strong className="h4">A faire</strong>
                                                 <div className="chart-wrapper">
                                                     <canvas id="sparkline-chart-4" width="100" height="30"></canvas>
                                                 </div>
@@ -131,56 +210,61 @@ class Statistiques extends Component {
                                     <hr className="mt-0" />
                                     <ul className="horizontal-bars type-2">
                                         <li>
-                                            <i className="icon-user"></i>
-                                            <span className="title">Masculin</span>
-                                            <span className="value">50%</span>
+                                            <i className="icon-check"></i>
+                                            <span className="title">Avec surnom</span>
+                                            <span className="value">
+                                                <span className="text-muted small"> ({count_surnoms(membres, true).toPrecision(2)}%)</span>
+                                            </span>
                                             <div className="bars">
-                                                <Progress className="progress-xs" color="warning" value="50" />
+                                                <Progress className="progress-xs" color="warning" value={count_surnoms(membres, true)} />
                                             </div>
                                         </li>
                                         <li>
-                                            <i className="icon-user-female"></i>
-                                            <span className="title">Féminin</span>
-                                            <span className="value">50%</span>
+                                            <i className="icon-question"></i>
+                                            <span className="title">Sans surnom</span>
+                                            <span className="value">
+                                                <span className="text-muted small"> ({count_surnoms(membres, false).toPrecision(2)}%)</span>
+                                            </span>
                                             <div className="bars">
-                                                <Progress className="progress-xs" color="warning" value="50" />
+                                                <Progress className="progress-xs" color="warning" value={count_surnoms(membres, false)} />
                                             </div>
                                         </li>
                                         <li className="divider"></li>
+                                        <b>Répartition des élèves par âge</b>
                                         <li>
                                             <span className="title">Eveil</span>
-                                            <span className="value">191,235
-                                                <span className="text-muted small">(56%)</span>
+                                            <span className="value">{countMembers(membres, key_eveil)} 
+                                                <span className="text-muted small"> ({countPercentageMembers(membres, key_eveil).toPrecision(2)}%)</span>
                                             </span>
                                             <div className="bars">
-                                                <Progress className="progress-xs" color="success" value="56" />
+                                                <Progress className="progress-xs" color="success" value={countPercentageMembers(membres, key_eveil)} />
                                             </div>
                                         </li>
                                         <li>
                                             <span className="title">Enfants</span>
-                                            <span className="value">51,223
-                                                <span className="text-muted small">(15%)</span>
+                                            <span className="value">{countMembers(membres, key_enfants)} 
+                                                <span className="text-muted small"> ({countPercentageMembers(membres, key_enfants).toPrecision(2)}%)</span>
                                             </span>
                                             <div className="bars">
-                                                <Progress className="progress-xs" color="success" value="15" />
+                                                <Progress className="progress-xs" color="success" value={countPercentageMembers(membres, key_enfants)} />
                                             </div>
                                         </li>
                                         <li>
                                             <span className="title">Ados</span>
-                                            <span className="value">37,564
-                                                <span className="text-muted small">(11%)</span>
+                                            <span className="value">{countMembers(membres, key_ado)} 
+                                                <span className="text-muted small"> ({countPercentageMembers(membres, key_ado).toPrecision(2)}%)</span>
                                             </span>
                                             <div className="bars">
-                                                <Progress className="progress-xs" color="success" value="11" />
+                                                <Progress className="progress-xs" color="success" value={countPercentageMembers(membres, key_ado)} />
                                             </div>
                                         </li>
                                         <li>
                                             <span className="title">Adultes</span>
-                                            <span className="value">27,319
-                                                <span className="text-muted small">(8%)</span>
+                                            <span className="value">{countMembers(membres, key_adulte)} 
+                                                <span className="text-muted small"> ({countPercentageMembers(membres, key_adulte).toPrecision(2)}%)</span>
                                             </span>
                                             <div className="bars">
-                                                <Progress className="progress-xs" color="success" value="8" />
+                                                <Progress className="progress-xs" color="success" value={countPercentageMembers(membres, key_adulte)} />
                                             </div>
                                         </li>
                                         <li className="divider text-center">
@@ -262,5 +346,20 @@ class Statistiques extends Component {
         )
     }
 }
+
+Statistiques = reduxForm({
+    form: 'statistiques',
+    enableReinitialize: true
+  })(Statistiques)
+
+Statistiques = connect((state, ownProps) => {
+
+    return {
+        ...ownProps,
+        membres: state.membres,
+        cours: state.cours
+      };
+    })(Statistiques)
+    
 
 export default Statistiques;
