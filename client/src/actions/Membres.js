@@ -131,6 +131,11 @@ let dataSpecialTreatment = (data) => {
     data.photo = data.photo || false
     data.fiche_adhesion = data.fiche_adhesion ||  false
     data.droit_image = data.droit_image || false
+
+    var arrayLength = data.paiements.length;
+    for (var i = 0; i < arrayLength; i++) {
+        data.paiements[i].encaisse = data.paiements[i].encaisse || false;
+    }
     return data;
 }
 

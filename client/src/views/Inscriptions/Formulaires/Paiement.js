@@ -38,7 +38,13 @@ let renderPaiement = ({ fields }) => (
                     </div>
                     <label className="col-md-2 form-control-label" htmlFor="text-input">Encaissé</label>
                     <div className="col-md-9">
-                        <Field component="input" type="checkbox" name={`${field}.encaisse`} className="form-control"/>
+                        <label className="form-check-label">
+                            <Field
+                                component="input"
+                                name={`${field}.encaisse`} 
+                                className="form-check-input"
+                                type="checkbox" />
+                        </label>
                     </div>
                 </div>
             </div>
@@ -61,16 +67,22 @@ let Paiement = ({ typePaiement, categorie, cours }) => (
                         Paiement</h4>
                 </div>
                 <div className="card-block">
-                    <div className="form-group row">
-                        <label className="col-md-3 form-control-label" htmlFor="text-input">Somme totale</label>
-                        <div className="col-md-9">
-                            <Field component="input" id="select" name="selectPrix" className="form-control"></Field>
+                    <fieldset
+                        className="form-group"
+                        style={{
+                            marginLeft: 30 + 'px'
+                        }}>
+                        <div className="row">
+                            <label className="col-md-3 form-control-label" htmlFor="text-input">Somme totale</label>
+                            <div className="col-md-9">
+                                <Field component="input" id="select" name="selectPrix" className="form-control"></Field>
+                            </div>
                         </div>
-                    </div>
-                    <div className="form-group row">
-                        <label className="col-md-3 form-control-label" htmlFor="text-input">Paiements</label>
-                        {filtered_with_type_paiement(typePaiement)}
-                    </div>
+                        <div className="row">
+                            <label className="col-md-3 form-control-label" htmlFor="text-input">Paiements</label>
+                            {filtered_with_type_paiement(typePaiement)}
+                        </div>
+                    </fieldset>
                 </div>
             </div>
         </div>

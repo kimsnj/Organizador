@@ -47,11 +47,40 @@ const renderToolTipEleve = (eleve) => {
   if (!eleve.photo)
     missingItems += "- Photo\n"
   if (!paiementFait(eleve))
-    missingItems += "- Paiement : manque " + calculeCombienManque(eleve)
+    missingItems += "- Paiement : manque " + calculeCombienManque(eleve) + "\n"
+  if (!paiementEncaisse(eleve)) {
+    missingItems += "- " + ditQuoiPasEncaisse(eleve) 
+  }
   return (missingItems)
 }
 
 const dossierComplet = (eleve) => eleve.fiche_adhesion && eleve.certificat_medical && eleve.photo;
+
+const paiementEncaisse = (eleve) => {
+  if (eleve.paiements.length === 0) {
+    return true // si pas de paiements, pas besoin de surveiller l'encaissement...
+  } else {
+    for (var i = 0; i < eleve.paiements.length; i ++) {
+      if (eleve.paiements[i].methode === "CHEQUE" & !eleve.paiements[i].encaisse) {
+        return false
+      }      
+    }
+  }
+  return true
+}
+
+const ditQuoiPasEncaisse = (eleve) => {
+  var quoi = "";
+  if (eleve.paiements.length != 0) {
+    for (var i = 0; i < eleve.paiements.length; i ++) {
+      var paiement = eleve.paiements[i]
+      if (paiement.methode === "CHEQUE" & !paiement.encaisse) {
+        quoi += "Chèque de " + paiement.somme + "€ non encaissé\n"
+      }      
+    }
+  }
+  return quoi
+}
 
 const paiementFait = (eleve) => {
   if (eleve.paiements.length === 0) {
