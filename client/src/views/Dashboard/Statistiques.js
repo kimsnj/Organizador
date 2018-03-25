@@ -176,7 +176,7 @@ class Statistiques extends Component {
                                                 <Progress className="progress-xs" color="info" value="9" />
                                                 <Progress className="progress-xs" color="danger" value="69" />
                                             </div>
-                                        </li> */}
+                                        </li>
                                         <li className="legend">
                                             <span className="badge badge-pill badge-info"></span>
                                             <small>New clients</small>
