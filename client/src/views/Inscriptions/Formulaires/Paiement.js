@@ -75,7 +75,7 @@ let Paiement = ({ typePaiement, categorie, cours }) => (
                         <div className="row">
                             <label className="col-md-3 form-control-label" htmlFor="text-input">Somme totale</label>
                             <div className="col-md-9">
-                                <Field component="input" id="select" name="selectPrix" className="form-control"></Field>
+                                <Field component="input" id="select" name="somme_totale" className="form-control"></Field>
                             </div>
                         </div>
                         <div className="row">

@@ -134,6 +134,8 @@ class Personne(models.Model):
     certificat_medical = models.BooleanField(default=False)
     cours = models.ManyToManyField(Cours, blank=True, related_name='inscrits')
 
+    somme_totale = models.IntegerField(blank=True, null=True)
+
     contact_nom = models.CharField(max_length=100, blank=True, null=True)
     contact_principal_tel = models.CharField(
         max_length=50, blank=True, null=True)

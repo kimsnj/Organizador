@@ -102,6 +102,8 @@ class PersonneSerializer(ModelSerializer):
             'contact_principal_tel')
         instance.contact_secondaire_tel = validated_data.get(
             'contact_secondaire_tel')
+        instance.somme_totale = validated_data.get(
+            'somme_totale')
         instance.save()
 
         # Recreate all paiements from scratch
