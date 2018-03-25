@@ -28,12 +28,15 @@ const calculeCombienManque = (eleve) => {
   if (eleve.paiements.length === 0) {
     return "la totalité"
   } else {
-    let total = 0;
+    let sommedue = eleve.somme_totale == null ? PAIEMENT[eleve.categorie + "_" + eleve.cours.length] : eleve.somme_totale;
+    
+    let sommeversee = 0;
     for (var i = 0; i < eleve.paiements.length; i++) {
-      total += eleve.paiements[i].somme;
+      sommeversee += eleve.paiements[i].somme;
     }
-    if (total < PAIEMENT[eleve.categorie + "_" + eleve.cours.length]) {
-      return (PAIEMENT[eleve.categorie + "_" + eleve.cours.length] - total) + "€";
+    
+    if (sommeversee <= sommedue) {
+      return (sommedue - sommeversee) + "€";
     }
   }
 }
@@ -86,11 +89,14 @@ const paiementFait = (eleve) => {
   if (eleve.paiements.length === 0) {
     return false
   } else {
-    let total = 0;
+    let sommeversee = 0;
     for (var i = 0; i < eleve.paiements.length; i++) {
-      total += eleve.paiements[i].somme;
+      sommeversee += eleve.paiements[i].somme;
     }
-    if (total < PAIEMENT[eleve.categorie + "_" + eleve.cours.length]) {
+
+    let sommedue = eleve.somme_totale == null ? PAIEMENT[eleve.categorie + "_" + eleve.cours.length] : eleve.somme_totale;
+
+    if (sommeversee < sommedue) {
       return false;
     } else {
       return true;
