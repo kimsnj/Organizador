@@ -19,8 +19,8 @@ def compute_existing_totals(apps, _):
     for p in Personne.objects.all():
         categorie = p.categorie
         nbCours = len(p.cours.all())
-        if nbCours > 0:
-            p.somme_totale = PAIEMENT[categorie + "_" + str(nbCours)]
+        if nbCours > 0 and categorie is not None:
+            p.somme_totale = PAIEMENT.get(categorie + "_" + str(nbCours), 0)
             p.save()
 
 class Migration(migrations.Migration):
