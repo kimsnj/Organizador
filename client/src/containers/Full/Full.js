@@ -8,7 +8,8 @@ import Aside from '../../components/Aside/';
 
 import Dashboard from '../../views/Dashboard/';
 import Inscriptions from '../../views/Inscriptions';
-import Appel from '../../views/Appel'
+import Appel from '../../views/Appel';
+import TousPaiements from '../../views/TousPaiements';
 
 import { isLoggedIn, getAuthorizationHeader } from '../../authentication'
 import { init } from '../../actions/common'
@@ -63,6 +64,7 @@ class Full extends Component {
                 <Route path="/dashboard" name="Dashboard" component={Dashboard} />
                 <Route path="/inscriptions/:id?" name="Inscriptions" component={Inscriptions} />
                 <Route path="/appel/:date/:index?" name="Appel" component={Appel} />
+                <Route path="/touspaiements" name="TousPaiements" component={TousPaiements} />
                 <Redirect from="/" to="/dashboard" />
               </Switch>
             </div>

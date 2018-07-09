@@ -144,6 +144,7 @@ class Dashboard extends Component {
     const { members = [] } = this.props;
     return (
       <div className="container">
+      
         <div className="row">
           <div className="col">
             <div className="card bg-primary">
@@ -168,6 +169,7 @@ class Dashboard extends Component {
             </div>
           </div>
         </div>
+
         <div className="row">
           <div className="col">
             <div className="card">
@@ -181,11 +183,11 @@ class Dashboard extends Component {
               <div className="card-block" style={{ marginTop: 0 + 'px' }}>
                 <div className="col-md-12" id="InscriptionsPreExistantes">
                   <ul className="icons-list">
-                    <input
+                  {/* <input
                       className="form-control"
                       type="search"
                       placeholder="Chercher nom"
-                      id="example-search-input" />
+                  id="example-search-input" /> */}
                     {filter_members(members).map(renderEleve)}
                   </ul>
                 </div>
@@ -193,6 +195,21 @@ class Dashboard extends Component {
             </div>
           </div>
         </div>
+        
+        <div className="row">
+          <div className="col">
+            <div className="card bg-primary">
+              <div className="card-block">
+                <NavLink to={'/touspaiements'} className="nav-link text-white" activeClassName="active">
+                  <h3>
+                    <i className="fa fa-flag" style={{ marginRight: 10 + 'px' }} ></i>
+                  Statut des paiements</h3>
+                  </NavLink>
+                </div>
+              </div>
+            </div>
+        </div>
+
         <div className="row">
           <div className="col">
             <Statistiques />
