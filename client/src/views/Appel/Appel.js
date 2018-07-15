@@ -1,9 +1,15 @@
 import React from 'react'
-import { Field, reduxForm } from 'redux-form'
-import { connect } from 'react-redux'
-import { Progress } from 'reactstrap'
-
-import { putAppel } from '../../actions/Membres'
+import {Field, reduxForm} from 'redux-form'
+import {connect} from 'react-redux'
+import {Progress} from 'reactstrap'
+import {
+  Card,
+  CardBody,
+  CardHeader,
+  Col,
+  Row
+} from 'reactstrap';
+import {putAppel} from '../../actions/Membres'
 
 const validate = values => {
   let errors = {};
@@ -14,11 +20,11 @@ const dossierComplet = (eleve) => eleve.fiche_adhesion && eleve.certificat_medic
 
 const renderToolTipEleve = (eleve) => {
   let missingItems = ""
-  if (!eleve.fiche_adhesion)
+  if (!eleve.fiche_adhesion) 
     missingItems += "- Fiche adhésion\n"
-  if (!eleve.certificat_medical)
+  if (!eleve.certificat_medical) 
     missingItems += "- Certificat médical\n"
-  if (!eleve.photo)
+  if (!eleve.photo) 
     missingItems += "- Photo"
   return (missingItems)
 }
@@ -26,13 +32,11 @@ const renderToolTipEleve = (eleve) => {
 const renderEleve = (eleve, idx) => <li key={idx}>
   <i
     className={dossierComplet(eleve)
-      ? "icon-check bg-success"
-      : "icon-bell bg-warning"}
+    ? "icon-check bg-success"
+    : "icon-bell bg-warning"}
     data-toggle="tooltip"
     data-placement="top"
-    title={renderToolTipEleve(eleve)}
-
-  ></i>
+    title={renderToolTipEleve(eleve)}></i>
   <div className="desc">
     <div className="title">{eleve.prenom} {eleve.nom}</div>
     <small>{eleve.surnom}</small>
@@ -46,12 +50,16 @@ const renderEleve = (eleve, idx) => <li key={idx}>
         type="checkbox"
         className="switch-input"
         name={eleve.id}
-        data-toggle="tooltip" />
+        data-toggle="tooltip"/>
       <span className="switch-label" data-on="On" data-off="Off"></span>
       <span className="switch-handle"></span>
     </label>
   </div>
 </li>
+
+let handleChange = (evt, history) => {
+  history.push("/appel/" + evt.target.value)
+}
 
 let AppelForm = ({
   handleSubmit,
@@ -60,23 +68,36 @@ let AppelForm = ({
   index,
   inscrits,
   nbOfPresents,
+  date,
   pristine,
   submitting,
-  props
+  history
 }) => {
   return (
     <div className="container">
       <form onSubmit={handleSubmit}>
-        <div className="row">
-          <div className="col-md-12">
-            <div className="card">
-              <div className="card-header">
-                <h4>
-                  <i className="fa fa-users"></i>
-                  Appel</h4>
-              </div>
-              <div className="card-block">
-                <div className="row">
+        <Row>
+          <Col>
+            <Card>
+              <CardHeader>
+                <Row>
+                  <Col>
+                    <h4>
+                      <i className="fa fa-users"></i>
+                      Appel</h4>
+                  </Col>
+                  <Col style={{textAlign: 'right'}}>
+                    <input type="date" id="choisirDate" name="trip" value={date} onChange={(evt) => handleChange(evt, history)}/>
+                  </Col>
+                </Row>
+              </CardHeader>
+              <CardBody>
+                <Row
+                  style={{
+                  marginRight: 10 + 'px',
+                  marginLeft: 10 + 'px',
+                  marginBottom: 10 + 'px'
+                }}>
                   <div className="col-sm-6 col-lg-4 btn-group-vertical">
                     {classes.map((classe, idx) => {
                       let cours = courses[classe.cours] || {}
@@ -84,8 +105,8 @@ let AppelForm = ({
                         key={idx}
                         role="button"
                         className={idx === index
-                          ? "btn btn-primary btn-block"
-                          : "btn btn-outline-secondary btn-block"}
+                        ? "btn btn-primary btn-block"
+                        : "btn btn-outline-secondary btn-block"}
                         href={"/appel/" + classe.date + "/" + idx}>
                         Cours {cours.categorie} de {cours.horaire} à {cours.salle}
                       </a>
@@ -95,8 +116,8 @@ let AppelForm = ({
                   <div
                     className="col-sm-6 col-lg-4"
                     style={{
-                      marginTop: '20px'
-                    }}>
+                    marginTop: '20px'
+                  }}>
                     <ul className="icons-list">
                       {inscrits.map(renderEleve)}
                     </ul>
@@ -112,35 +133,74 @@ let AppelForm = ({
                           <Progress
                             className="progress-xs"
                             color="success"
-                            value={100 * nbOfPresents / inscrits.length} />
+                            value={100 * nbOfPresents / inscrits.length}/>
                         </div>
                       </li>
                       <li className="divider"></li>
                       <button
                         type="submit"
+                        id="register"
                         className="btn btn-sm btn-primary col-md-9"
                         disabled={pristine || submitting}
+                        onClick={handleClick}
                         style={{
-                          display: 'block',
-                          margin: 'auto'
-                        }}>Enregistrer</button>
+                        display: 'block',
+                        margin: 'auto'
+                      }}>Enregistrer</button>
                     </ul>
                   </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+                </Row>
+              </CardBody>
+            </Card>
+          </Col>
+        </Row>
       </form>
     </div>
   )
+}
+
+let handleClick = () => {
+  window.scrollTo(0, 0)
+  initNotify();
+  notify();
+}
+
+function initNotify(){  // Onload du body
+	var btn = document.getElementById('register');
+	if(window.Notification){
+		Notification.requestPermission(function (status) {
+			if(status === 'granted'){
+				btn.disabled = false;
+				btn.onclick = notify;
+			}
+			else{
+				btn.disabled = true;
+				btn.onclick = undefined;
+			}
+		});
+	}
+	else{
+		btn.disabled = true;
+		btn.onclick = undefined;
+		alert('Votre navigateur est trop ancien (ou est Internet Explorer) pour supporter cette fonctionnalité !');
+	}
+}
+
+function notify(){
+	var n = new Notification('Enregistrement', {
+		body: 'Les modifications ont été prises en compte!'
+		//icon: 'dvp.gif'
+	});
 }
 
 AppelForm = reduxForm({
   form: 'appel',
   enableReinitialize: true,
   validate,
-  onSubmit: (values, dispatch, props) => dispatch(putAppel({ ...values, date: props.match.params.date }))
+  onSubmit: (values, dispatch, props) => dispatch(putAppel({
+    ...values,
+    date: props.match.params.date
+  }))
 })(AppelForm)
 
 AppelForm = connect((state, ownProps) => {
@@ -181,6 +241,7 @@ AppelForm = connect((state, ownProps) => {
     index,
     inscrits,
     nbOfPresents,
+    date,
     initialValues
   };
 })(AppelForm)

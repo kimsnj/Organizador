@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Progress } from 'reactstrap';
-import { reduxForm } from 'redux-form'
-import { connect } from 'react-redux'
+import { reduxForm } from 'redux-form';
+import { connect } from 'react-redux';
+import { Table, Card, CardBody, CardHeader, Col, Row } from 'reactstrap';
 
 var key_eveil = "EVEIL"
 var key_enfants = "ENFANT"
@@ -52,19 +53,18 @@ const count_surnoms = (membres, withSurnom) => {
 class Statistiques extends Component {
     render() {
         const { membres = [] } = this.props;
-        const { cours = [] } = this.props;
         return (
-            <div className="row">
-                <div className="col-md-12">
-                    <div className="card">
-                        <div className="card-header">
+            <Row>
+                <Col>
+                    <Card>
+                        <CardHeader>
                             <h4><i className="fa fa-area-chart" style={{ marginRight: 10 + 'px' }} ></i>Statistiques</h4>
-                        </div>
-                        <div className="card-block">
-                            <div className="row">
-                                <div className="col-sm-12 col-lg-8">
-                                    <div className="row">
-                                        <div className="col-sm-12">
+                        </CardHeader>
+                        <CardBody>
+                            <Row style={{ marginRight: 10 + 'px', marginLeft: 10 + 'px' }}>
+                                <Col xs="12" md="6" xl="6">
+                                    <Row>
+                                        <Col sm="6">
                                             <div className="callout callout-info">
                                                 <small className="text-muted">Nombre total d'élèves</small><br />
                                                 <strong className="h4">{Object.keys(membres).length}</strong>
@@ -72,46 +72,8 @@ class Statistiques extends Component {
                                                     <canvas id="sparkline-chart-1" width="100" height="30"></canvas>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                    {/* <div className="row">
-                                        <div className="col-sm-6">
-                                            <div className="callout callout-danger">
-                                                <small className="text-muted">Nombre d'adultes</small><br />
-                                                <strong className="h4">{countMembers(membres, key_adulte)}</strong>
-                                                <div className="chart-wrapper">
-                                                    <canvas id="sparkline-chart-2" width="100" height="30"></canvas>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="col-sm-6">
-                                            <div className="callout callout-danger">
-                                                <small className="text-muted">Nombre d'ados</small><br />
-                                                <strong className="h4">{countMembers(membres, key_ado)}</strong>
-                                                <div className="chart-wrapper">
-                                                    <canvas id="sparkline-chart-2" width="100" height="30"></canvas>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="col-sm-6">
-                                            <div className="callout callout-danger">
-                                                <small className="text-muted">Nombre d'enfants</small><br />
-                                                <strong className="h4">{countMembers(membres, key_enfants)}</strong>
-                                                <div className="chart-wrapper">
-                                                    <canvas id="sparkline-chart-2" width="100" height="30"></canvas>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="col-sm-6">
-                                            <div className="callout callout-danger">
-                                                <small className="text-muted">Nombre d'éveil</small><br />
-                                                <strong className="h4">{countMembers(membres, key_eveil)}</strong>
-                                                <div className="chart-wrapper">
-                                                    <canvas id="sparkline-chart-2" width="100" height="30"></canvas>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div> */}
+                                        </Col>
+                                    </Row>
                                     <hr className="mt-0" />
                                     <ul className="horizontal-bars">
                                         <li>
@@ -179,16 +141,16 @@ class Statistiques extends Component {
                                         </li>
                                         <li className="legend">
                                             <span className="badge badge-pill badge-info"></span>
-                                            <small>New clients</small>
+                                            <small>Moyenne de présents</small>
                                             &nbsp;
                                             <span className="badge badge-pill badge-danger"></span>
-                                            <small>Recurring clients</small>
+                                            <small>Maximum</small>
                                         </li>
                                     </ul>
-                                </div>
-                                <div className="col-sm-6 col-lg-4">
-                                    <div className="row">
-                                        <div className="col-sm-6">
+                                </Col>
+                                <Col xs="12" md="6" xl="6">
+                                    <Row>
+                                        <Col sm="6">
                                             <div className="callout callout-warning">
                                                 <small className="text-muted">Présences sur l'année</small><br />
                                                 <strong className="h4">A faire</strong>
@@ -196,8 +158,8 @@ class Statistiques extends Component {
                                                     <canvas id="sparkline-chart-3" width="100" height="30"></canvas>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div className="col-sm-6">
+                                        </Col>
+                                        <Col sm="6">
                                             <div className="callout callout-success">
                                                 <small className="text-muted">Absences sur l'année</small><br />
                                                 <strong className="h4">A faire</strong>
@@ -205,8 +167,8 @@ class Statistiques extends Component {
                                                     <canvas id="sparkline-chart-4" width="100" height="30"></canvas>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
+                                        </Col>
+                                    </Row>
                                     <hr className="mt-0" />
                                     <ul className="horizontal-bars type-2">
                                         <li>
@@ -279,11 +241,10 @@ class Statistiques extends Component {
                                             </button>
                                         </li>
                                     </ul>
-                                </div>
-
-                            </div>
+                                </Col>
+                            </Row>
                             <br />
-                            <table className="table table-hover table-outline mb-0 hidden-sm-down">
+                            <Table hover responsive className="table-outline mb-0 d-none d-sm-table" style={{ marginRight: 10 + 'px', marginLeft: 10 + 'px' }}>
                                 <thead className="thead-default">
                                     <tr>
                                         <th className="text-center">
@@ -338,11 +299,11 @@ class Statistiques extends Component {
                                         </td>
                                     </tr>
                                 </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                            </Table>
+                        </CardBody>
+                    </Card>
+                </Col>
+            </Row>
         )
     }
 }

@@ -7,6 +7,8 @@ const routes = {
   '/dashboard': 'Dashboard',
   '/inscriptions': 'Inscriptions',
   '/appel': 'Appel',
-  '/touspaiements': 'TousPaiements'
+  '/touspaiements': 'TousPaiements',
+  '/statistiques': 'Statistiques',
+  '/modifierinscription': 'ModifierInscription'
 };
 export default routes;

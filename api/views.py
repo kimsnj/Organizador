@@ -25,10 +25,10 @@ class DateCoursViewSet(ModelViewSet):
     serializer_class = DateCoursSerializer
 
 
-def two_month_range():
+def months_range(before, after):
     today = date.today()
     delta = timedelta(days=30)
-    return (today - delta, today + delta)
+    return (today - before * delta, today + after * delta)
 
 
 class InitView(MultipleModelAPIView):
@@ -36,6 +36,6 @@ class InitView(MultipleModelAPIView):
     queryList = [
         (Personne.objects.all(), PersonneSerializer, 'personnes'),
         (Cours.objects.all(), CoursSerializer, 'cours'),
-        (DateCours.objects.filter(date__range=two_month_range()),
+        (DateCours.objects.filter(date__range=months_range(6, 1)),
          DateCoursSerializer, 'dates')
     ]
