@@ -166,7 +166,6 @@ AppelForm = connect((state, ownProps) => {
   console.log('presents: ', presents)
   if (presents) {
     for (let key of presents.values()) {
-      console.log('k', key)
       initialValues[key] = true;
     }
   }

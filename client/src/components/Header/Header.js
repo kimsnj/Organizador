@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Dropdown, DropdownMenu, DropdownItem } from 'reactstrap';
+import { NavLink } from 'react-router-dom'
 import { logOut } from '../../authentication'
 
 class Header extends Component {
@@ -112,8 +113,9 @@ class Header extends Component {
                   Dossiers<span className="badge badge-danger">4</span>
                 </DropdownItem>
                 <DropdownItem>
-                  <i className="fa fa-envelope-o"></i>
-                  Paiements<span className="badge badge-warning">5</span>
+                  <a href='/paiements/' className="nav-link">
+                    Paiements <span className="badge badge-warning">5</span>
+                  </a>
                 </DropdownItem>
                 <DropdownItem onClick={() => logOut(this.props.history)}>
                   <i className="fa fa-sign-out"></i>

@@ -1,0 +1,6 @@
+{
+    "name": "TousPaiements",
+    "version": "0.0.0",
+    "private": true,
+    "main": "./TousPaiements.js"
+  }

@@ -23,6 +23,7 @@ let Inscriptions = props => {
           <button
             type="submit"
             className="btn btn-sm btn-primary"
+            id="notify"
             disabled={pristine || submitting}
             onClick={handleClick}>Enregistrer</button>
           <button
@@ -40,6 +41,36 @@ let Inscriptions = props => {
 
 let handleClick = () => {
   window.scrollTo(0, 0)
+  initNotify();
+  notify();
+}
+
+function initNotify(){  // Onload du body
+	var btn = document.getElementById('notify');
+	if(window.Notification){
+		Notification.requestPermission(function (status) {
+			if(status == 'granted'){
+				btn.disabled = false;
+				btn.onclick = notify;
+			}
+			else{
+				btn.disabled = true;
+				btn.onclick = undefined;
+			}
+		});
+	}
+	else{
+		btn.disabled = true;
+		btn.onclick = undefined;
+		alert('Votre navigateur est trop ancien (ou est Internet Explorer) pour supporter cette fonctionnalité !');
+	}
+}
+
+function notify(){
+	var n = new Notification('Enregistrement', {
+		body: 'Les modifications ont été prises en compte!'
+		//icon: 'dvp.gif'
+	});
 }
 
 Inscriptions = reduxForm({
