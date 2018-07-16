@@ -155,7 +155,7 @@ const compterEleves = (type, cours) => {
   var compteur = 0;
   for (const key of Object.keys(cours)) {
     if (cours[key].categorie === type) {
-      compteur += Math.max(0, cours[key].inscrits.length - 1);
+      compteur += cours[key].inscrits.length;
     }
   }
 
