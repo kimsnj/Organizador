@@ -66,7 +66,7 @@ class Statistiques extends Component {
                                     <Row>
                                         <Col sm="6">
                                             <div className="callout callout-info">
-                                                <small className="text-muted">Nombre total d'élèves:</small><br />
+                                                <small className="text-muted">Nombre total d'élèves</small><br />
                                                 <strong className="h4">{Object.keys(membres).length}</strong>
                                                 <div className="chart-wrapper">
                                                     <canvas id="sparkline-chart-1" width="100" height="30"></canvas>

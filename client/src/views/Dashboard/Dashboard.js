@@ -15,18 +15,10 @@ import {
   Row
 } from 'reactstrap';
 
-//Random Numbers
-function random(min, max) {
-  return Math.floor(Math.random() * (max - min + 1) + min);
-}
-
 const addInArrayAndComputeMean = (array, index, value) => {
-  console.log("addInArray, ", array, " index ", index, " value ", value)
   if (array.length >= index) {
-    console.log("adding!")
     array[index - 1] = ((array[index - 1]) + value)/2;
   } else {
-    console.log("pushing!")
     array.push(value);
   }
 }
@@ -42,7 +34,6 @@ const createData = (type, dates) => {
       }
     }
   }
-  console.log("createData, for type ", type, " ", listePresents)
   return listePresents;
 }
 
@@ -164,7 +155,7 @@ const compterEleves = (type, cours) => {
   var compteur = 0;
   for (const key of Object.keys(cours)) {
     if (cours[key].categorie === type) {
-      compteur += cours[key].inscrits.length;
+      compteur += cours[key].inscrits.length - 1;
     }
   }
 
