@@ -49,7 +49,7 @@ function initNotify(){  // Onload du body
 	var btn = document.getElementById('notify');
 	if(window.Notification){
 		Notification.requestPermission(function (status) {
-			if(status == 'granted'){
+			if(status === 'granted'){
 				btn.disabled = false;
 				btn.onclick = notify;
 			}

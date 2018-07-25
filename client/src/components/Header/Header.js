@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { Dropdown, DropdownMenu, DropdownItem } from 'reactstrap';
-import { NavLink } from 'react-router-dom'
-import { logOut } from '../../authentication'
+// import { Dropdown, DropdownMenu, DropdownItem } from 'reactstrap';
+// import { NavLink } from 'react-router-dom'
+// import { logOut } from '../../authentication'
 
 class Header extends Component {
 
@@ -71,7 +71,7 @@ class Header extends Component {
               type="button"
               onClick={this.sidebarToggle}>&#9776;</button>
           </li>
-          <li>
+          {/* <li>
             <div className="form-group row">
               <div className="col-10">
                 <input
@@ -82,9 +82,9 @@ class Header extends Component {
                   onChange={this.onResearchChanged} />
               </div>
             </div>
-          </li>
+          </li> */}
         </ul>
-        <ul className="nav navbar-nav ml-auto">
+        {/* <ul className="nav navbar-nav ml-auto">
           <li className="nav-item d-md-down-none">
             <button className="nav-link">
               <i className="icon-bell"></i>
@@ -124,7 +124,7 @@ class Header extends Component {
               </DropdownMenu>
             </Dropdown>
           </li>
-        </ul>
+        </ul> */}
 
       </header>
     )

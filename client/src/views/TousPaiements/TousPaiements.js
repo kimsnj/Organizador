@@ -1,7 +1,7 @@
 import React from 'react';
 import { reduxForm } from 'redux-form'
 import { connect } from 'react-redux'
-import { Badge, Card, CardBody, CardHeader, Col, Pagination, PaginationItem, PaginationLink, Row, Table } from 'reactstrap';
+import { Badge, Card, CardBody, CardHeader, Table } from 'reactstrap';
 
 const PAIEMENT = {
   "EVEIL_1": 175,
@@ -93,7 +93,7 @@ let dit_cheque_encaisse = (member) => {
       }      
     }
 
-    if (reponse == "") {
+    if (reponse === "") {
       reponse += "Oui"
     }
   }
@@ -107,7 +107,7 @@ const paiementComplet = (eleve) => {
       sommeversee += eleve.paiements[i].somme;
     }
 
-    let sommedue = eleve.somme_totale == null ? PAIEMENT[eleve.categorie + "_" + eleve.cours.length] : eleve.somme_totale;
+    let sommedue = eleve.somme_totale === null ? PAIEMENT[eleve.categorie + "_" + eleve.cours.length] : eleve.somme_totale;
 
     if (sommeversee < sommedue) {
       return false;
@@ -133,13 +133,13 @@ let genere_statut = (member) => {
     return <Badge color="danger">Pas de paiement</Badge>
   } else {
     if (!paiementComplet(member)) {
-      if (dit_cheque_encaisse(member) == "Oui") {
+      if (dit_cheque_encaisse(member) === "Oui") {
         return <Badge color="warning">Paiement incomplet</Badge>;
       } else {
         return <div><Badge color="warning">Paiement incomplet</Badge><br/><Badge color="info">Chèque à encaisser</Badge></div>;
       }
     } else {
-      if (dit_cheque_encaisse(member) == "Oui") {
+      if (dit_cheque_encaisse(member) === "Oui") {
         return <Badge color="success">OK, payé et chèque encaissé</Badge>;
       } else {
         return <Badge color="info">Chèque à encaisser</Badge>;
@@ -160,7 +160,7 @@ let generer_statut_paiement= (member) =>
         <div>{dit_identite(member)}</div>
       </td>
       <td className="text-center">
-        <div>{member.surnom == null ? "N/A" : member.surnom}</div>
+        <div>{member.surnom == null ? "" : member.surnom}</div>
       </td>
       <td className="text-center">
         <div>{calcule_somme_versee(member)}</div>
@@ -179,7 +179,6 @@ TousPaiements = reduxForm({
   )(TousPaiements)
   
 TousPaiements = connect((state, ownProps) => {
-  console.log("coucou ", state.membres)
   return { members : state.membres};
 })(TousPaiements)
 

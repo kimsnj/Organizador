@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Switch, Route, Redirect } from 'react-router-dom'
+import { Switch, Route, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux'
 import Header from '../../components/Header/';
 import Sidebar from '../../components/Sidebar/';
@@ -10,9 +10,11 @@ import Dashboard from '../../views/Dashboard/';
 import Inscriptions from '../../views/Inscriptions';
 import Appel from '../../views/Appel';
 import TousPaiements from '../../views/TousPaiements';
+import Statistiques from '../../views/Statistiques';
+import ModifierInscription from '../../views/ModifierInscription';
 
-import { isLoggedIn, getAuthorizationHeader } from '../../authentication'
-import { init } from '../../actions/common'
+import { isLoggedIn, getAuthorizationHeader } from '../../authentication';
+import { init } from '../../actions/common';
 
 
 class Full extends Component {
@@ -65,6 +67,8 @@ class Full extends Component {
                 <Route path="/inscriptions/:id?" name="Inscriptions" component={Inscriptions} />
                 <Route path="/appel/:date/:index?" name="Appel" component={Appel} />
                 <Route path="/touspaiements" name="TousPaiements" component={TousPaiements} />
+                <Route path="/statistiques" name="Statistiques" component={Statistiques} />
+                <Route path="/modifierinscription" name="ModifierInscription" component={ModifierInscription} />
                 <Redirect from="/" to="/dashboard" />
               </Switch>
             </div>
