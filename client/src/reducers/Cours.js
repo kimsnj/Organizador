@@ -22,7 +22,7 @@ const remove = (array, idx) => [
 
 
 const inscrire = (state, data) => {
-    const inscrits = new Set(data.cours.map((val) => parseInt(val, 10)));
+    const inscrits = new Set((data.cours || []).map((val) => parseInt(val, 10)));
 
     const updateCours = (cours) => {
         const current = inscrits.has(cours.id);

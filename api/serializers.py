@@ -56,7 +56,8 @@ class PersonneSerializer(ModelSerializer):
     id = UUIDField(read_only=False, required=False)
     cours = PrimaryKeyRelatedField(
         many=True, read_only=False, queryset=Cours.objects.all(), required=False)
-    paiements = EmbeddedPaiementSerializer(many=True, required=False)
+    paiements = EmbeddedPaiementSerializer(
+        many=True, required=False)
 
     class Meta:
         model = Personne
@@ -96,7 +97,7 @@ class PersonneSerializer(ModelSerializer):
         instance.photo = validated_data.get('photo')
         instance.fiche_adhesion = validated_data.get('fiche_adhesion')
         instance.certificat_medical = validated_data.get('certificat_medical')
-        instance.cours = validated_data.get('cours')
+        instance.cours.set(validated_data.get('cours'))
         instance.contact_nom = validated_data.get('contact_nom')
         instance.contact_principal_tel = validated_data.get(
             'contact_principal_tel')
