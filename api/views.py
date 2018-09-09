@@ -1,5 +1,5 @@
 from rest_framework.viewsets import ModelViewSet
-from drf_multiple_model.views import MultipleModelAPIView
+from drf_multiple_model.views import ObjectMultipleModelAPIView
 from .serializers import PersonneSerializer, CoursSerializer, PaiementSerializer, DateCoursSerializer
 from .models import Personne, Cours, Paiement, DateCours
 from datetime import date, timedelta
@@ -31,11 +31,21 @@ def months_range(before, after):
     return (today - before * delta, today + after * delta)
 
 
-class InitView(MultipleModelAPIView):
-    objectify = True
-    queryList = [
-        (Personne.objects.all(), PersonneSerializer, 'personnes'),
-        (Cours.objects.all(), CoursSerializer, 'cours'),
-        (DateCours.objects.filter(date__range=months_range(6, 1)),
-         DateCoursSerializer, 'dates')
+class InitView(ObjectMultipleModelAPIView):
+    querylist = [
+        {
+            'queryset': Personne.objects.all(),
+            'serializer_class': PersonneSerializer,
+            'label': 'personnes'
+        },
+        {
+            'queryset': Cours.objects.all(),
+            'serializer_class': CoursSerializer,
+            'label': 'cours'
+        },
+        {
+            'queryset': DateCours.objects.filter(date__range=months_range(6, 1)),
+            'serializer_class': DateCoursSerializer,
+            'label': 'dates'
+        }
     ]
