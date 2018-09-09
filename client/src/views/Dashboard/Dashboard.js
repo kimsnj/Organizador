@@ -15,8 +15,6 @@ import {
   Row
 } from 'reactstrap';
 
-let MAX_ELEVES = 0;
-
 const addInArrayAndComputeMean = (array, index, value) => {
   if (array.length >= index) {
     array[index - 1] = ((array[index - 1]) + value)/2;
@@ -107,20 +105,27 @@ const mainChart = (dates) => ({
 });
 
 const computeMaxStats = (cours) => {
-  let nbEleves = 0;
-  console.log("cours : ", cours)
+  let maxEleves = 0;
   for (const key of Object.keys(cours)) {
-    nbEleves = cours[key].inscrits.length;
-    console.log("nb eleves : ", nbEleves)
-    if (nbEleves > MAX_ELEVES) {
-      console.log("found something!")
-      MAX_ELEVES = nbEleves;
+    let nbEleves = cours[key].inscrits.length;
+    if (nbEleves > maxEleves) {
+      maxEleves = nbEleves;
     }
   }
 
-  console.log("I'll return ", nbEleves)
+  return maxEleves;
+}
 
-  return nbEleves;
+const computeStepStats = (cours) => {
+  let max = computeMaxStats(cours);
+
+  if (max <= 5) {
+    return 1;
+  } else if (5 < max <= 10) {
+    return 2;
+  } else {
+    return 5;
+  }
 }
 
 const mainChartOpts = (cours) => ({
@@ -154,7 +159,7 @@ const mainChartOpts = (cours) => ({
         ticks: {
           beginAtZero: true,
           maxTicksLimit: 10,
-          stepSize: 2,
+          stepSize: computeStepStats(cours),
           max: computeMaxStats(cours)
         }
       }
