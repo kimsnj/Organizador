@@ -118,6 +118,8 @@ const computeMaxStats = (cours) => {
     }
   }
 
+  console.log("I'll return ", nbEleves)
+
   return nbEleves;
 }
 
