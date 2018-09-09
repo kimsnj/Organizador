@@ -1,10 +1,17 @@
 from datetime import timedelta, date, time
 from django.test import TestCase
+from django.contrib.auth.models import User
 
 from hypothesis import given
+from hypothesis.extra.django import TestCase as HypothesisTestCase
 from hypothesis.strategies import dates, integers, composite
 
+from rest_framework import status
 from rest_framework.renderers import JSONRenderer
+from rest_framework.test import APITestCase
+
+from uuid import uuid4
+import json
 
 from .serializers import PersonneSerializer, DateCoursSerializer
 from .models import Cours, Personne, DateCours, Presence, Paiement
@@ -13,12 +20,12 @@ from .models import Cours, Personne, DateCours, Presence, Paiement
 @composite
 def two_dates(draw):
     debut = draw(dates())
-    fin = draw(dates(min_date=debut - timedelta(days=-15),
+    fin = draw(dates(min_date=debut - timedelta(days=15),
                      max_date=debut + timedelta(days=150)))
     return (debut, fin)
 
 
-class CoursTestCase(TestCase):
+class CoursTestCase(HypothesisTestCase):
 
     @given(jour=integers(0, 6),
            range_=two_dates())
@@ -199,3 +206,132 @@ class PersonneSerializerTest(TestCase):
         paiements = Paiement.objects.filter(payeur=upd_p)
         self.assertEqual(len(paiements), 1)
         self.assertTrue(paiements[0].encaisse)
+
+
+class InitViewTest(APITestCase):
+    def fill_data(self):
+        c1 = Cours(jour=0,
+                   salle='Ranguin',
+                   categorie='ADO',
+                   horaire=time(hour=17),
+                   dernier=date(2020, 12, 31))
+        c1.save()
+        c2 = Cours(jour=1,
+                   salle='Siagne',
+                   categorie='ADULTE',
+                   horaire=time(hour=16),
+                   dernier=date(2020, 12, 31))
+        c2.save()
+
+        p1_id = uuid4()
+        p1 = {
+            "id": p1_id,
+            "paiements": [
+                {
+                    "methode": "CHEQUE",
+                    "somme": 200,
+                    "validite": "2019-10-11"
+                }
+            ],
+            "cours": [
+                c2.id
+            ],
+            "contact_nom": "MH",
+            "contact_principal_tel": "06",
+            "prenom": "K",
+            "nom": "S",
+            "surnom": "I",
+            "date_naissance": "1988-12-01",
+            "telephone": "06",
+            "taille_abada": "G",
+            "droit_image": True,
+            "photo": True,
+            "fiche_adhesion": False,
+            "certificat_medical": False
+        }
+        p_ser = PersonneSerializer(data=p1)
+        self.assertTrue(p_ser.is_valid())
+        p_ser.save()
+
+        Presence(cours=DateCours.objects.filter(cours=c2).first(),
+                 personne=Personne.objects.get(pk=p1_id),
+                 present=True).save()
+
+        return str(p1_id)
+
+    def test_get_init(self):
+        '''
+        Tests init message content.
+        '''
+        p1_id = self.fill_data()
+
+        self.user = User.objects.create_user(
+            username='testuser', password='12345')
+        login = self.client.login(username='testuser', password='12345')
+        response = self.client.get('/api/init/', format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        self.maxDiff = None
+        content = json.loads(response.content)
+
+        self.assertEqual(
+            [{'categorie': 'ADO',
+              'dernier': '2020-12-31',
+              'horaire': '17:00:00',
+              'id': 1,
+              'inscrits': [],
+              'jour': 0,
+              'salle': 'Ranguin'},
+             {'categorie': 'ADULTE',
+                'dernier': '2020-12-31',
+                'horaire': '16:00:00',
+                'id': 2,
+                'inscrits': [p1_id],
+                'jour': 1,
+                'salle': 'Siagne'}],
+            content.get('cours'))
+
+        self.assertEqual(
+            [{'cours': 1, 'date': '2018-09-03', 'id': 1, 'presences': []},
+             {'cours': 2,
+                'date': '2018-09-04',
+                'id': 123,
+                'presences': [{'personne': p1_id,
+                               'present': True}]},
+                {'cours': 1, 'date': '2018-09-10', 'id': 2, 'presences': []},
+                {'cours': 2, 'date': '2018-09-11', 'id': 124, 'presences': []},
+                {'cours': 1, 'date': '2018-09-17', 'id': 3, 'presences': []},
+                {'cours': 2, 'date': '2018-09-18', 'id': 125, 'presences': []},
+                {'cours': 1, 'date': '2018-09-24', 'id': 4, 'presences': []},
+                {'cours': 2, 'date': '2018-09-25', 'id': 126, 'presences': []},
+                {'cours': 1, 'date': '2018-10-01', 'id': 5, 'presences': []},
+                {'cours': 2, 'date': '2018-10-02', 'id': 127, 'presences': []}],
+            content.get('dates'))
+
+        self.assertEqual(
+            [{'adresse': None,
+                'categorie': None,
+                'certificat_medical': False,
+                'contact_nom': 'MH',
+                'contact_principal_tel': '06',
+                'contact_secondaire_tel': None,
+                'corde': None,
+                'cours': [2],
+                'date_naissance': '1988-12-01',
+                'droit_image': True,
+                'fiche_adhesion': False,
+                'id': p1_id,
+                'nom': 'S',
+                'paiements': [{'encaisse': False,
+                               'encaissement': None,
+                               'methode': 'CHEQUE',
+                               'somme': 200}],
+                'photo': True,
+                'prenom': 'K',
+                'somme_totale': None,
+                'surnom': 'I',
+                'taille_abada': 'G',
+                'telephone': '06'}],
+            content.get('personnes')
+        )

@@ -188,7 +188,7 @@ class Paiement(models.Model):
     somme = models.IntegerField()
     encaissement = models.DateField(null=True, blank=True)
     encaisse = models.BooleanField(default=False)
-    payeur = models.ForeignKey(Personne, related_name='paiements')
+    payeur = models.ForeignKey(Personne, related_name='paiements', on_delete=models.CASCADE)
 
     class Meta:
         """Meta definition for Paiement."""
@@ -198,4 +198,6 @@ class Paiement(models.Model):
 
     def __str__(self):
         """Unicode representation of Paiement."""
-        return "Paiement par {} pour {}".format(self.get_methode_display(), self.payeur)
+        return "Paiement par {} pour {}".format(
+            self.get_methode_display(),
+            self.payeur)
