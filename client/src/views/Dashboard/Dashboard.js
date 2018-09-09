@@ -15,6 +15,8 @@ import {
   Row
 } from 'reactstrap';
 
+let MAX_ELEVES = 0;
+
 const addInArrayAndComputeMean = (array, index, value) => {
   if (array.length >= index) {
     array[index - 1] = ((array[index - 1]) + value)/2;
@@ -136,7 +138,7 @@ const mainChartOpts = {
           beginAtZero: true,
           maxTicksLimit: 10,
           stepSize: 2,
-          max: 20
+          max: MAX_ELEVES
         }
       }
     ]
@@ -157,6 +159,10 @@ const compterEleves = (type, cours) => {
     if (cours[key].categorie === type) {
       compteur += cours[key].inscrits.length;
     }
+  }
+
+  if (compteur > MAX_ELEVES) {
+    MAX_ELEVES = compteur;
   }
 
   return compteur;
@@ -193,7 +199,7 @@ class Dashboard extends Component {
     return (
       <div className="container">
         <Row>
-          <Col xs="12" sm="12" lg="4">
+          <Col xs="12" sm="6" lg="3">
             <Card color="success">
               <div className="card-block">
                 <NavLink
@@ -212,7 +218,7 @@ class Dashboard extends Component {
             </Card>
           </Col>
 
-          <Col xs="12" sm="12" lg="4">
+          <Col xs="12" sm="6" lg="3">
             <Card color="primary">
               <div className="card-block">
                 <NavLink
@@ -231,7 +237,26 @@ class Dashboard extends Component {
             </Card>
           </Col>
 
-          <Col xs="12" sm="12" lg="4">
+          <Col xs="12" sm="6" lg="3">
+            <Card color="info">
+              <div className="card-block">
+                <NavLink
+                  to={'/modifierinscription'}
+                  className="nav-link text-white"
+                  activeClassName="active">
+                  <h3>
+                    <i
+                      className="fa fa-edit"
+                      style={{
+                      marginRight: 10 + 'px',
+                    }}/>
+                    Modifier infos élève</h3>
+                </NavLink>
+              </div>
+            </Card>
+          </Col>
+
+          <Col xs="12" sm="6" lg="3">
             <Card color="warning">
               <div className="card-block">
                 <NavLink
