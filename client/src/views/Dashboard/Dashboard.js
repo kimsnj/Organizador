@@ -106,7 +106,22 @@ const mainChart = (dates) => ({
   ]
 });
 
-const mainChartOpts = {
+const computeMaxStats = (cours) => {
+  let nbEleves = 0;
+  console.log("cours : ", cours)
+  for (const key of Object.keys(cours)) {
+    nbEleves = cours[key].inscrits.length;
+    console.log("nb eleves : ", nbEleves)
+    if (nbEleves > MAX_ELEVES) {
+      console.log("found something!")
+      MAX_ELEVES = nbEleves;
+    }
+  }
+
+  return nbEleves;
+}
+
+const mainChartOpts = (cours) => ({
   tooltips: {
     enabled: true,
     intersect: true,
@@ -138,7 +153,7 @@ const mainChartOpts = {
           beginAtZero: true,
           maxTicksLimit: 10,
           stepSize: 2,
-          max: MAX_ELEVES
+          max: computeMaxStats(cours)
         }
       }
     ]
@@ -151,7 +166,7 @@ const mainChartOpts = {
       hoverBorderWidth: 3
     }
   }
-};
+});
 
 const compterEleves = (type, cours) => {
   var compteur = 0;
@@ -159,10 +174,6 @@ const compterEleves = (type, cours) => {
     if (cours[key].categorie === type) {
       compteur += cours[key].inscrits.length;
     }
-  }
-
-  if (compteur > MAX_ELEVES) {
-    MAX_ELEVES = compteur;
   }
 
   return compteur;
@@ -306,7 +317,7 @@ class Dashboard extends Component {
                   height: 300 + 'px',
                   marginTop: 10 + 'px'
                 }}>
-                  <Line data={mainChart(dates)} options={mainChartOpts} height={300}/>
+                  <Line data={mainChart(dates)} options={mainChartOpts(cours)} height={300}/>
                 </div>
               </CardBody>
               <CardFooter>
