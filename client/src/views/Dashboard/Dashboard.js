@@ -15,18 +15,10 @@ import {
   Row
 } from 'reactstrap';
 
-//Random Numbers
-function random(min, max) {
-  return Math.floor(Math.random() * (max - min + 1) + min);
-}
-
 const addInArrayAndComputeMean = (array, index, value) => {
-  console.log("addInArray, ", array, " index ", index, " value ", value)
   if (array.length >= index) {
-    console.log("adding!")
     array[index - 1] = ((array[index - 1]) + value)/2;
   } else {
-    console.log("pushing!")
     array.push(value);
   }
 }
@@ -42,7 +34,6 @@ const createData = (type, dates) => {
       }
     }
   }
-  console.log("createData, for type ", type, " ", listePresents)
   return listePresents;
 }
 
@@ -113,7 +104,31 @@ const mainChart = (dates) => ({
   ]
 });
 
-const mainChartOpts = {
+const computeMaxStats = (cours) => {
+  let maxEleves = 0;
+  for (const key of Object.keys(cours)) {
+    let nbEleves = cours[key].inscrits.length;
+    if (nbEleves > maxEleves) {
+      maxEleves = nbEleves;
+    }
+  }
+
+  return maxEleves;
+}
+
+const computeStepStats = (cours) => {
+  let max = computeMaxStats(cours);
+
+  if (max <= 5) {
+    return 1;
+  } else if (5 < max <= 10) {
+    return 2;
+  } else {
+    return 5;
+  }
+}
+
+const mainChartOpts = (cours) => ({
   tooltips: {
     enabled: true,
     intersect: true,
@@ -144,8 +159,8 @@ const mainChartOpts = {
         ticks: {
           beginAtZero: true,
           maxTicksLimit: 10,
-          stepSize: 2,
-          max: 20
+          stepSize: computeStepStats(cours),
+          max: computeMaxStats(cours)
         }
       }
     ]
@@ -158,7 +173,7 @@ const mainChartOpts = {
       hoverBorderWidth: 3
     }
   }
-};
+});
 
 const compterEleves = (type, cours) => {
   var compteur = 0;
@@ -202,7 +217,7 @@ class Dashboard extends Component {
     return (
       <div className="container">
         <Row>
-          <Col xs="12" sm="12" lg="4">
+          <Col xs="12" sm="6" lg="3">
             <Card color="success">
               <div className="card-block">
                 <NavLink
@@ -221,7 +236,7 @@ class Dashboard extends Component {
             </Card>
           </Col>
 
-          <Col xs="12" sm="12" lg="4">
+          <Col xs="12" sm="6" lg="3">
             <Card color="primary">
               <div className="card-block">
                 <NavLink
@@ -240,7 +255,26 @@ class Dashboard extends Component {
             </Card>
           </Col>
 
-          <Col xs="12" sm="12" lg="4">
+          <Col xs="12" sm="6" lg="3">
+            <Card color="info">
+              <div className="card-block">
+                <NavLink
+                  to={'/modifierinscription'}
+                  className="nav-link text-white"
+                  activeClassName="active">
+                  <h3>
+                    <i
+                      className="fa fa-edit"
+                      style={{
+                      marginRight: 10 + 'px',
+                    }}/>
+                    Modifier infos élève</h3>
+                </NavLink>
+              </div>
+            </Card>
+          </Col>
+
+          <Col xs="12" sm="6" lg="3">
             <Card color="warning">
               <div className="card-block">
                 <NavLink
@@ -290,7 +324,7 @@ class Dashboard extends Component {
                   height: 300 + 'px',
                   marginTop: 10 + 'px'
                 }}>
-                  <Line data={mainChart(dates)} options={mainChartOpts} height={300}/>
+                  <Line data={mainChart(dates)} options={mainChartOpts(cours)} height={300}/>
                 </div>
               </CardBody>
               <CardFooter>
