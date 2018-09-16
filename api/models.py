@@ -31,6 +31,27 @@ SEMAINE = (
 )
 
 
+class Periode(models.Model):
+    """
+    Modèle pour une periode d'enseignement (e.g. annee scolaire)
+    """
+    debut = models.DateField(auto_now=False, auto_now_add=False)
+    fin = models.DateField(auto_now=False, auto_now_add=False)
+
+    class Meta:
+        """Meta definition for Periode."""
+        verbose_name = 'Periode'
+        verbose_name_plural = 'Periodes'
+
+    def __str__(self):
+        """Unicode representation of Personne."""
+        return "Période du {} au {}".format(self.debut.isoformat(), self.fin.isoformat())
+
+    @staticmethod
+    def latest():
+        return Periode.objects.order_by('-debut').first()
+
+
 class Cours(models.Model):
     """Model definition for Cours."""
 
@@ -39,6 +60,7 @@ class Cours(models.Model):
     categorie = models.CharField(choices=CATEGORIES_COURS_CHOIX, max_length=10)
     horaire = models.TimeField(auto_now=False, auto_now_add=False)
     dernier = models.DateField(auto_now=False, auto_now_add=False)
+    periode = models.ForeignKey(Periode, on_delete=models.CASCADE, null=True)
 
     class Meta:
         """Meta definition for Cours."""
@@ -153,6 +175,28 @@ class Personne(models.Model):
         return "{} {}".format(self.prenom, self.nom)
 
 
+class Inscription(models.Model):
+    """ Modèle pour un dossier d'inscription """
+    droit_image = models.BooleanField(default=False)
+    photo = models.BooleanField(default=False)
+    fiche_adhesion = models.BooleanField(default=False)
+    certificat_medical = models.BooleanField(default=False)
+    cours = models.ManyToManyField(Cours, blank=True, related_name='inscriptions')
+    somme_totale = models.IntegerField(blank=True, null=True)
+    periode = models.ForeignKey(Periode, on_delete=models.CASCADE)
+    inscrit = models.ForeignKey(Personne, on_delete=models.CASCADE, related_name='inscriptions')
+
+    class Meta:
+        """Meta definition for Inscription."""
+
+        verbose_name = "Dossier d'inscription"
+        verbose_name_plural = "Dossiers d'inscription"
+
+    def __str__(self):
+        """Unicode representation of Personne."""
+        return "Dossier de {} pour la {}".format(self.inscrit, self.periode)
+
+
 class Presence(models.Model):
     """Model definition for Presence."""
 
@@ -189,10 +233,11 @@ class Paiement(models.Model):
     encaissement = models.DateField(null=True, blank=True)
     encaisse = models.BooleanField(default=False)
     payeur = models.ForeignKey(Personne, related_name='paiements', on_delete=models.CASCADE)
+    inscription = models.ForeignKey(
+        Inscription, related_name='paiements', on_delete=models.CASCADE, null=True)
 
     class Meta:
         """Meta definition for Paiement."""
-
         verbose_name = 'Paiement'
         verbose_name_plural = 'Paiements'
 
@@ -200,4 +245,4 @@ class Paiement(models.Model):
         """Unicode representation of Paiement."""
         return "Paiement par {} pour {}".format(
             self.get_methode_display(),
-            self.payeur)
+            self.inscription.inscrit)

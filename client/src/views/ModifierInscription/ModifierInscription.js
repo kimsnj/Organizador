@@ -15,7 +15,7 @@ const PAIEMENT = {
 }
 
 const calculeCombienManque = (eleve) => {
-    if (eleve.paiements.length === 0) {
+    if ((eleve.paiement || []).length === 0) {
         return "la totalité"
     } else {
         let sommedue = eleve.somme_totale === null
@@ -50,21 +50,22 @@ const renderToolTipEleve = (eleve) => {
 }
 
 const paiementEncaisse = (eleve) => {
-    if (eleve.paiements.length === 0) {
+    if ((eleve.paiements || []).length === 0) {
         return true // si pas de paiements, pas besoin de surveiller l'encaissement...
-    } else {
-        for (var i = 0; i < eleve.paiements.length; i++) {
-            if (eleve.paiements[i].methode === "CHEQUE" & !eleve.paiements[i].encaisse) {
-                return false
-            }
+    }
+
+    for (var i = 0; i < eleve.paiements.length; i++) {
+        if (eleve.paiements[i].methode === "CHEQUE" & !eleve.paiements[i].encaisse) {
+            return false
         }
     }
+    
     return true
 }
 
 const ditQuoiPasEncaisse = (eleve) => {
     var quoi = "";
-    if (eleve.paiements.length !== 0) {
+    if ((eleve.paiements || []).length !== 0) {
         for (var i = 0; i < eleve.paiements.length; i++) {
             var paiement = eleve.paiements[i]
             if (paiement.methode === "CHEQUE" & !paiement.encaisse) {
@@ -76,7 +77,7 @@ const ditQuoiPasEncaisse = (eleve) => {
 }
 
 const paiementFait = (eleve) => {
-    if (eleve.paiements.length === 0) {
+    if ((eleve.paiements || []).length === 0) {
         return false
     } else {
         let sommeversee = 0;
