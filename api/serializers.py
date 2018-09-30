@@ -167,6 +167,9 @@ class PersonneSerializer(ModelSerializer):
             ins.somme_totale= donnees_inscription.get('somme_totale', ins.somme_totale)
             ins.cours.set(donnees_inscription.get('cours', []))
             ins.save()
+            instance.cours.set(donnees_inscription.get('cours', []))
+            instance.save()
+
 
             # Recreate all paiements from scratch
             Paiement.objects.filter(inscription=ins).delete()
