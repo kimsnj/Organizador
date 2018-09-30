@@ -41,7 +41,7 @@ class DateCoursSerializer(ModelSerializer):
 class PeriodeSerializer(ModelSerializer):
     class Meta:
         model = Periode
-        fields = ('debut', 'fin')
+        fields = ('id', 'debut', 'fin')
 
 
 class CoursSerializer(ModelSerializer):
@@ -87,15 +87,10 @@ class PersonneSerializer(ModelSerializer):
     def to_representation(self, obj):
         """Move fields from inscriptions to person representation."""
         representation = super().to_representation(obj)
-        inscriptions_representation = representation.pop('inscriptions')
-        if not inscriptions_representation:
-            return representation
-
-        recente = sorted(inscriptions_representation,
-                          key=lambda i: i.get('Periode', {}).get('debut'),
-                          reverse=True)[0]
-        for key in recente:
-            representation[key]= recente[key]
+        inscriptions_repr = representation.pop('inscriptions', [])
+        latest = next((insc for insc in inscriptions_repr if insc['periode']['id'] == Periode.latest().id), {})
+        for key in latest:
+            representation[key]= latest[key]
 
         return representation
 

@@ -44,31 +44,35 @@ class CoursTestCase(HypothesisTestCase):
             self.assertLessEqual(d, fin)
 
     def test_updated(self):
+        p = Periode.objects.create(debut = date(2020, 1, 1), fin=date(2020, 12, 31))
         c = Cours(jour=0,
                   salle='Ranguin',
                   categorie='ADO',
                   horaire=time(hour=17),
-                  dernier=date(2020, 12, 31))
-        self.assertTrue(c.are_dates_to_be_updated,
+                  dernier=date(2020, 12, 31),
+                  periode=p)
+        self.assertTrue(c.are_dates_to_be_updated(),
                         'Nouveau cours, dates à créer')
         c.save()
-        self.assertFalse(c.are_dates_to_be_updated, 'Cours sauvegardé.')
+        self.assertFalse(c.are_dates_to_be_updated(), 'Cours sauvegardé.')
         c.salle = 'Auribeau'
-        self.assertFalse(c.are_dates_to_be_updated, 'Seul le lieu à changer')
+        self.assertFalse(c.are_dates_to_be_updated(), 'Seul le lieu à changer')
         c.jour = 1
-        self.assertTrue(c.are_dates_to_be_updated,
+        self.assertTrue(c.are_dates_to_be_updated(),
                         'Jour changé, dates à regénérer')
         c2 = Cours.objects.get(pk=c.pk)
-        self.assertFalse(c2.are_dates_to_be_updated, 'Cours fraichement lu')
+        self.assertFalse(c2.are_dates_to_be_updated(), 'Cours fraichement lu')
 
 
 class DateCoursSerializerTest(TestCase):
     def test_create(self):
+        p = Periode.objects.create(debut = date(2020, 1, 1), fin=date(2020, 12, 31))
         c = Cours(jour=0,
                   salle='Auribeau',
                   categorie='ADULTE',
                   horaire=time(hour=17),
-                  dernier=date.today() + timedelta(days=14))
+                  dernier=date.today() + timedelta(days=14),
+                  periode=p)
         c.save()
         d = list(DateCours.objects.filter(cours=c))[0]
         p1 = Personne(nom="M", prenom="H", telephone="06")
@@ -126,11 +130,13 @@ class PersonneSerializerTest(TestCase):
 
     @staticmethod
     def donnees_personnes():
+        p = Periode.objects.create(debut = date(2020, 1, 1), fin=date(2020, 12, 31))
         c = Cours(jour=0,
                   salle='Ranguin',
                   categorie='ADO',
                   horaire=time(hour=17),
-                  dernier=date(2020, 12, 31))
+                  dernier=date(2020, 12, 31),
+                  periode=p)
         c.save()
 
         donnees = {
@@ -218,20 +224,34 @@ class PersonneSerializerTest(TestCase):
 
 class InitViewTest(APITestCase):
     def fill_data(self):
-        periode = Periode.objects.create(debut = date(2020, 1, 1), fin=date(2020, 12, 31))
+        self.debut = date.today() - timedelta(days=400)
+        self.fin = self.debut + timedelta(days=100)
+        prev_period = Periode.objects.create(debut=self.debut, fin=self.fin)
+        arch_c = Cours.objects.create(
+                    jour=0,
+                    salle='Ranguin',
+                    categorie='ADO',
+                    horaire=time(hour=17),
+                    dernier=self.fin,
+                    periode=prev_period)
+
+        self.debut = date.today() - timedelta(days=10)
+        self.fin = self.debut + timedelta(days=200)
+        periode = Periode.objects.create(debut=self.debut, fin=self.fin)
+
         self.c1 = Cours.objects.create(
                     jour=0,
                     salle='Ranguin',
                     categorie='ADO',
                     horaire=time(hour=17),
-                    dernier=date(2020, 12, 31),
+                    dernier=self.fin,
                     periode=periode)
         self.c2 = Cours.objects.create(
                     jour=1,
                     salle='Siagne',
                     categorie='ADULTE',
                     horaire=time(hour=16),
-                    dernier=date(2020, 12, 31),
+                    dernier=self.fin,
                     periode=periode)
         p1_id = uuid4()
         self.p1 = {
@@ -266,6 +286,7 @@ class InitViewTest(APITestCase):
                  personne=Personne.objects.get(pk=p1_id),
                  present=True).save()
 
+        self.assertEqual(Periode.latest(), periode)
         return str(p1_id)
 
     def test_get_init(self):
@@ -286,25 +307,26 @@ class InitViewTest(APITestCase):
 
         self.assertEqual(
             [{'categorie': 'ADO',
-              'dernier': '2020-12-31',
+              'dernier': self.fin.isoformat(),
               'horaire': '17:00:00',
-              'id': 1,
+              'id': 2,
               'inscrits': [],
               'jour': 0,
-              'periode': {'debut': '2020-01-01', 'fin': '2020-12-31'},
+              'periode': {'debut': self.debut.isoformat(), 'fin': self.fin.isoformat(), 'id': 3},
               'salle': 'Ranguin'},
              {'categorie': 'ADULTE',
-              'dernier': '2020-12-31',
+              'dernier': self.fin.isoformat(),
               'horaire': '16:00:00',
-              'id': 2,
+              'id': 3,
               'inscrits': [p1_id],
               'jour': 1,
-              'periode': {'debut': '2020-01-01', 'fin': '2020-12-31'},
+              'periode': {'debut': self.debut.isoformat(), 'fin': self.fin.isoformat(), 'id': 3},
               'salle': 'Siagne'}],
             content.get('cours'))
 
         matched_first = False
-        for date_cours in content.get('dates'):
+        self.assertGreater(len(content.get('dates', [])), 0)
+        for date_cours in content['dates']:
             self.assertTrue('cours' in date_cours)
             self.assertTrue('date' in date_cours)
             self.assertTrue('id' in date_cours)
@@ -318,6 +340,8 @@ class InitViewTest(APITestCase):
             else:
                 self.assertEqual(len(date_cours['presences']), 0)
 
+        self.assertTrue(matched_first)
+
         self.assertEqual(
             [{'adresse': None,
                 'categorie': None,
@@ -326,7 +350,7 @@ class InitViewTest(APITestCase):
                 'contact_principal_tel': '06',
                 'contact_secondaire_tel': None,
                 'corde': None,
-                'cours': [2],
+                'cours': [self.c2.id],
                 'date_naissance': '1988-12-01',
                 'droit_image': True,
                 'fiche_adhesion': False,
@@ -336,7 +360,7 @@ class InitViewTest(APITestCase):
                                'encaissement': None,
                                'methode': 'CHEQUE',
                                'somme': 200}],
-                'periode': {'debut': '2020-01-01', 'fin': '2020-12-31'},
+                'periode': {'debut': self.debut.isoformat(), 'fin': self.fin.isoformat(), 'id': 3},
                 'photo': True,
                 'prenom': 'K',
                 'somme_totale': None,

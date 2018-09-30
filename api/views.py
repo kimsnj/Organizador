@@ -1,7 +1,7 @@
 from rest_framework.viewsets import ModelViewSet
 from drf_multiple_model.views import ObjectMultipleModelAPIView
 from .serializers import PersonneSerializer, CoursSerializer, PaiementSerializer, DateCoursSerializer
-from .models import Personne, Cours, Paiement, DateCours
+from .models import Personne, Cours, Paiement, DateCours, Periode
 from datetime import date, timedelta
 
 
@@ -34,18 +34,20 @@ def months_range(before, after):
 class InitView(ObjectMultipleModelAPIView):
     querylist = [
         {
-            'queryset': Personne.objects.all(),
+            'label': 'personnes',
             'serializer_class': PersonneSerializer,
-            'label': 'personnes'
+            'queryset': Personne.objects.all(),
         },
         {
-            'queryset': Cours.objects.all(),
+            'label': 'cours',
             'serializer_class': CoursSerializer,
-            'label': 'cours'
+            'queryset': Cours.objects.all(),
+            'filter_fn': Cours.within_latest_period,
         },
         {
-            'queryset': DateCours.objects.filter(date__range=months_range(6, 1)),
+            'label': 'dates',
             'serializer_class': DateCoursSerializer,
-            'label': 'dates'
+            'queryset': DateCours.objects.all(),
+            'filter_fn': DateCours.within_range(months_range(6, 1)),
         }
     ]

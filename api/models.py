@@ -47,9 +47,31 @@ class Periode(models.Model):
         """Unicode representation of Personne."""
         return "Période du {} au {}".format(self.debut.isoformat(), self.fin.isoformat())
 
+    def set_original(self):
+        self.__original_debut = self.debut
+        self.__original_fin = self.fin
+
+    def __init__(self, *args, **kwargs):
+        super(Periode, self).__init__(*args, **kwargs)
+        self.set_original()
+
     @staticmethod
     def latest():
-        return Periode.objects.order_by('-debut').first()
+        p = Periode.objects.order_by('-debut').first()
+        print ("Latest: ", p)
+        return p
+
+    def are_dates_to_be_updated(self):
+        return self.__original_debut != self.debut \
+            or self.__original_fin != self.fin
+
+    def save(self, *args, **kwargs):
+        """ Enregistre le cours actuelles et créent tout les dates liées au cours de cette période"""
+        super(Periode, self).save(*args, **kwargs)
+        if self.are_dates_to_be_updated():
+            self.set_original()
+            for c in self.cours_set.all():
+                c.update_dates()
 
 
 class Cours(models.Model):
@@ -77,6 +99,10 @@ class Cours(models.Model):
         self.set_original()
 
     @staticmethod
+    def within_latest_period(queryset, *args, **kwargs):
+        return queryset.filter(periode=Periode.latest())
+
+    @staticmethod
     def every_weekday(weekday, start, end):
         if start > end:
             return []
@@ -93,24 +119,28 @@ class Cours(models.Model):
             self.horaire,
             self.salle)
 
-    @property
     def are_dates_to_be_updated(self):
         return self.pk is None \
             or self.__original_jour != self.jour \
             or self.__original_dernier != self.dernier \
             or len(DateCours.objects.filter(cours=self)) == 0
 
+
+    def update_dates(self):
+        DateCours.objects.filter(cours=self)\
+            .filter(date__gte=date.today())\
+            .delete()
+        debut = max(date.today(), self.periode.debut)
+        for d in self.every_weekday(self.jour, debut, self.periode.fin):
+            c = DateCours(cours=self, date=d)
+            c.save()
+
     def save(self, *args, **kwargs):
         """ Enregistre le cours actuelles et créent tout les dates liées """
         super(Cours, self).save(*args, **kwargs)
-        if self.are_dates_to_be_updated:
+        if self.are_dates_to_be_updated():
             self.set_original()
-            DateCours.objects.filter(cours=self)\
-                .filter(date__gte=date.today())\
-                .delete()
-            for d in self.every_weekday(self.jour, date.today(), self.dernier):
-                c = DateCours(cours=self, date=d)
-                c.save()
+            self.update_dates()
 
 
 class DateCours(models.Model):
@@ -119,6 +149,13 @@ class DateCours(models.Model):
     cours = models.ForeignKey(
         Cours, on_delete=models.CASCADE, related_name='dates')
     date = models.DateField(db_index=True)
+
+    @staticmethod
+    def within_range(date_range):
+        def fn(queryset, *args, **kwargs):
+            return queryset.filter(cours__periode=Periode.latest())\
+                           .filter(date__range=date_range)
+        return fn
 
     class Meta:
         """Meta definition for Cours."""
